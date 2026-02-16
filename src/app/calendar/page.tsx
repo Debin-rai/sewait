@@ -145,8 +145,8 @@ export default function CalendarPage() {
                                     <span className="material-symbols-outlined text-orange-500 text-2xl">wb_sunny</span>
                                 </div>
                                 <div className="min-w-0">
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 nepali-font truncate">Sunrise</p>
-                                    <p className="text-xl font-black text-primary nepali-font truncate">06:42 AM</p>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 nepali-font">Sunrise</p>
+                                    <p className="text-xl font-black text-primary nepali-font whitespace-nowrap">06:42 AM</p>
                                 </div>
                             </div>
                             <div className="bg-white rounded-2xl p-6 flex items-center gap-5 shadow-sm border border-slate-50 hover:shadow-md transition-shadow min-w-0">
@@ -154,8 +154,8 @@ export default function CalendarPage() {
                                     <span className="material-symbols-outlined text-orange-500 text-2xl">wb_twilight</span>
                                 </div>
                                 <div className="min-w-0">
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 nepali-font truncate">Sunset</p>
-                                    <p className="text-xl font-black text-primary nepali-font truncate">06:12 PM</p>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 nepali-font">Sunset</p>
+                                    <p className="text-xl font-black text-primary nepali-font whitespace-nowrap">06:12 PM</p>
                                 </div>
                             </div>
                             <div className="bg-white rounded-2xl p-6 flex items-center gap-5 shadow-sm border border-slate-50 hover:shadow-md transition-shadow min-w-0">
