@@ -1,27 +1,51 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-const PLACEMENTS = [
-    { id: "HOME_HERO", name: "Home Page - Hero Banner", size: "1200x400" },
-    { id: "SIDEBAR", name: "Sidebar - Square Widget", size: "400x400" },
-    { id: "FOOTER", name: "Footer - Wide Strip", size: "1200x200" },
-    { id: "UTILITY_TOP", name: "Utility Page - Top Banner", size: "800x150" },
-];
+// Categorized placements for granular control
+const PLACEMENT_CATEGORIES = {
+    "HOME": [
+        { id: "HOME_HERO", name: "Hero Banner (Top)", size: "1200x400" },
+        { id: "HOME_SIDEBAR", name: "Sidebar Widget", size: "400x400" },
+        { id: "HOME_FOOTER", name: "Footer Strip", size: "1200x200" }
+    ],
+    "CALENDAR": [
+        { id: "CALENDAR_TOP", name: "Top Banner", size: "1200x200" },
+        { id: "CALENDAR_SIDEBAR", name: "Sidebar Widget", size: "400x400" }
+    ],
+    "NEPSE": [
+        { id: "NEPSE_TOP", name: "Top Info Bar", size: "1200x150" }
+    ],
+    "GOLD_SILVER": [
+        { id: "GOLD_HEADER", name: "Header Banner", size: "1200x300" }
+    ],
+    "SERVICES": [
+        { id: "GOV_LIST", name: "List Interstitial", size: "800x200" }
+    ],
+    "WEATHER": [
+        { id: "WEATHER_BOTTOM", name: "Widget Bottom", size: "400x200" }
+    ]
+};
 
 export default function AdsManagementPage() {
     const [loading, setLoading] = useState(false);
     const [ads, setAds] = useState<any[]>([]);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+    // Form State
+    const [selectedPage, setSelectedPage] = useState("HOME");
     const [formData, setFormData] = useState({
         name: "",
         client: "",
-        position: "HOME_HERO",
+        position: "",
         imageUrl: "",
         link: "",
         startDate: "",
         endDate: "",
     });
+
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
         fetchAds();
@@ -32,13 +56,38 @@ export default function AdsManagementPage() {
         try {
             const res = await fetch("/api/sewait-portal-99/ads");
             const data = await res.json();
-            if (Array.isArray(data)) {
-                setAds(data);
-            }
+            if (Array.isArray(data)) setAds(data);
         } catch (error) {
             console.error("Failed to fetch ads", error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setUploading(true);
+        const data = new FormData();
+        data.append('file', file);
+
+        try {
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                body: data
+            });
+            const result = await res.json();
+            if (result.url) {
+                setFormData(prev => ({ ...prev, imageUrl: result.url }));
+            } else {
+                alert("Upload failed");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Upload error");
+        } finally {
+            setUploading(false);
         }
     };
 
@@ -54,7 +103,7 @@ export default function AdsManagementPage() {
             if (res.ok) {
                 setIsCreateModalOpen(false);
                 fetchAds();
-                setFormData({ name: "", client: "", position: "HOME_HERO", imageUrl: "", link: "", startDate: "", endDate: "" });
+                setFormData({ name: "", client: "", position: "", imageUrl: "", link: "", startDate: "", endDate: "" });
             }
         } catch (error) {
             console.error("Failed to create ad", error);
@@ -78,8 +127,8 @@ export default function AdsManagementPage() {
             {/* Header */}
             <header className="flex flex-col md:flex-row justify-between items-end gap-4">
                 <div>
-                    <h2 className="text-3xl font-black text-primary dark:text-blue-400 tracking-tight">Campaign Center</h2>
-                    <p className="text-slate-500 font-medium">Schedule, place, and monitor high-performance ads.</p>
+                    <h2 className="text-3xl font-black text-primary dark:text-blue-400 tracking-tight">Campaign Center 2.0</h2>
+                    <p className="text-slate-500 font-medium">Advanced granular control over ad placements.</p>
                 </div>
                 <button
                     onClick={() => setIsCreateModalOpen(true)}
@@ -90,41 +139,14 @@ export default function AdsManagementPage() {
                 </button>
             </header>
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
-                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Active Ads</p>
-                    <h3 className="text-3xl font-black mt-2">{ads.filter(a => a.status === 'ACTIVE').length}</h3>
-                </div>
-                <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
-                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Total Impressions</p>
-                    <h3 className="text-3xl font-black mt-2 text-blue-500">
-                        {ads.reduce((acc, curr) => acc + curr.impressions, 0).toLocaleString()}
-                    </h3>
-                </div>
-                <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
-                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Total Clicks</p>
-                    <h3 className="text-3xl font-black mt-2 text-[#07883b]">
-                        {ads.reduce((acc, curr) => acc + curr.clicks, 0).toLocaleString()}
-                    </h3>
-                </div>
-                <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
-                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Revenue (est.)</p>
-                    <h3 className="text-3xl font-black mt-2 text-orange-500">
-                        NPR {ads.reduce((acc, curr) => acc + curr.revenue, 0).toLocaleString()}
-                    </h3>
-                </div>
-            </div>
-
-            {/* Ads List */}
+            {/* Ads List Table (Existing code structure) */}
             <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead className="bg-slate-50/50 dark:bg-slate-800/50 text-[10px] font-black uppercase tracking-widest text-slate-500">
                             <tr>
-                                <th className="px-8 py-4">Campaign & Placement</th>
-                                <th className="px-8 py-4">Reach (Imp/Clk)</th>
-                                <th className="px-8 py-4">Schedule</th>
+                                <th className="px-8 py-4">Campaign</th>
+                                <th className="px-8 py-4">Position</th>
                                 <th className="px-8 py-4">Status</th>
                                 <th className="px-8 py-4 text-right">Control</th>
                             </tr>
@@ -139,34 +161,22 @@ export default function AdsManagementPage() {
                                             </div>
                                             <div>
                                                 <p className="font-black text-slate-800 dark:text-white leading-tight">{ad.name}</p>
-                                                <p className="text-xs font-bold text-primary mt-1 uppercase tracking-tighter">{ad.position}</p>
                                                 <p className="text-[10px] text-slate-400 font-medium truncate max-w-[150px]">{ad.client || 'Direct Client'}</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="px-8 py-6">
-                                        <div className="flex flex-col gap-1">
-                                            <span className="text-sm font-black text-slate-700 dark:text-slate-300">{ad.impressions.toLocaleString()} views</span>
-                                            <span className="text-[10px] font-bold text-slate-400">{ad.clicks.toLocaleString()} clicks</span>
-                                        </div>
+                                        <span className="px-2 py-1 bg-blue-50 text-blue-600 rounded text-[10px] font-bold uppercase">{ad.position.replace('_', ' ')}</span>
                                     </td>
                                     <td className="px-8 py-6">
-                                        <div className="flex flex-col gap-0.5">
-                                            <span className="text-[10px] font-black text-slate-500 uppercase">Starts: {ad.startDate ? new Date(ad.startDate).toDateString() : 'ASAP'}</span>
-                                            <span className="text-[10px] font-black text-red-400 uppercase">Ends: {ad.endDate ? new Date(ad.endDate).toDateString() : 'NEVER'}</span>
-                                        </div>
-                                    </td>
-                                    <td className="px-8 py-6">
-                                        <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${ad.status === 'ACTIVE' ? 'bg-[#07883b]/10 text-[#07883b]' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
-                                            }`}>
+                                        <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${ad.status === 'ACTIVE' ? 'bg-[#07883b]/10 text-[#07883b]' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
                                             {ad.status}
                                         </span>
                                     </td>
                                     <td className="px-8 py-6 text-right">
-                                        <div className="flex justify-end gap-2">
-                                            <button className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all"><span className="material-symbols-outlined text-lg">edit</span></button>
-                                            <button onClick={() => handleDelete(ad.id, ad.name)} className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl text-red-500 transition-all"><span className="material-symbols-outlined text-lg">delete</span></button>
-                                        </div>
+                                        <button onClick={() => handleDelete(ad.id, ad.name)} className="p-2 hover:bg-red-50 text-red-500 rounded-xl transition-all">
+                                            <span className="material-symbols-outlined">delete</span>
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
@@ -175,110 +185,168 @@ export default function AdsManagementPage() {
                 </div>
             </div>
 
-            {/* Create Ad Modal (Standardized form as per design assets) */}
+            {/* NEW Create Ad Modal */}
             {isCreateModalOpen && (
                 <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-                    <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 animate-in zoom-in-95 duration-300">
-                        <div className="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
+                    <div className="bg-white dark:bg-slate-900 w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 animate-in zoom-in-95 duration-300 max-h-[90vh] flex flex-col">
+                        <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
                             <div>
-                                <h3 className="text-2xl font-black text-slate-800 dark:text-white leading-tight">Create New Campaign</h3>
-                                <p className="text-sm text-slate-500 font-medium">Configure placements and scheduling rules.</p>
+                                <h3 className="text-xl font-black text-slate-800 dark:text-white leading-tight">Create New Campaign</h3>
+                                <p className="text-xs text-slate-500 font-medium">Step 1: Select Page & Position — Step 2: Upload Creative</p>
                             </div>
-                            <button onClick={() => setIsCreateModalOpen(false)} className="size-10 flex items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+                            <button onClick={() => setIsCreateModalOpen(false)} className="size-8 flex items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
                                 <span className="material-symbols-outlined text-slate-500">close</span>
                             </button>
                         </div>
-                        <form onSubmit={handleCreateAd} className="p-8 space-y-6 max-h-[70vh] overflow-y-auto">
-                            <div className="grid grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-xs font-black uppercase tracking-widest text-slate-400">Campaign Title</label>
-                                    <input
-                                        required
-                                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border-none focus:ring-2 focus:ring-primary/20 outline-none text-sm font-bold"
-                                        placeholder="e.g. Summer Festival 2024"
-                                        value={formData.name}
-                                        onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-black uppercase tracking-widest text-slate-400">Client / Brand</label>
-                                    <input
-                                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border-none focus:ring-2 focus:ring-primary/20 outline-none text-sm font-bold"
-                                        placeholder="e.g. Ncell Axiata"
-                                        value={formData.client}
-                                        onChange={e => setFormData({ ...formData, client: e.target.value })}
-                                    />
-                                </div>
-                            </div>
 
-                            <div className="space-y-2">
-                                <label className="text-xs font-black uppercase tracking-widest text-slate-400">Placement Position</label>
-                                <div className="grid grid-cols-2 gap-3">
-                                    {PLACEMENTS.map(p => (
-                                        <div
-                                            key={p.id}
-                                            onClick={() => setFormData({ ...formData, position: p.id })}
-                                            className={`p-4 rounded-2xl border-2 transition-all cursor-pointer ${formData.position === p.id
-                                                    ? 'border-primary bg-primary/5 shadow-md shadow-primary/10'
-                                                    : 'border-slate-100 dark:border-slate-800 hover:border-slate-200'
-                                                }`}
+                        <form onSubmit={handleCreateAd} className="p-8 space-y-8 overflow-y-auto custom-scrollbar">
+
+                            {/* 1. Placement Selection */}
+                            <section className="space-y-4">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <span className="bg-primary text-white size-6 flex items-center justify-center rounded-full text-xs font-bold">1</span>
+                                    <h4 className="font-bold text-sm uppercase tracking-wider text-slate-800 dark:text-white">Target Placement</h4>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    {/* Page Selector */}
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Target Page</label>
+                                        <select
+                                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border-none focus:ring-2 focus:ring-primary/20 outline-none text-sm font-bold"
+                                            value={selectedPage}
+                                            onChange={(e) => {
+                                                setSelectedPage(e.target.value);
+                                                setFormData(prev => ({ ...prev, position: "" })); // Reset position on page change
+                                            }}
                                         >
-                                            <p className="font-bold text-xs text-slate-800 dark:text-white">{p.name}</p>
-                                            <p className="text-[10px] text-slate-400 mt-1 font-black uppercase">Spec: {p.size}</p>
+                                            <option value="HOME">Home Page</option>
+                                            <option value="CALENDAR">Calendar</option>
+                                            <option value="NEPSE">NEPSE Market</option>
+                                            <option value="GOLD_SILVER">Gold & Silver</option>
+                                            <option value="SERVICES">Gov Services</option>
+                                            <option value="WEATHER">Weather</option>
+                                        </select>
+                                    </div>
+
+                                    {/* Position Selector (Dynamic) */}
+                                    <div className="space-y-2 md:col-span-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Available Positions</label>
+                                        <div className="grid grid-cols-2 gap-3">
+                                            {PLACEMENT_CATEGORIES[selectedPage as keyof typeof PLACEMENT_CATEGORIES]?.map((pos) => (
+                                                <div
+                                                    key={pos.id}
+                                                    onClick={() => setFormData({ ...formData, position: pos.id })}
+                                                    className={`p-3 rounded-xl border-2 cursor-pointer transition-all ${formData.position === pos.id
+                                                            ? 'border-primary bg-primary/5 shadow-md shadow-primary/10 scale-[1.02]'
+                                                            : 'border-slate-100 dark:border-slate-800 hover:border-slate-200'
+                                                        }`}
+                                                >
+                                                    <p className="font-bold text-xs text-slate-800 dark:text-white">{pos.name}</p>
+                                                    <p className="text-[9px] text-slate-400 mt-1 font-black uppercase">Size: {pos.size}</p>
+                                                </div>
+                                            ))}
                                         </div>
-                                    ))}
+                                    </div>
                                 </div>
-                            </div>
+                            </section>
 
-                            <div className="space-y-2">
-                                <label className="text-xs font-black uppercase tracking-widest text-slate-400">Graphic Asset (URL)</label>
-                                <input
-                                    required
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border-none focus:ring-2 focus:ring-primary/20 outline-none text-sm font-bold"
-                                    placeholder="https://content.sewait.com/ads/banner1.jpg"
-                                    value={formData.imageUrl}
-                                    onChange={e => setFormData({ ...formData, imageUrl: e.target.value })}
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-xs font-black uppercase tracking-widest text-slate-400">Destination Link</label>
-                                <input
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border-none focus:ring-2 focus:ring-primary/20 outline-none text-sm font-bold"
-                                    placeholder="https://client-landing-page.com"
-                                    value={formData.link}
-                                    onChange={e => setFormData({ ...formData, link: e.target.value })}
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-xs font-black uppercase tracking-widest text-slate-400">Start Date</label>
-                                    <input
-                                        type="date"
-                                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border-none focus:ring-2 focus:ring-primary/20 outline-none text-sm font-bold"
-                                        value={formData.startDate}
-                                        onChange={e => setFormData({ ...formData, startDate: e.target.value })}
-                                    />
+                            {/* 2. Creative Upload */}
+                            <section className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <span className="bg-primary text-white size-6 flex items-center justify-center rounded-full text-xs font-bold">2</span>
+                                    <h4 className="font-bold text-sm uppercase tracking-wider text-slate-800 dark:text-white">Creative Asset</h4>
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-black uppercase tracking-widest text-slate-400">End Date</label>
-                                    <input
-                                        type="date"
-                                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border-none focus:ring-2 focus:ring-primary/20 outline-none text-sm font-bold"
-                                        value={formData.endDate}
-                                        onChange={e => setFormData({ ...formData, endDate: e.target.value })}
-                                    />
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div
+                                        className={`border-2 border-dashed rounded-2xl p-6 flex flex-col items-center justify-center text-center transition-all cursor-pointer ${formData.imageUrl ? 'border-green-400 bg-green-50/10' : 'border-slate-200 dark:border-slate-700 hover:border-primary/50'
+                                            }`}
+                                        onClick={() => fileInputRef.current?.click()}
+                                    >
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            className="hidden"
+                                            onChange={handleFileUpload}
+                                            accept="image/*"
+                                        />
+                                        {uploading ? (
+                                            <p className="text-xs font-bold text-primary animate-pulse">Uploading...</p>
+                                        ) : formData.imageUrl ? (
+                                            <>
+                                                <img src={formData.imageUrl} alt="Preview" className="h-24 object-contain mb-2 rounded shadow-sm" />
+                                                <p className="text-[10px] font-bold text-green-600 uppercase tracking-wider">Upload Complete</p>
+                                                <p className="text-[9px] text-slate-400">(Click to change)</p>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span className="material-symbols-outlined text-4xl text-slate-300 mb-2">cloud_upload</span>
+                                                <p className="text-xs font-bold text-slate-500">Click to Upload Image</p>
+                                                <p className="text-[9px] text-slate-400 mt-1">Supports JPG, PNG, WEBP</p>
+                                            </>
+                                        )}
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Link Destination</label>
+                                            <input
+                                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border-none focus:ring-2 focus:ring-primary/20 outline-none text-sm font-bold"
+                                                placeholder="https://"
+                                                value={formData.link}
+                                                onChange={e => setFormData({ ...formData, link: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Campaign Name</label>
+                                            <input
+                                                required
+                                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border-none focus:ring-2 focus:ring-primary/20 outline-none text-sm font-bold"
+                                                placeholder="Internal Reference Name"
+                                                value={formData.name}
+                                                onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            </section>
+
+                            {/* 3. Scheduling */}
+                            <section className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <span className="bg-primary text-white size-6 flex items-center justify-center rounded-full text-xs font-bold">3</span>
+                                    <h4 className="font-bold text-sm uppercase tracking-wider text-slate-800 dark:text-white">Schedule</h4>
+                                </div>
+                                <div className="grid grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Start Date</label>
+                                        <input
+                                            type="date"
+                                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border-none focus:ring-2 focus:ring-primary/20 outline-none text-sm font-bold"
+                                            value={formData.startDate}
+                                            onChange={e => setFormData({ ...formData, startDate: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">End Date</label>
+                                        <input
+                                            type="date"
+                                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border-none focus:ring-2 focus:ring-primary/20 outline-none text-sm font-bold"
+                                            value={formData.endDate}
+                                            onChange={e => setFormData({ ...formData, endDate: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+                            </section>
 
                             <div className="pt-4">
                                 <button
                                     type="submit"
-                                    disabled={loading}
-                                    className="w-full py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all disabled:opacity-50"
+                                    disabled={loading || !formData.imageUrl || !formData.position}
+                                    className="w-full py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    {loading ? 'Processing...' : 'Launch Campaign Now'}
+                                    {loading ? 'Processing...' : 'Launch Campaign'}
                                 </button>
                             </div>
                         </form>
