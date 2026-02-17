@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 export default function Header() {
     const pathname = usePathname();
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const navLinks = [
         { href: "/", label: "Home" },
@@ -16,51 +18,125 @@ export default function Header() {
     ];
 
     return (
-        <header className="sticky top-0 z-50 bg-white border-b border-slate-200 px-4 md:px-10 py-3 flex items-center justify-between shadow-sm">
-            <div className="flex items-center gap-10">
-                <Link href="/" className="flex items-center gap-2">
-                    <div className="relative w-10 h-10 overflow-hidden rounded-lg">
-                        <img
-                            src="/assets/images/Logo.jpg"
-                            alt="SewaIT Logo"
-                            className="w-full h-full object-cover"
+        <>
+            <header className="sticky top-0 z-50 bg-white border-b border-slate-200 px-4 md:px-10 py-3 flex items-center justify-between shadow-sm">
+                <div className="flex items-center gap-10">
+                    <Link href="/" className="flex items-center gap-2">
+                        <div className="relative w-10 h-10 overflow-hidden rounded-lg">
+                            <img
+                                src="/assets/images/Logo.jpg"
+                                alt="SewaIT Logo"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                        <h1 className="text-xl font-bold tracking-tight text-slate-800">Sewa<span className="text-primary">IT</span></h1>
+                    </Link>
+                    {/* Desktop Navigation */}
+                    <nav className="hidden lg:flex items-center gap-6">
+                        {navLinks.map((link) => {
+                            const isActive = pathname === link.href;
+                            return (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    className={`${isActive
+                                        ? "text-primary text-sm font-bold border-b-2 border-primary"
+                                        : "text-slate-600 hover:text-primary text-sm font-semibold"
+                                        } transition-colors`}
+                                >
+                                    {link.label}
+                                </Link>
+                            );
+                        })}
+                    </nav>
+                </div>
+                <div className="flex items-center gap-4 lg:gap-8 flex-1 justify-end">
+                    {/* Desktop Search */}
+                    <div className="relative w-full max-w-[320px] hidden sm:flex items-center">
+                        <div className="absolute left-3 w-5 h-5 flex items-center justify-center overflow-hidden pointer-events-none">
+                            <span className="material-symbols-outlined text-slate-400 text-xl notranslate">search</span>
+                        </div>
+                        <input
+                            className="w-full bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary/5 focus:border-primary rounded-xl pl-10 pr-20 text-xs py-2 transition-all outline-none"
+                            placeholder="Search services..."
+                            type="text"
                         />
+                        <button className="absolute right-1 bg-primary text-white text-[9px] font-bold px-3 py-1.5 rounded-lg hover:bg-primary-light transition-colors">
+                            GO
+                        </button>
                     </div>
-                    <h1 className="text-xl font-bold tracking-tight text-slate-800">Sewa<span className="text-primary">IT</span></h1>
-                </Link>
-                <nav className="hidden lg:flex items-center gap-6">
-                    {navLinks.map((link) => {
-                        const isActive = pathname === link.href;
-                        return (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                className={`${isActive
-                                    ? "text-primary text-sm font-bold border-b-2 border-primary"
-                                    : "text-slate-600 hover:text-primary text-sm font-semibold"
-                                    } transition-colors`}
-                            >
-                                {link.label}
-                            </Link>
-                        );
-                    })}
-                </nav>
-            </div>
-            <div className="flex items-center gap-4 lg:gap-8 flex-1 justify-end">
-                <div className="relative w-full max-w-[320px] hidden sm:flex items-center">
-                    <div className="absolute left-3 w-5 h-5 flex items-center justify-center overflow-hidden pointer-events-none">
-                        <span className="material-symbols-outlined text-slate-400 text-xl notranslate">search</span>
-                    </div>
-                    <input
-                        className="w-full bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary/5 focus:border-primary rounded-xl pl-10 pr-20 text-xs py-2 transition-all outline-none"
-                        placeholder="Search services..."
-                        type="text"
-                    />
-                    <button className="absolute right-1 bg-primary text-white text-[9px] font-bold px-3 py-1.5 rounded-lg hover:bg-primary-light transition-colors">
-                        GO
+                    {/* Mobile Menu Button */}
+                    <button
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        className="lg:hidden p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                        aria-label="Toggle menu"
+                    >
+                        <span className="material-symbols-outlined text-slate-700">
+                            {mobileMenuOpen ? "close" : "menu"}
+                        </span>
                     </button>
                 </div>
+            </header>
+
+            {/* Mobile Menu Overlay */}
+            {mobileMenuOpen && (
+                <div
+                    className="lg:hidden fixed inset-0 bg-black/50 z-40 animate-in fade-in duration-200"
+                    onClick={() => setMobileMenuOpen(false)}
+                />
+            )}
+
+            {/* Mobile Menu Sidebar */}
+            <div
+                className={`lg:hidden fixed top-0 right-0 h-screen w-80 max-w-[85vw] bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+                    }`}
+            >
+                <div className="p-6">
+                    <div className="flex items-center justify-between mb-8">
+                        <h2 className="text-xl font-bold text-slate-800">Menu</h2>
+                        <button
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                        >
+                            <span className="material-symbols-outlined text-slate-700">close</span>
+                        </button>
+                    </div>
+
+                    {/* Mobile Navigation Links */}
+                    <nav className="space-y-2">
+                        {navLinks.map((link) => {
+                            const isActive = pathname === link.href;
+                            return (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className={`block px-4 py-3 rounded-lg transition-all ${isActive
+                                        ? "bg-primary text-white font-bold"
+                                        : "text-slate-700 hover:bg-slate-100 font-semibold"
+                                        }`}
+                                >
+                                    {link.label}
+                                </Link>
+                            );
+                        })}
+                    </nav>
+
+                    {/* Mobile Search */}
+                    <div className="mt-8">
+                        <div className="relative">
+                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">
+                                search
+                            </span>
+                            <input
+                                className="w-full bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary/5 focus:border-primary rounded-lg pl-10 pr-4 py-3 text-sm outline-none"
+                                placeholder="Search services..."
+                                type="text"
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
-        </header>
+        </>
     );
 }
