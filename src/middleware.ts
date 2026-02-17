@@ -52,7 +52,7 @@ export async function middleware(request: NextRequest) {
 
     if (isProtectedRoute && !isAuthRoute) {
         // --- IP Restriction Logic ---
-        const clientIp = request.ip || request.headers.get('x-forwarded-for') || 'unknown';
+        const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
         if (process.env.NODE_ENV === 'production' && !ALLOWED_IPS.includes(clientIp)) {
             // In a real scenario, you'd be more careful with x-forwarded-for parsing
             // For now, we allow the request to proceed but this is the hook for lockdown
