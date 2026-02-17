@@ -24,13 +24,14 @@ export async function middleware(request: NextRequest) {
         pathname === route
     );
 
-    // --- Strict Zero Trust IP Check ---
-    if (isProtectedRoute && process.env.NODE_ENV === 'production') {
+    // --- Strict Zero Trust IP Check (ALL ENVIRONMENTS) ---
+    if (isProtectedRoute) {
         const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
         if (!ALLOWED_IPS.includes(clientIp)) {
-            console.warn(`Blocked unauthorized access to admin from IP: ${clientIp}`);
+            console.warn(`🚫 BLOCKED unauthorized admin access from IP: ${clientIp}`);
             return new NextResponse(null, { status: 404 }); // Return 404 to make path look non-existent
         }
+        console.log(`✅ ALLOWED admin access from authorized IP: ${clientIp}`);
     }
 
     const session = request.cookies.get(SESSION_COOKIE_NAME)?.value;
