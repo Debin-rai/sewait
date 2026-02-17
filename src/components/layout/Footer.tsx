@@ -47,10 +47,11 @@ export default function Footer() {
                     <div>
                         <h4 className="text-slate-900 font-bold text-sm mb-6">About Us</h4>
                         <ul className="space-y-4 text-xs text-slate-600">
-                            <li><Link className="hover:text-primary transition-colors" href="#">Our Mission</Link></li>
-                            <li><Link className="hover:text-primary transition-colors" href="#">Contact Us</Link></li>
-                            <li><Link className="hover:text-primary transition-colors" href="#">Privacy Policy</Link></li>
-                            <li><Link className="hover:text-primary transition-colors" href="#">Terms of Service</Link></li>
+                            <li><Link className="hover:text-primary transition-colors" href="/about">About Us</Link></li>
+                            <li><Link className="hover:text-primary transition-colors" href="/mission">Our Mission</Link></li>
+                            <li><Link className="hover:text-primary transition-colors" href="/contact">Contact Us</Link></li>
+                            <li><Link className="hover:text-primary transition-colors" href="/privacy">Privacy Policy</Link></li>
+                            <li><Link className="hover:text-primary transition-colors" href="/terms">Terms of Service</Link></li>
                         </ul>
                     </div>
 
@@ -74,12 +75,11 @@ export default function Footer() {
                 </div>
 
                 <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-slate-500">
-                    <p className="uppercase">© २०८१ SewaIT OFFICIAL. सर्वाधिकार सुरक्षित।</p>
+                    <p className="uppercase">© 2024 SewaIT Inc. All rights reserved.</p>
                     <div className="flex items-center gap-2">
-                        <span className="font-medium">OFFICIAL UTILITY PLATFORM OF</span>
+                        <span className="font-medium">OFFICIAL UTILITY PLATFORM BY</span>
                         <div className="flex items-center gap-1">
-                            <img src="https://flagcdn.com/w20/np.png" width="16" alt="Nepal Flag" className="rounded-xs" />
-                            <span className="font-bold text-slate-700">NEPAL</span>
+                            <span className="font-bold text-slate-700 uppercase tracking-wider">Debin Rai</span>
                         </div>
                     </div>
                 </div>

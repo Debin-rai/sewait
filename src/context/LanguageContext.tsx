@@ -182,7 +182,7 @@ const translations: Record<Language, Translations> = {
             title: "Special Functions",
             update: "Update",
             officialInfo: "Official Information",
-            officialDesc: "सजिलो साथी is a platform that presents official information from various Nepal Government agencies in a simple manner.",
+            officialDesc: "SewaIT is a platform that presents official information from various Nepal Government agencies in a simple manner.",
             items: [
                 { title: "National ID Renewal", desc: "Online form and required documents" },
                 { title: "Lost Passport Notice", desc: "Process for new passport" },
@@ -209,8 +209,8 @@ const translations: Record<Language, Translations> = {
             newsletter: "Get Notifications",
             newsletterDesc: "Register to receive important government notices directly to your email.",
             subscribe: "Subscribe",
-            copyright: "© २०८१ सजिलो साथी OFFICIAL. सर्वाधिकार सुरक्षित।",
-            platform: "OFFICIAL UTILITY PLATFORM OF",
+            copyright: "© 2024 SewaIT Inc. All rights reserved.",
+            platform: "OFFICIAL UTILITY PLATFORM BY",
         },
     },
     np: {
@@ -302,7 +302,7 @@ const translations: Record<Language, Translations> = {
             title: "विशेष कार्यहरू",
             update: "अद्यावधिक",
             officialInfo: "आधिकारिक जानकारी",
-            officialDesc: "सजिलो साथी नेपाल सरकारका विभिन्न निकायहरूबाट प्राप्त आधिकारिक सूचनाहरूलाई सरल ढंगले प्रस्तुत गर्ने माध्यम हो।",
+            officialDesc: "SewaIT नेपाल सरकारका विभिन्न निकायहरूबाट प्राप्त आधिकारिक सूचनाहरूलाई सरल ढंगले प्रस्तुत गर्ने माध्यम हो।",
             items: [
                 { title: "राष्ट्रिय परिचयपत्र नवीकरण", desc: "अनलाइन फारम र आवश्यक कागजातहरू" },
                 { title: "राहदानी हराएको सूचना", desc: "नयाँ बनाउन चालिने प्रक्रिया" },
@@ -329,8 +329,8 @@ const translations: Record<Language, Translations> = {
             newsletter: "सूचना प्राप्त गर्नुहोस्",
             newsletterDesc: "महत्वपूर्ण सरकारी सूचनाहरू सिधै इमेलमा प्राप्त गर्न दर्ता गर्नुहोस्।",
             subscribe: "दर्ता गर्नुहोस्",
-            copyright: "© २०८१ सजिलो साथी OFFICIAL. सर्वाधिकार सुरक्षित।",
-            platform: "OFFICIAL UTILITY PLATFORM OF",
+            copyright: "© 2024 SewaIT Inc. All rights reserved.",
+            platform: "OFFICIAL UTILITY PLATFORM BY",
         },
     },
 };
