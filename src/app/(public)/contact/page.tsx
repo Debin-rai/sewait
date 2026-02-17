@@ -36,6 +36,16 @@ export default function ContactPage() {
                             </div>
                         </div>
 
+                        <div className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm flex items-center gap-6">
+                            <div className="size-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0">
+                                <span className="material-symbols-outlined text-3xl font-black">alternate_email</span>
+                            </div>
+                            <div>
+                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Direct Contact</p>
+                                <p className="text-xl font-black text-[#1a355b] break-all">reedweveen@gmail.com</p>
+                            </div>
+                        </div>
+
                         <div className="bg-[#1a355b] p-8 rounded-[32px] text-white shadow-xl shadow-blue-900/10">
                             <h3 className="text-lg font-black mb-4 flex items-center gap-2">
                                 <span className="material-symbols-outlined text-[#10b981]">monitoring</span>

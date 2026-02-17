@@ -26,7 +26,7 @@ export default function Footer() {
                             <Link href="#" className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-primary transition-colors hover:text-white group">
                                 <span className="material-symbols-outlined text-sm text-slate-500 group-hover:text-white">public</span>
                             </Link>
-                            <Link href="#" className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-primary transition-colors hover:text-white group">
+                            <Link href="mailto:contact@sewait.com" className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-primary transition-colors hover:text-white group">
                                 <span className="material-symbols-outlined text-sm text-slate-500 group-hover:text-white">mail</span>
                             </Link>
                         </div>
@@ -64,7 +64,7 @@ export default function Footer() {
                         <div className="flex gap-2">
                             <input
                                 type="email"
-                                placeholder="email@example.com"
+                                placeholder="your@email.com"
                                 className="bg-slate-50 border border-slate-200 rounded-lg text-xs px-4 py-2 flex-1 focus:ring-1 focus:ring-primary focus:border-primary outline-none"
                             />
                             <button className="bg-primary text-white text-[10px] font-bold px-4 py-2 rounded-lg hover:bg-primary-light transition-colors">
