@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 export default function WidgetsGrid() {
     return (
@@ -120,34 +121,93 @@ export default function WidgetsGrid() {
             </Link>
 
             {/* Weather Widget */}
-            <Link href="/weather" className="bg-white border border-slate-100 shadow-sm rounded-2xl p-6 hover:shadow-lg transition-all border-t-4 border-t-accent-amber block">
-                <div className="flex items-center gap-2 mb-6">
-                    <span className="material-symbols-outlined text-accent-amber">partly_cloudy_day</span>
-                    <h2 className="text-slate-900 font-bold text-lg">Weather <span className="nepali-font text-sm text-slate-400">मौसम</span></h2>
-                </div>
-
-                <div className="flex items-center gap-6 mb-8 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                    <span className="material-symbols-outlined text-5xl text-primary/80">sunny</span>
-                    <div>
-                        <p className="text-3xl font-bold text-primary tracking-tighter">22°C</p>
-                        <p className="text-xs font-bold text-slate-500">Kathmandu, Clear</p>
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-3">
-                    {[
-                        { day: "THU", temp: "24°", icon: "cloud" },
-                        { day: "FRI", temp: "23°", icon: "partly_cloudy_day" },
-                        { day: "SAT", temp: "25°", icon: "sunny" }
-                    ].map((w, i) => (
-                        <div key={i} className="text-center p-2 rounded-xl border border-slate-50 bg-slate-50/30">
-                            <p className="text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-tighter">{w.day}</p>
-                            <span className="material-symbols-outlined text-slate-400 text-lg mb-1">{w.icon}</span>
-                            <p className="text-xs font-black text-slate-700">{w.temp}</p>
-                        </div>
-                    ))}
-                </div>
-            </Link>
+            <WeatherWidget />
         </div>
+    );
+}
+
+function WeatherWidget() {
+    const [weather, setWeather] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+
+    const fetchWeather = async (lat?: number, lon?: number) => {
+        try {
+            const url = lat && lon
+                ? `/api/weather?lat=${lat}&lon=${lon}`
+                : `/api/weather`;
+            const res = await fetch(url);
+            const data = await res.json();
+            if (!data.error) setWeather(data);
+        } catch (err) {
+            console.error("Weather fetch failed", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => fetchWeather(pos.coords.latitude, pos.coords.longitude),
+                () => fetchWeather() // Fallback to Kathmandu on denial
+            );
+        } else {
+            fetchWeather();
+        }
+    }, []);
+
+    const formatTime = (timestamp: number) => {
+        return new Date(timestamp * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    };
+
+    return (
+        <Link href="/weather" className="bg-white border border-slate-100 shadow-sm rounded-2xl p-6 hover:shadow-lg transition-all border-t-4 border-t-accent-amber block overflow-hidden">
+            <div className="flex items-center gap-2 mb-6">
+                <span className="material-symbols-outlined text-accent-amber">partly_cloudy_day</span>
+                <h2 className="text-slate-900 font-bold text-lg">Weather <span className="nepali-font text-sm text-slate-400">मौसम</span></h2>
+            </div>
+
+            {loading ? (
+                <div className="h-40 flex flex-col items-center justify-center gap-2">
+                    <div className="size-8 border-4 border-slate-100 border-t-primary rounded-full animate-spin"></div>
+                    <p className="text-[10px] font-black uppercase text-slate-400">Locating...</p>
+                </div>
+            ) : weather ? (
+                <>
+                    <div className="flex items-center gap-6 mb-6 bg-slate-50 p-4 rounded-2xl border border-slate-100 relative overflow-hidden">
+                        <div className="relative z-10">
+                            <p className="text-4xl font-black text-primary tracking-tighter">{weather.temp}°C</p>
+                            <p className="text-xs font-bold text-slate-500 mt-1">{weather.city || 'Kathmandu'}</p>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-primary/60 mt-0.5">{weather.condition}</p>
+                        </div>
+                        <span className="material-symbols-outlined text-6xl text-primary/10 absolute -right-2 -bottom-2">
+                            {weather.condition.toLowerCase().includes('cloud') ? 'cloud' : 'sunny'}
+                        </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="bg-orange-50/50 p-3 rounded-xl border border-orange-100 flex flex-col items-center gap-1">
+                            <span className="material-symbols-outlined text-orange-500 text-lg">wb_sunny</span>
+                            <div className="text-center">
+                                <p className="text-[9px] font-black text-orange-400 uppercase leading-none">Sunrise <span className="nepali-font">सूर्योदय</span></p>
+                                <p className="text-xs font-black text-slate-700 mt-1">{formatTime(weather.sunrise)}</p>
+                            </div>
+                        </div>
+                        <div className="bg-indigo-50/50 p-3 rounded-xl border border-indigo-100 flex flex-col items-center gap-1">
+                            <span className="material-symbols-outlined text-indigo-500 text-lg">wb_twilight</span>
+                            <div className="text-center">
+                                <p className="text-[9px] font-black text-indigo-400 uppercase leading-none">Sunset <span className="nepali-font">सूर्यास्त</span></p>
+                                <p className="text-xs font-black text-slate-700 mt-1">{formatTime(weather.sunset)}</p>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            ) : (
+                <div className="p-4 bg-red-50 rounded-xl text-center">
+                    <p className="text-xs font-bold text-red-500">API Key Missing</p>
+                    <p className="text-[9px] text-red-400 mt-1">Configure in Admin Settings</p>
+                </div>
+            )}
+        </Link>
     );
 }

@@ -1,13 +1,46 @@
 "use client";
 
 import { useLanguage } from "@/context/LanguageContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function WeatherPage() {
     const { t } = useLanguage();
-    const [searchQuery, setSearchQuery] = useState("");
+    const [weather, setWeather] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
 
-    // Forecast data based on reference
+    const fetchWeather = async (lat?: number, lon?: number) => {
+        setLoading(true);
+        try {
+            const url = lat && lon
+                ? `/api/weather?lat=${lat}&lon=${lon}`
+                : `/api/weather`;
+            const res = await fetch(url);
+            const data = await res.json();
+            if (!data.error) setWeather(data);
+        } catch (err) {
+            console.error("Weather fetch failed", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => fetchWeather(pos.coords.latitude, pos.coords.longitude),
+                () => fetchWeather() // Fallback
+            );
+        } else {
+            fetchWeather();
+        }
+    }, []);
+
+    const formatTime = (timestamp: number) => {
+        if (!timestamp) return "--:--";
+        return new Date(timestamp * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    };
+
+    // Forecast data based on reference (Keep static for now as 3.0 OneCall implementation focuses on current/daily current)
     const forecast = [
         { day: "Tue", icon: "wb_sunny", condition: "Sunny", high: 28, low: 18, color: "text-orange-400" },
         { day: "Wed", icon: "partly_cloudy_day", condition: "Cloudy", high: 26, low: 17, color: "text-slate-400" },
@@ -19,8 +52,8 @@ export default function WeatherPage() {
     ];
 
     const metrics = [
-        { label: "Humidity", value: "65%", subValue: "+2%", icon: "humidity_percentage", iconColor: "text-blue-500", trend: "up" },
-        { label: "Wind", value: "12", unit: "km/h", subValue: "-1km", icon: "air", iconColor: "text-slate-500", trend: "down" },
+        { label: "Humidity", value: weather?.humidity ? `${weather.humidity}%` : "--", subValue: "", icon: "humidity_percentage", iconColor: "text-blue-500", trend: "neutral" },
+        { label: "Wind", value: weather?.wind || "--", unit: "km/h", subValue: "", icon: "air", iconColor: "text-slate-500", trend: "neutral" },
         { label: "Pressure", value: "1012", unit: "hPa", subValue: "0 hPa", icon: "compress", iconColor: "text-purple-500", trend: "neutral" },
         { label: "UV Index", value: "Moderate", subValue: "+1", icon: "wb_sunny", iconColor: "text-orange-500", trend: "up" },
     ];
@@ -35,11 +68,18 @@ export default function WeatherPage() {
                             <span className="material-symbols-outlined text-base">location_on</span>
                             <span className="text-sm font-black uppercase tracking-wider">Current Location</span>
                         </div>
-                        <h1 className="mt-1 text-5xl font-black tracking-tight text-slate-900 nepali-font">काठमाडौं, नेपाल</h1>
-                        <p className="mt-2 text-sm text-slate-500 font-semibold uppercase tracking-wide">Monday, 24 May • Last updated 10:42 AM</p>
+                        <h1 className="mt-1 text-5xl font-black tracking-tight text-slate-900 nepali-font">
+                            {loading ? "लोड हुँदै..." : (weather?.city ? `${weather.city}, नेपाल` : t.hero.kathmandu_nepal)}
+                        </h1>
+                        <p className="mt-2 text-sm text-slate-500 font-semibold uppercase tracking-wide">
+                            {new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' })} • Last updated {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </p>
                     </div>
                     <div className="flex gap-3">
-                        <button className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-700 shadow-sm hover:bg-slate-50 transition-all active:scale-95">
+                        <button
+                            onClick={() => fetchWeather()}
+                            className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-700 shadow-sm hover:bg-slate-50 transition-all active:scale-95"
+                        >
                             <span className="material-symbols-outlined mr-2 text-sm">refresh</span> Refresh
                         </button>
                         <button className="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-xl hover:bg-primary/95 transition-all active:scale-95">
@@ -55,26 +95,41 @@ export default function WeatherPage() {
                         <div className="overflow-hidden rounded-3xl bg-white p-10 shadow-xl ring-1 ring-slate-200 transition-all hover:shadow-2xl">
                             <div className="flex flex-col items-center justify-between gap-10 md:flex-row">
                                 <div className="text-center md:text-left">
-                                    <div className="flex items-start justify-center md:justify-start">
-                                        <span className="text-9xl font-black tracking-tighter text-slate-900 md:text-[160px]">24</span>
-                                        <span className="mt-8 text-5xl font-bold text-slate-300">°C</span>
-                                    </div>
-                                    <p className="mt-4 text-3xl font-bold text-slate-600 nepali-font">आंशिक बदली</p>
-                                    <div className="mt-6 flex gap-6 text-sm font-bold text-slate-500 uppercase tracking-widest">
-                                        <span className="flex items-center gap-1.5 hover:text-orange-600 transition-colors">
-                                            <span className="material-symbols-outlined text-sm text-orange-500 font-black">arrow_upward</span> H: 28°
-                                        </span>
-                                        <span className="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
-                                            <span className="material-symbols-outlined text-sm text-blue-500 font-black">arrow_downward</span> L: 19°
-                                        </span>
-                                    </div>
+                                    {loading ? (
+                                        <div className="animate-pulse space-y-4">
+                                            <div className="h-32 w-48 bg-slate-100 rounded-2xl"></div>
+                                            <div className="h-8 w-32 bg-slate-50 rounded-lg"></div>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <div className="flex items-start justify-center md:justify-start">
+                                                <span className="text-9xl font-black tracking-tighter text-slate-900 md:text-[160px] leading-none">
+                                                    {weather?.temp || "--"}
+                                                </span>
+                                                <span className="mt-8 text-5xl font-bold text-slate-300">°C</span>
+                                            </div>
+                                            <p className="mt-4 text-3xl font-bold text-slate-600 nepali-font">{weather?.description || "आंशिक बदली"}</p>
+                                            <div className="mt-6 flex gap-6 text-sm font-bold text-slate-500 uppercase tracking-widest">
+                                                <span className="flex items-center gap-1.5 hover:text-orange-600 transition-colors">
+                                                    <span className="material-symbols-outlined text-sm text-orange-500 font-black">arrow_upward</span> H: {weather?.temp + 2 || "--"}°
+                                                </span>
+                                                <span className="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
+                                                    <span className="material-symbols-outlined text-sm text-blue-500 font-black">arrow_downward</span> L: {weather?.temp - 3 || "--"}°
+                                                </span>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
-                                <div className="relative h-64 w-64 md:h-80 md:w-80">
+                                <div className="relative h-64 w-64 md:h-80 md:w-80 flex items-center justify-center">
                                     <div className="absolute inset-0 flex items-center justify-center opacity-10 animate-pulse">
-                                        <span className="material-symbols-outlined text-[240px] text-orange-400">light_mode</span>
+                                        <span className="material-symbols-outlined text-[240px] text-orange-400">
+                                            {weather?.condition?.toLowerCase()?.includes('sky') ? 'light_mode' : 'sunny'}
+                                        </span>
                                     </div>
                                     <div className="absolute inset-0 flex items-center justify-center drop-shadow-2xl">
-                                        <span className="material-symbols-outlined text-[140px] text-slate-400 md:text-[180px]">cloud</span>
+                                        <span className="material-symbols-outlined text-[140px] text-slate-400 md:text-[180px]">
+                                            {weather?.condition?.toLowerCase()?.includes('cloud') ? 'cloud' : (weather?.condition?.toLowerCase()?.includes('rain') ? 'rainy' : 'sunny')}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -93,15 +148,17 @@ export default function WeatherPage() {
                                             {metric.value}
                                             {metric.unit && <span className="text-xs font-bold text-slate-300 ml-1 uppercase">{metric.unit}</span>}
                                         </span>
-                                        <span className={`text-xs font-black ${metric.trend === 'up' ? 'text-green-500' : metric.trend === 'down' ? 'text-red-500' : 'text-slate-400'}`}>
-                                            {metric.subValue}
-                                        </span>
+                                        {metric.subValue && (
+                                            <span className={`text-xs font-black ${metric.trend === 'up' ? 'text-green-500' : metric.trend === 'down' ? 'text-red-500' : 'text-slate-400'}`}>
+                                                {metric.subValue}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                             ))}
                         </div>
 
-                        {/* Hourly Graph */}
+                        {/* Hourly Graph (Static placeholder) */}
                         <div className="rounded-3xl bg-white p-8 shadow-md ring-1 ring-slate-200">
                             <div className="mb-8 flex items-center justify-between">
                                 <h3 className="text-lg font-black text-slate-900 nepali-font">प्रति घण्टा तापक्रम</h3>
@@ -138,7 +195,7 @@ export default function WeatherPage() {
 
                     {/* Right Column: 7-Day Forecast & Sun/Moon */}
                     <div className="lg:col-span-4 space-y-8">
-                        {/* 7-Day Forecast */}
+                        {/* 7-Day Forecast (Static) */}
                         <div className="rounded-3xl bg-white p-8 shadow-lg ring-1 ring-slate-200 h-fit">
                             <h3 className="mb-8 flex items-center gap-3 text-lg font-black text-slate-900 nepali-font">
                                 <span className="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-xl">calendar_month</span>
@@ -164,26 +221,26 @@ export default function WeatherPage() {
                             </button>
                         </div>
 
-                        {/* Sun & Moon Info */}
+                        {/* Sun & Moon Info (Real Data) */}
                         <div className="relative overflow-hidden rounded-3xl bg-slate-900 p-8 shadow-2xl transition-all hover:shadow-primary/20">
                             <h3 className="mb-8 font-black text-white/50 text-xs uppercase tracking-[0.2em]">सुर्योदय र सुर्यास्त</h3>
-                            <div className="grid grid-cols-2 gap-6 relative z-10">
-                                <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-500/20 ring-1 ring-orange-500/30">
-                                        <span className="material-symbols-outlined text-orange-500 text-xl font-black">sunny</span>
+                            <div className="grid grid-cols-1 gap-4 relative z-10">
+                                <div className="flex items-center gap-4 p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-500/20 ring-1 ring-orange-500/30 group-hover:scale-110 transition-transform">
+                                        <span className="material-symbols-outlined text-orange-500 text-2xl font-black">wb_sunny</span>
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">Sunrise</p>
-                                        <p className="text-lg font-black text-white whitespace-nowrap">5:12 AM</p>
+                                        <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">Sunrise <span className="nepali-font ml-1">सूर्योदय</span></p>
+                                        <p className="text-xl font-black text-white tracking-tight">{loading ? "--:--" : formatTime(weather?.sunrise)}</p>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-500/20 ring-1 ring-indigo-500/30">
-                                        <span className="material-symbols-outlined text-indigo-400 text-xl font-black">wb_twilight</span>
+                                <div className="flex items-center gap-4 p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500/20 ring-1 ring-indigo-500/30 group-hover:scale-110 transition-transform">
+                                        <span className="material-symbols-outlined text-indigo-400 text-2xl font-black">wb_twilight</span>
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">Sunset</p>
-                                        <p className="text-lg font-black text-white whitespace-nowrap">6:45 PM</p>
+                                        <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">Sunset <span className="nepali-font ml-1">सूर्यास्त</span></p>
+                                        <p className="text-xl font-black text-white tracking-tight">{loading ? "--:--" : formatTime(weather?.sunset)}</p>
                                     </div>
                                 </div>
                             </div>
@@ -192,11 +249,13 @@ export default function WeatherPage() {
                     </div>
                 </div>
 
-                {/* Search Sidebar/Footer */}
+                {/* Footer Info */}
                 <div className="mt-12 flex flex-col md:flex-row items-center justify-between gap-6 p-8 bg-white rounded-3xl shadow-sm border border-slate-100">
                     <div className="flex items-center gap-4 opacity-50">
                         <span className="material-symbols-outlined text-base">verified</span>
-                        <p className="text-xs font-bold uppercase tracking-widest nepali-font">डाटा २ मिनेट अघि अपडेट गरिएको</p>
+                        <p className="text-xs font-bold uppercase tracking-widest nepali-font">
+                            डाटा {loading ? "..." : "२ मिनेट अघि"} अपडेट गरिएको
+                        </p>
                     </div>
                     <div className="flex gap-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">
                         <a className="hover:text-primary transition-colors" href="#">Privacy Policy</a>

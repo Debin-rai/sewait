@@ -1,11 +1,45 @@
 "use client";
 
 import { useLanguage } from "@/context/LanguageContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function CalendarPage() {
     const { language, t } = useLanguage();
+    const [weather, setWeather] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+
+    const fetchWeather = async (lat?: number, lon?: number) => {
+        setLoading(true);
+        try {
+            const url = lat && lon
+                ? `/api/weather?lat=${lat}&lon=${lon}`
+                : `/api/weather`;
+            const res = await fetch(url);
+            const data = await res.json();
+            if (!data.error) setWeather(data);
+        } catch (err) {
+            console.error("Weather fetch failed", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => fetchWeather(pos.coords.latitude, pos.coords.longitude),
+                () => fetchWeather()
+            );
+        } else {
+            fetchWeather();
+        }
+    }, []);
+
+    const formatTime = (timestamp: number) => {
+        if (!timestamp) return "--:--";
+        return new Date(timestamp * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    };
 
     const panchangData = [
         { label: "Tithi", value: "Panchami" },
@@ -139,28 +173,29 @@ export default function CalendarPage() {
                             </div>
                         </div>
 
+                        {/* Real-time Sunrise/Sunset Widgets */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
                             <div className="bg-white rounded-2xl p-6 flex items-center gap-5 shadow-sm border border-slate-50 hover:shadow-md transition-shadow min-w-0">
-                                <div className="bg-orange-50 w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                <div className="bg-orange-50 w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 animate-in zoom-in duration-500">
                                     <span className="material-symbols-outlined text-orange-500 text-2xl">wb_sunny</span>
                                 </div>
                                 <div className="min-w-0">
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Sunrise</p>
-                                    <p className="text-xl font-black text-primary whitespace-nowrap">06:42 AM</p>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Sunrise <span className="nepali-font ml-1">सूर्योदय</span></p>
+                                    <p className="text-xl font-black text-primary whitespace-nowrap">{loading ? "--:--" : formatTime(weather?.sunrise)}</p>
                                 </div>
                             </div>
                             <div className="bg-white rounded-2xl p-6 flex items-center gap-5 shadow-sm border border-slate-50 hover:shadow-md transition-shadow min-w-0">
-                                <div className="bg-orange-50 w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0">
-                                    <span className="material-symbols-outlined text-orange-500 text-2xl">wb_twilight</span>
+                                <div className="bg-indigo-50 w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 animate-in zoom-in duration-500">
+                                    <span className="material-symbols-outlined text-indigo-500 text-2xl">wb_twilight</span>
                                 </div>
                                 <div className="min-w-0">
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Sunset</p>
-                                    <p className="text-xl font-black text-primary whitespace-nowrap">06:12 PM</p>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Sunset <span className="nepali-font ml-1">सूर्यास्त</span></p>
+                                    <p className="text-xl font-black text-primary whitespace-nowrap">{loading ? "--:--" : formatTime(weather?.sunset)}</p>
                                 </div>
                             </div>
                             <div className="bg-white rounded-2xl p-6 flex items-center gap-5 shadow-sm border border-slate-50 hover:shadow-md transition-shadow min-w-0">
-                                <div className="bg-orange-50 w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0">
-                                    <span className="material-symbols-outlined text-orange-500 text-2xl">stars</span>
+                                <div className="bg-amber-50 w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                    <span className="material-symbols-outlined text-amber-500 text-2xl">stars</span>
                                 </div>
                                 <div className="min-w-0 overflow-hidden">
                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 truncate">Tithi / Pakshya</p>
@@ -196,16 +231,21 @@ export default function CalendarPage() {
                             </button>
                         </div>
 
-                        {/* Weather Snapshot */}
-                        <div className="mt-8 bg-white rounded-2xl p-6 border border-slate-100 flex items-center gap-5 shadow-sm hover:shadow-md transition-all group cursor-pointer">
-                            <div className="bg-slate-100 p-4 rounded-xl group-hover:bg-primary transition-colors">
-                                <span className="material-symbols-outlined text-slate-400 group-hover:text-white transition-colors">cloud</span>
+                        {/* Real Weather Snapshot */}
+                        <Link href="/weather" className="mt-8 bg-white rounded-2xl p-6 border border-slate-100 flex items-center gap-5 shadow-sm hover:shadow-md transition-all group cursor-pointer overflow-hidden relative">
+                            <div className="absolute inset-0 bg-primary/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                            <div className="bg-slate-100 p-4 rounded-xl group-hover:bg-primary transition-colors relative z-10">
+                                <span className="material-symbols-outlined text-slate-400 group-hover:text-white transition-colors">
+                                    {weather?.condition?.toLowerCase()?.includes('cloud') ? 'cloud' : (weather?.condition?.toLowerCase()?.includes('rain') ? 'rainy' : 'sunny')}
+                                </span>
                             </div>
-                            <div>
-                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Weather - Kathmandu</p>
-                                <p className="text-sm font-black text-primary">18°C / 4°C · Sunny</p>
+                            <div className="relative z-10">
+                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest group-hover:text-slate-600">Weather - {loading ? "..." : (weather?.city || "Kathmandu")}</p>
+                                <p className="text-sm font-black text-primary">
+                                    {loading ? "लोड हुँदै..." : `${weather?.temp || "--"}°C · ${weather?.description || "आंशिक बदली"}`}
+                                </p>
                             </div>
-                        </div>
+                        </Link>
                     </div>
                 </div>
 

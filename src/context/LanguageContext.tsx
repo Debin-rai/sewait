@@ -23,6 +23,7 @@ type Translations = {
         tithi: string;
         festival: string;
         kathmandu: string;
+        kathmandu_nepal: string;
     };
     services: {
         title: string;
@@ -111,6 +112,7 @@ const translations: Record<Language, Translations> = {
             tithi: "Ekadashi Tithi",
             festival: "5 days left for Dashain (Ghatasthapana)",
             kathmandu: "Kathmandu: 22°C",
+            kathmandu_nepal: "Kathmandu, Nepal",
         },
         services: {
             title: "Government Guides & Services",
@@ -230,6 +232,7 @@ const translations: Record<Language, Translations> = {
             tithi: "एकादशी तिथि",
             festival: "दशैं आउन ५ दिन बाँकी (घटस्थापना)",
             kathmandu: "काठमाडौं: २२°C",
+            kathmandu_nepal: "काठमाडौं, नेपाल",
         },
         services: {
             title: "सरकारी गाइड तथा सेवाहरू",

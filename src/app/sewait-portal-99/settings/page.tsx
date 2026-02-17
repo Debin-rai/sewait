@@ -83,26 +83,31 @@ export default function AdminSettingsPage() {
 
                     <div className="space-y-4">
                         {[
-                            { key: "MODULE_WEATHER", label: "Weather Services", desc: "Live temperature and sky conditions" },
-                            { key: "MODULE_NEPSE", label: "Market Data (NEPSE)", desc: "Stock ticker and market status" },
-                            { key: "MODULE_GOLD", label: "Precious Metals", desc: "Gold and Silver spot prices" },
-                            { key: "MODULE_GUIDES", label: "Service Guides", desc: "Sarkari Sewa documentation" }
-                        ].map((item) => (
-                            <label key={item.key} className="flex items-center justify-between p-4 bg-slate-50/50 dark:bg-slate-800/30 rounded-2xl hover:bg-slate-100/50 dark:hover:bg-slate-800/50 transition-all cursor-pointer group">
-                                <div>
-                                    <p className="font-black text-slate-800 dark:text-slate-200">{item.label}</p>
-                                    <p className="text-[10px] text-slate-500 font-medium">{item.desc}</p>
+                            { key: "MODULE_WEATHER", label: "Weather Services", desc: "Live temperature, status, sunrise/sunset", icon: 'partly_cloudy_day', color: 'text-amber-500' },
+                            { key: "MODULE_NEPSE", label: "Market Data (NEPSE)", desc: "Stock ticker and market status", icon: 'monitoring', color: 'text-green-500' },
+                            { key: "MODULE_GOLD", label: "Precious Metals", desc: "Gold and Silver spot prices", icon: 'payments', color: 'text-amber-600' },
+                            { key: "MODULE_GUIDES", label: "Service Guides", desc: "Sarkari Sewa documentation", icon: 'description', color: 'text-blue-500' },
+                            { key: 'ENABLE_ADS', label: 'Ads Management', desc: 'Campaigns and Ad tracking', icon: 'campaign', color: 'text-purple-500' }
+                        ].map((module) => (
+                            <div key={module.key} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800">
+                                <div className="flex items-center gap-3">
+                                    <div className={`size-10 rounded-xl bg-white dark:bg-slate-700 flex items-center justify-center shadow-sm ${module.color}`}>
+                                        <span className="material-symbols-outlined">{module.icon}</span>
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-sm text-slate-700 dark:text-slate-200">{module.label}</p>
+                                        <p className="text-[10px] text-slate-500 font-medium">{module.desc}</p>
+                                    </div>
                                 </div>
-                                <div className="relative inline-flex items-center cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        className="sr-only peer"
-                                        checked={configs[item.key] === "true"}
-                                        onChange={e => updateValue(item.key, e.target.checked ? "true" : "false")}
-                                    />
-                                    <div className="w-12 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
-                                </div>
-                            </label>
+                                <button
+                                    onClick={() => updateValue(module.key, configs[module.key] === 'true' ? 'false' : 'true')}
+                                    className={`w-12 h-6 rounded-full transition-colors relative ${configs[module.key] === 'true' ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-600'
+                                        }`}
+                                >
+                                    <div className={`absolute top-1 left-1 size-4 bg-white rounded-full transition-transform ${configs[module.key] === 'true' ? 'translate-x-6' : 'translate-x-0'
+                                        }`} />
+                                </button>
+                            </div>
                         ))}
                     </div>
                 </section>
