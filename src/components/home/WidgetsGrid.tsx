@@ -157,7 +157,12 @@ function WeatherWidget() {
     }, []);
 
     const formatTime = (timestamp: number) => {
-        return new Date(timestamp * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        if (!timestamp || isNaN(timestamp)) return "--:--";
+        try {
+            return new Date(timestamp * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        } catch (e) {
+            return "--:--";
+        }
     };
 
     return (
@@ -176,12 +181,12 @@ function WeatherWidget() {
                 <>
                     <div className="flex items-center gap-6 mb-6 bg-slate-50 p-4 rounded-2xl border border-slate-100 relative overflow-hidden">
                         <div className="relative z-10">
-                            <p className="text-4xl font-black text-primary tracking-tighter">{weather.temp}°C</p>
-                            <p className="text-xs font-bold text-slate-500 mt-1">{weather.city || 'Kathmandu'}</p>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-primary/60 mt-0.5">{weather.condition}</p>
+                            <p className="text-4xl font-black text-primary tracking-tighter">{weather.current?.temp ?? weather.temp ?? "--"}°C</p>
+                            <p className="text-xs font-bold text-slate-500 mt-1">{weather.current?.city ?? weather.city ?? 'Kathmandu'}</p>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-primary/60 mt-0.5">{weather.current?.condition ?? weather.condition ?? "--"}</p>
                         </div>
                         <span className="material-symbols-outlined text-6xl text-primary/10 absolute -right-2 -bottom-2">
-                            {weather.condition.toLowerCase().includes('cloud') ? 'cloud' : 'sunny'}
+                            {(weather.current?.condition ?? weather.condition ?? "").toLowerCase().includes('cloud') ? 'cloud' : 'sunny'}
                         </span>
                     </div>
 
@@ -190,14 +195,14 @@ function WeatherWidget() {
                             <span className="material-symbols-outlined text-orange-500 text-lg">wb_sunny</span>
                             <div className="text-center">
                                 <p className="text-[9px] font-black text-orange-400 uppercase leading-none">Sunrise <span className="nepali-font">सूर्योदय</span></p>
-                                <p className="text-xs font-black text-slate-700 mt-1">{formatTime(weather.sunrise)}</p>
+                                <p className="text-xs font-black text-slate-700 mt-1">{formatTime(weather.current?.sunrise ?? weather.sunrise)}</p>
                             </div>
                         </div>
                         <div className="bg-indigo-50/50 p-3 rounded-xl border border-indigo-100 flex flex-col items-center gap-1">
                             <span className="material-symbols-outlined text-indigo-500 text-lg">wb_twilight</span>
                             <div className="text-center">
                                 <p className="text-[9px] font-black text-indigo-400 uppercase leading-none">Sunset <span className="nepali-font">सूर्यास्त</span></p>
-                                <p className="text-xs font-black text-slate-700 mt-1">{formatTime(weather.sunset)}</p>
+                                <p className="text-xs font-black text-slate-700 mt-1">{formatTime(weather.current?.sunset ?? weather.sunset)}</p>
                             </div>
                         </div>
                     </div>
