@@ -7,16 +7,16 @@ export default function Sidebar() {
     const pathname = usePathname();
 
     const navLinks = [
-        { href: "/admin", label: "Dashboard", icon: "dashboard" },
-        { href: "/admin/users", label: "User Management", icon: "group" },
-        { href: "/admin/rates", label: "Daily Rates", icon: "monitoring" },
-        { href: "/admin/calendar", label: "Calendar", icon: "calendar_month" },
-        { href: "/admin/content", label: "Content Manager", icon: "description" },
-        { href: "/admin/analytics", label: "Analytics", icon: "analytics" },
-        { href: "/admin/settings", label: "Admin Settings", icon: "settings" },
-        { href: "/admin/logs", label: "System Logs", icon: "history" },
-        { href: "/admin/guides", label: "Sarkari Guides", icon: "account_balance" },
-        { href: "/admin/ads", label: "Ads Management", icon: "ads_click" },
+        { href: "/sewait-portal-99", label: "Dashboard", icon: "dashboard" },
+        { href: "/sewait-portal-99/users", label: "User Management", icon: "group" },
+        { href: "/sewait-portal-99/rates", label: "Daily Rates", icon: "monitoring" },
+        { href: "/sewait-portal-99/calendar", label: "Calendar", icon: "calendar_month" },
+        { href: "/sewait-portal-99/content", label: "Content Manager", icon: "description" },
+        { href: "/sewait-portal-99/analytics", label: "Analytics", icon: "analytics" },
+        { href: "/sewait-portal-99/settings", label: "Admin Settings", icon: "settings" },
+        { href: "/sewait-portal-99/logs", label: "System Logs", icon: "history" },
+        { href: "/sewait-portal-99/guides", label: "Sarkari Guides", icon: "account_balance" },
+        { href: "/sewait-portal-99/ads", label: "Ads Management", icon: "ads_click" },
     ];
 
     return (
@@ -25,12 +25,12 @@ export default function Sidebar() {
                 <div className="relative w-10 h-10 overflow-hidden rounded-lg">
                     <img
                         src="/assets/images/Logo.jpg"
-                        alt="सजिलो साथी एडमिन"
+                        alt="सेवा आईटी एडमिन"
                         className="w-full h-full object-cover"
                     />
                 </div>
                 <div className="flex flex-col">
-                    <h1 className="text-lg font-bold text-primary leading-tight">सजिलो साथी</h1>
+                    <h1 className="text-lg font-bold text-primary leading-tight">सेवा आईटी</h1>
                     <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Admin Panel</span>
                 </div>
             </div>

@@ -60,11 +60,6 @@ export default function Header() {
                         GO
                     </button>
                 </div>
-                <Link href="/admin">
-                    <button className="flex items-center justify-center w-10 h-10 text-slate-600 hover:bg-slate-100 rounded-full border border-slate-200 transition-colors flex-shrink-0 overflow-hidden">
-                        <span className="material-symbols-outlined text-2xl notranslate">account_circle</span>
-                    </button>
-                </Link>
             </div>
         </header>
     );

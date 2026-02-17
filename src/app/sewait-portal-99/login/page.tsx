@@ -33,7 +33,7 @@ export default function AdminLoginPage() {
             }
 
             // Success! Next.js middleware will now allow access
-            router.push("/admin");
+            router.push("/sewait-portal-99");
         } catch (err: any) {
             setError(err.message);
         } finally {

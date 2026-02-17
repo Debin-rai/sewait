@@ -8,9 +8,9 @@ export default function UploadAdPage() {
         <div className="space-y-8 animate-in fade-in duration-500">
             {/* Breadcrumbs */}
             <nav className="flex items-center gap-2 text-sm font-medium text-slate-500">
-                <Link href="/admin" className="hover:text-primary transition-colors">Dashboard</Link>
+                <Link href="/sewait-portal-99" className="hover:text-primary transition-colors">Dashboard</Link>
                 <span className="material-symbols-outlined text-xs leading-none">chevron_right</span>
-                <Link href="/admin/ads" className="hover:text-primary transition-colors">Ads</Link>
+                <Link href="/sewait-portal-99/ads" className="hover:text-primary transition-colors">Ads</Link>
                 <span className="material-symbols-outlined text-xs leading-none">chevron_right</span>
                 <span className="text-primary dark:text-blue-400">Upload</span>
             </nav>
@@ -127,7 +127,7 @@ export default function UploadAdPage() {
                         </label>
                     </div>
                     <div className="flex items-center gap-3">
-                        <Link href="/admin/ads" className="px-6 py-2.5 text-sm font-bold text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors">
+                        <Link href="/sewait-portal-99/ads" className="px-6 py-2.5 text-sm font-bold text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors">
                             Cancel
                         </Link>
                         <button className="px-8 py-2.5 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all flex items-center gap-2">

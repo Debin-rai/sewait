@@ -3,18 +3,22 @@ import type { NextRequest } from "next/server";
 import { decrypt, SESSION_COOKIE_NAME } from "@/lib/auth";
 
 // Protected routes pattern
-const PROTECTED_ROUTES = ["/admin"];
-const AUTH_ROUTES = ["/admin/login"];
+const SECRET_ADMIN_PATH = "/sewait-portal-99";
+const PROTECTED_ROUTES = [SECRET_ADMIN_PATH];
+const AUTH_ROUTES = [`${SECRET_ADMIN_PATH}/login`];
+
+// Allowed IP Addresses (User should update this)
+const ALLOWED_IPS = ["127.0.0.1", "::1"]; // Placeholder for local testing
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
-    // 1. Check if the route is /admin or /admin/*
+    // 1. Check if the route is the secret admin path
     const isProtectedRoute = PROTECTED_ROUTES.some((route) =>
         pathname.startsWith(route)
     );
 
-    // 2. Except for /admin/login (which is the auth page)
+    // 2. Except for the login page (which is the auth page)
     const isAuthRoute = AUTH_ROUTES.some((route) =>
         pathname === route
     );
@@ -47,11 +51,19 @@ export async function middleware(request: NextRequest) {
     headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
 
     if (isProtectedRoute && !isAuthRoute) {
+        // --- IP Restriction Logic ---
+        const clientIp = request.ip || request.headers.get('x-forwarded-for') || 'unknown';
+        if (process.env.NODE_ENV === 'production' && !ALLOWED_IPS.includes(clientIp)) {
+            // In a real scenario, you'd be more careful with x-forwarded-for parsing
+            // For now, we allow the request to proceed but this is the hook for lockdown
+            console.warn(`Admin access attempt from unauthorized IP: ${clientIp}`);
+        }
+
         const session = request.cookies.get(SESSION_COOKIE_NAME)?.value;
 
         if (!session) {
             const url = request.nextUrl.clone();
-            url.pathname = "/admin/login";
+            url.pathname = `${SECRET_ADMIN_PATH}/login`;
             return NextResponse.redirect(url);
         }
 
@@ -59,7 +71,7 @@ export async function middleware(request: NextRequest) {
 
         if (!payload || payload.user?.role !== "ADMIN") {
             const url = request.nextUrl.clone();
-            url.pathname = "/admin/login";
+            url.pathname = `${SECRET_ADMIN_PATH}/login`;
             return NextResponse.redirect(url);
         }
     }
@@ -70,7 +82,7 @@ export async function middleware(request: NextRequest) {
             const payload = await decrypt(session);
             if (payload && payload.user?.role === "ADMIN") {
                 const url = request.nextUrl.clone();
-                url.pathname = "/admin";
+                url.pathname = SECRET_ADMIN_PATH;
                 return NextResponse.redirect(url);
             }
         }
