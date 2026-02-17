@@ -5,7 +5,7 @@ export default function AdminHeader() {
         <header className="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 z-10 sticky top-0">
             <div className="flex items-center gap-4">
                 <nav className="flex items-center text-sm text-slate-500 gap-2">
-                    <span className="hover:text-primary cursor-pointer">Admin</span>
+                    <span className="hover:text-primary cursor-pointer text-xs font-bold uppercase tracking-wider">SewaIT Portal</span>
                     <span className="material-symbols-outlined text-xs">chevron_right</span>
                     <span className="text-slate-900 dark:text-white font-medium">Dashboard</span>
                 </nav>
