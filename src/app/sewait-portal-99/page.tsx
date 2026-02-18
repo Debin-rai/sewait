@@ -6,9 +6,10 @@ export default function AdminDashboard() {
     const [stats, setStats] = useState({
         dau: 0,
         totalUniques: 0,
-        hitsTrend: 12.5,
-        articles: 128,
-        status: "Healthy"
+        hitsTrend: 0,
+        articleCount: 0,
+        status: "Healthy",
+        recentLogs: [] as any[]
     });
     const [loading, setLoading] = useState(true);
 
@@ -18,11 +19,14 @@ export default function AdminDashboard() {
                 const res = await fetch("/api/sewait-portal-99/analytics");
                 const data = await res.json();
                 if (data.dau !== undefined) {
-                    setStats(prev => ({
-                        ...prev,
+                    setStats({
                         dau: data.dau,
-                        totalUniques: data.totalUniques
-                    }));
+                        totalUniques: data.totalUniques,
+                        hitsTrend: data.hitsTrend,
+                        articleCount: data.articleCount,
+                        status: "Healthy",
+                        recentLogs: data.recentLogs || []
+                    });
                 }
             } catch (error) {
                 console.error("Failed to fetch dashboard stats", error);
@@ -33,6 +37,20 @@ export default function AdminDashboard() {
 
         fetchStats();
     }, []);
+
+    const formatRelativeTime = (dateString: string) => {
+        const now = new Date();
+        const past = new Date(dateString);
+        const diffInMs = now.getTime() - past.getTime();
+        const diffInMins = Math.floor(diffInMs / (1000 * 60));
+        const diffInHours = Math.floor(diffInMins / 60);
+        const diffInDays = Math.floor(diffInHours / 24);
+
+        if (diffInMins < 1) return "Just now";
+        if (diffInMins < 60) return `${diffInMins} min${diffInMins > 1 ? 's' : ''} ago`;
+        if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+        return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+    };
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
@@ -52,8 +70,8 @@ export default function AdminDashboard() {
                                 {loading ? "..." : stats.dau.toLocaleString()}
                             </h3>
                         </div>
-                        <div className="bg-[#10b981]/10 text-[#10b981] px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-0.5">
-                            <span className="material-symbols-outlined text-xs">trending_up</span> {stats.hitsTrend}%
+                        <div className={`px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-0.5 ${stats.hitsTrend >= 0 ? "bg-[#10b981]/10 text-[#10b981]" : "bg-red-100 text-red-600"}`}>
+                            <span className="material-symbols-outlined text-xs">{stats.hitsTrend >= 0 ? "trending_up" : "trending_down"}</span> {Math.abs(stats.hitsTrend)}%
                         </div>
                     </div>
                     <div className="h-10 w-full flex items-end gap-1 px-1">
@@ -76,7 +94,7 @@ export default function AdminDashboard() {
                             </h3>
                         </div>
                         <div className="bg-[#10b981]/10 text-[#10b981] px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-0.5">
-                            <span className="material-symbols-outlined text-xs">trending_up</span> 5.2%
+                            <span className="material-symbols-outlined text-xs">trending_up</span> Live
                         </div>
                     </div>
                     <div className="h-10 w-full flex items-end gap-1 px-1">
@@ -93,11 +111,11 @@ export default function AdminDashboard() {
                 <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col gap-4">
                     <div className="flex justify-between items-start">
                         <div>
-                            <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Articles Posted</p>
-                            <h3 className="text-3xl font-bold mt-1">{stats.articles}</h3>
+                            <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Content Assets</p>
+                            <h3 className="text-3xl font-bold mt-1">{loading ? "..." : stats.articleCount}</h3>
                         </div>
                         <div className="bg-slate-100 dark:bg-slate-800 text-slate-500 px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-0.5">
-                            <span className="material-symbols-outlined text-xs">horizontal_rule</span> Steady
+                            <span className="material-symbols-outlined text-xs">horizontal_rule</span> Total
                         </div>
                     </div>
                     <div className="h-10 w-full flex items-end gap-1 px-1">
@@ -117,12 +135,12 @@ export default function AdminDashboard() {
                             <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">System Health</p>
                             <h3 className="text-3xl font-bold mt-1 text-[#10b981]">{stats.status}</h3>
                         </div>
-                        <div className="bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-0.5">
-                            <span className="material-symbols-outlined text-xs">trending_down</span> 0.5% Latency
+                        <div className="bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-0.5">
+                            <span className="material-symbols-outlined text-xs">check_circle</span> Online
                         </div>
                     </div>
                     <div className="h-10 w-full flex items-center gap-1 px-1 bg-slate-50 dark:bg-slate-800/50 rounded p-1">
-                        <div className="h-full w-full bg-gradient-to-r from-[#10b981]/20 via-[#10b981] to-[#10b981]/20 rounded-full"></div>
+                        <div className="h-full w-full bg-gradient-to-r from-[#10b981]/20 via-[#10b981] to-[#10b981]/20 rounded-full animate-pulse"></div>
                     </div>
                 </div>
             </div>
@@ -130,7 +148,7 @@ export default function AdminDashboard() {
             {/* Recent Updates Table */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-white dark:bg-slate-900 sticky left-0">
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">Recent Updates & Alerts</h3>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">Recent Activity & Logs</h3>
                     <div className="flex gap-2">
                         <button className="text-sm font-semibold text-[#1a355b] hover:bg-[#1a355b]/5 px-3 py-1.5 rounded-lg transition-colors">Export CSV</button>
                         <button className="text-sm font-semibold bg-[#1a355b] text-white px-4 py-1.5 rounded-lg hover:bg-[#1a355b]/90 transition-colors shadow-sm">View All</button>
@@ -140,31 +158,49 @@ export default function AdminDashboard() {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-slate-50 dark:bg-slate-800/50">
-                                <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">User ID</th>
-                                <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Activity Type</th>
+                                <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Admin</th>
+                                <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Action</th>
+                                <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Details</th>
                                 <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Time</th>
                                 <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center">Status</th>
                                 <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
-                            {[
-                                { id: "#USR-8821", name: "RS", type: "Account Recovery Requested", time: "2 mins ago", status: "Pending", statusColor: "amber" },
-                                { id: "#USR-9102", name: "MA", type: "New Content Submission", time: "14 mins ago", status: "Resolved", statusColor: "emerald" },
-                                { id: "#ALERT-004", name: "SYS", type: "Database Connection Spike", time: "45 mins ago", status: "Critical", statusColor: "red", typeColor: "text-red-500 font-semibold" },
-                                { id: "#USR-7732", name: "KT", type: "New Pro Subscription", time: "1 hour ago", status: "Processing", statusColor: "blue" },
-                            ].map((row, i) => (
+                            {loading ? (
+                                <tr>
+                                    <td colSpan={6} className="px-6 py-12 text-center text-slate-400 font-bold uppercase tracking-widest">
+                                        Loading activity stream...
+                                    </td>
+                                </tr>
+                            ) : stats.recentLogs.length === 0 ? (
+                                <tr>
+                                    <td colSpan={6} className="px-6 py-12 text-center text-slate-400 italic">
+                                        No recent activity recorded.
+                                    </td>
+                                </tr>
+                            ) : stats.recentLogs.map((log, i) => (
                                 <tr key={i} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/30 transition-colors">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
-                                            <div className={`size-8 rounded ${row.name === 'SYS' ? 'bg-red-100 text-red-600' : 'bg-[#1a355b]/10 text-[#1a355b]'} flex items-center justify-center font-bold text-xs`}>{row.name}</div>
-                                            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{row.id}</span>
+                                            <div className="size-8 rounded bg-[#1a355b]/10 text-[#1a355b] flex items-center justify-center font-bold text-[10px] uppercase">
+                                                {log.admin?.name?.substring(0, 2) || "AD"}
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
+                                                    {log.admin?.name || "System"}
+                                                </span>
+                                                <span className="text-[10px] text-slate-500 uppercase">{log.admin?.role || "System"}</span>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className={`px-6 py-4 text-sm ${row.typeColor || 'text-slate-600 dark:text-slate-400'}`}>{row.type}</td>
-                                    <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">{row.time}</td>
+                                    <td className="px-6 py-4 text-sm font-semibold text-[#1a355b] dark:text-blue-400 uppercase tracking-tight">{log.action}</td>
+                                    <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400 max-w-xs truncate">{log.details}</td>
+                                    <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">{formatRelativeTime(log.createdAt)}</td>
                                     <td className="px-6 py-4 text-center">
-                                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-${row.statusColor}-100 dark:bg-${row.statusColor}-900/30 text-${row.statusColor}-600 dark:text-${row.statusColor}-400 ring-1 ring-${row.statusColor}-200 dark:ring-${row.statusColor}-800`}>{row.status}</span>
+                                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${log.status === 'SUCCESS' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'}`}>
+                                            {log.status}
+                                        </span>
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <button className="text-slate-400 hover:text-[#1a355b]"><span className="material-symbols-outlined">more_vert</span></button>

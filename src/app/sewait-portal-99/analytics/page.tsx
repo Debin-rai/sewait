@@ -59,8 +59,10 @@ export default function AnalyticsDashboardPage() {
                     <h3 className="text-4xl font-black text-slate-800 dark:text-white mt-2">{data.visitors.length}</h3>
                 </div>
                 <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border-b-4 border-[#07883b] shadow-sm hover:translate-y-[-2px] transition-transform">
-                    <p className="text-slate-400 text-xs font-black uppercase tracking-widest">Avg Growth</p>
-                    <h3 className="text-4xl font-black text-[#07883b] mt-2">+12.5%</h3>
+                    <p className="text-slate-400 text-xs font-black uppercase tracking-widest">Growth Trend</p>
+                    <h3 className={`text-4xl font-black mt-2 ${(data as any).hitsTrend >= 0 ? 'text-[#07883b]' : 'text-red-600'}`}>
+                        {(data as any).hitsTrend >= 0 ? '+' : ''}{(data as any).hitsTrend}%
+                    </h3>
                 </div>
             </div>
 

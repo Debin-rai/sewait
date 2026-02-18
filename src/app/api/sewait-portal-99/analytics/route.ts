@@ -16,6 +16,9 @@ export async function GET() {
         const today = new Date();
         today.setUTCHours(0, 0, 0, 0);
 
+        const yesterday = new Date(today);
+        yesterday.setUTCDate(today.getUTCDate() - 1);
+
         // Fetch daily hits (time series)
         const daily = await prisma.dailyAnalytic.findMany({
             orderBy: { date: 'desc' },
@@ -35,12 +38,49 @@ export async function GET() {
             }
         });
 
+        // Get yesterday's DAU for trend calculation
+        const yesterdayDau = await prisma.pageAnalytic.count({
+            where: {
+                date: yesterday
+            }
+        });
+
+        // Calculate trend (%)
+        const hitsTrend = yesterdayDau === 0 ? 100 : Math.round(((dau - yesterdayDau) / yesterdayDau) * 100);
+
         // Get total unique visitors (lifetime)
-        // This is a bit expensive if we count every row, but for now it's okay for 1k DAU scale
-        // A better way would be a separate counter for lifetime uniques
         const totalUniques = await prisma.pageAnalytic.count();
 
-        return NextResponse.json({ daily, visitors, dau, totalUniques });
+        // Article count (Guides + Events)
+        const [guidesCount, eventsCount] = await Promise.all([
+            prisma.guide.count({ where: { status: 'PUBLISHED' } }),
+            prisma.calendarEvent.count()
+        ]);
+        const articleCount = guidesCount + eventsCount;
+
+        // Fetch recent audit logs
+        const recentLogs = await prisma.auditLog.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: 5,
+            include: {
+                admin: {
+                    select: {
+                        name: true,
+                        role: true
+                    }
+                }
+            }
+        });
+
+        return NextResponse.json({
+            daily,
+            visitors,
+            dau,
+            totalUniques,
+            hitsTrend,
+            articleCount,
+            recentLogs
+        });
     } catch (error) {
         console.error("Fetch analytics error:", error);
         return NextResponse.json({ error: 'Failed to fetch analytics' }, { status: 500 });

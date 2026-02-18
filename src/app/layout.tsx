@@ -17,7 +17,7 @@ const mukta = Mukta({
 });
 
 const notoSansDevanagari = localFont({
-  src: "../../public/assets/fonts/NotoSansDevanagari-VariableFont_wdth,wght.ttf",
+  src: "../../public/assets/fonts/NotoSansDevanagari.ttf",
   variable: "--font-noto-sans-devanagari",
   weight: "100 900",
 });
