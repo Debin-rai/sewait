@@ -27,7 +27,8 @@ export default function Home() {
         'logo': 'https://sewait.up.railway.app/assets/images/Final-logo.png',
         'founder': {
           '@type': 'Person',
-          'name': 'SewaIT',
+          '@id': 'https://sewait.up.railway.app/#founder',
+          'name': 'Debin Rai',
           'url': 'https://sewait.up.railway.app/about'
         },
         'sameAs': [

@@ -1,13 +1,49 @@
-"use client";
-
 import React from "react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "About SewaIT | Founded by Debin Rai",
+    description: "Learn about SewaIT, a Nepali utility platform founded by Debin Rai, providing Nepali calendar, gold rates, and digital tools.",
+};
 
 export default function AboutPage() {
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "https://sewait.up.railway.app/#organization",
+                "name": "SewaIT",
+                "url": "https://sewait.up.railway.app",
+                "logo": "https://sewait.up.railway.app/assets/images/Final-logo.png",
+                "founder": {
+                    "@type": "Person",
+                    "@id": "https://sewait.up.railway.app/#founder",
+                    "name": "Debin Rai",
+                    "jobTitle": "Founder & Lead Developer",
+                    "url": "https://sewait.up.railway.app/about"
+                }
+            },
+            {
+                "@type": "Person",
+                "@id": "https://sewait.up.railway.app/#founder",
+                "name": "Debin Rai",
+                "url": "https://sewait.up.railway.app/about",
+                "knowsAbout": ["Web Development", "Nepali Digital Services", "Bikram Sambat"],
+                "founderOf": { "@id": "https://sewait.up.railway.app/#organization" }
+            }
+        ]
+    };
+
     return (
         <div className="min-h-screen bg-[#f8fafc] py-16 md:py-24">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <div className="container mx-auto px-6 max-w-4xl">
                 {/* Header */}
-                <header className="mb-16 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <header className="mb-16">
                     <h1 className="text-4xl md:text-6xl font-black text-[#1a355b] tracking-tight mb-6">
                         About SewaIT
                     </h1>
@@ -15,48 +51,52 @@ export default function AboutPage() {
                 </header>
 
                 {/* Content */}
-                <div className="space-y-12 text-slate-700 leading-relaxed text-lg animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-                    <section className="bg-white p-8 md:p-12 rounded-[40px] shadow-sm border border-slate-100 hover:shadow-xl transition-shadow duration-500">
+                <div className="space-y-12 text-slate-700 leading-relaxed text-lg">
+                    <section className="bg-white p-8 md:p-12 rounded-[40px] shadow-sm border border-slate-100">
+                        <h2 className="text-xl font-bold text-slate-900 mb-6">Official Statement</h2>
+                        <p className="text-xl font-medium text-[#1a355b] mb-8 leading-snug">
+                            SewaIT is a Nepali utility platform founded by <span className="text-slate-900 font-black">Debin Rai</span>, focused on providing daily-use digital services such as Nepali calendar, gold rates, and public information tools.
+                        </p>
                         <p className="mb-6">
-                            SewaIT is a utility-first daily web application dedicated to providing essential Nepali daily tools and local information in one secure location. Founded by <span className="font-bold text-[#1a355b]">Debin Rai</span>, the platform was born from a vision to create a "cleaner, faster, and no-bloat" digital companion for the Nepali community.
+                            The platform was born from a vision to create a cleaner, faster, and more reliable digital companion for the Nepali community, centralizing essential tools that were previously scattered across less secure websites.
                         </p>
                         <p>
-                            Whether you are a student, a professional, or a general user, SewaIT centralizes the information you need most—from the Nepali Calendar and location-based weather to Gold/NEPSE rates and comprehensive Sarkari Guides.
+                            Founded and maintained by Debin Rai, SewaIT serves students, professionals, and general users by providing location-based weather, Bikram Sambat dates, and verified market rates.
                         </p>
                     </section>
 
                     {/* Mission Section */}
                     <section>
-                        <h2 className="text-2xl font-black text-[#1a355b] uppercase tracking-widest mb-8 flex items-center gap-3">
+                        <h3 className="text-2xl font-black text-[#1a355b] uppercase tracking-widest mb-8 flex items-center gap-3">
                             <span className="material-symbols-outlined text-[#10b981]">rocket_launch</span>
-                            Our Mission
-                        </h2>
+                            Our Values
+                        </h3>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {[
                                 {
-                                    title: "Accuracy & Reliability",
-                                    desc: "Providing location-based weather, official festival dates, and manually verified market rates from trusted associations.",
+                                    title: "Accuracy",
+                                    desc: "Official festival dates and manually verified market rates.",
                                     icon: "verified_user",
                                     color: "bg-blue-50 text-blue-600"
                                 },
                                 {
-                                    title: "Security & Privacy",
-                                    desc: "Building a 'Zero Trust' environment where backend logic and user data are strictly protected via high-level encryption.",
-                                    icon: "shield_lock",
+                                    title: "Authority",
+                                    desc: "A verified platform led by Debin Rai to ensure tool integrity.",
+                                    icon: "foundation",
                                     color: "bg-indigo-50 text-indigo-600"
                                 },
                                 {
-                                    title: "Simplicity",
-                                    desc: "Maintaining a professional, crisp UI using modern typography and a focus on essential information.",
-                                    icon: "auto_awesome",
+                                    title: "Efficiency",
+                                    desc: "Blazing fast digital tools built for the modern Nepali web.",
+                                    icon: "bolt",
                                     color: "bg-teal-50 text-teal-600"
                                 }
                             ].map((item, i) => (
-                                <div key={i} className="bg-white p-8 rounded-[32px] border border-slate-100 hover:bg-[#1a355b] hover:text-white transition-all group duration-500">
-                                    <div className={`size-12 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-white/10 group-hover:text-white ${item.color}`}>
+                                <div key={i} className="bg-white p-8 rounded-[32px] border border-slate-100 hover:shadow-lg transition-all duration-300">
+                                    <div className={`size-12 rounded-2xl flex items-center justify-center mb-6 ${item.color}`}>
                                         <span className="material-symbols-outlined font-black">{item.icon}</span>
                                     </div>
-                                    <h3 className="font-black text-lg mb-3 tracking-tight">{item.title}</h3>
+                                    <h4 className="font-black text-lg mb-3 tracking-tight">{item.title}</h4>
                                     <p className="text-sm opacity-80 leading-relaxed font-medium">{item.desc}</p>
                                 </div>
                             ))}

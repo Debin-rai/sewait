@@ -1,6 +1,7 @@
 # SewaIT - Digital Utility Platform
+**Founded by Debin Rai**
 
-SewaIT is a modern digital utility platform designed to simplify the lives of Nepalese citizens by bringing government services, financial data, and essential tools into one unified interface.
+SewaIT is a modern digital utility platform founded by Debin Rai, designed to simplify the lives of Nepalese citizens by bringing government services, financial data, and essential tools into one unified interface.
 
 ## 🚀 Features
 
