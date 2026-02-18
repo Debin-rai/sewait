@@ -10,6 +10,16 @@ export default function AdminLoginPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
+    React.useEffect(() => {
+        const initCsrf = async () => {
+            const { getCookie } = await import("@/lib/cookies");
+            if (!getCookie("sewait_csrf_token")) {
+                await fetch("/api/auth/csrf");
+            }
+        };
+        initCsrf();
+    }, []);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -21,9 +31,14 @@ export default function AdminLoginPage() {
         const rememberMe = (e.target as HTMLFormElement).remember.checked;
 
         try {
-            // Get CSRF token from cookie
+            // Ensure we have a cookie, if not fetch one last time
             const { getCookie } = await import("@/lib/cookies");
-            const csrfToken = getCookie("sewait_csrf_token");
+            let csrfToken = getCookie("sewait_csrf_token");
+
+            if (!csrfToken) {
+                await fetch("/api/auth/csrf");
+                csrfToken = getCookie("sewait_csrf_token");
+            }
 
             const response = await fetch("/api/auth/login", {
                 method: "POST",

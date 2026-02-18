@@ -23,23 +23,26 @@ const notoSansDevanagari = localFont({
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: "SewaIT - Nepali Calendar, Gold Rates & Official Guides",
-    template: "%s | SewaIT by Debin Rai",
-  },
-  description: "Official Nepali utility portal for real-time Gold/Silver rates, Nepali Calendar (Patro), and Government Service Guides.",
+  title: "SewaIT – Nepali Calendar, Gold Rates & Official Guides",
+  description: "SewaIT is a Nepali utility platform providing today’s Nepali date, Tithi, gold rates, weather updates, and official government guides for Nepalis.",
   keywords: ["SewaIT", "Debin Rai", "Nepali Calendar", "Sarkari Guides", "Gold Price Nepal", "today's date", "tithi", "Nepal government services", "आजको मिती", "सुन चाँदी मूल्य", "NEPSE"],
   authors: [{ name: "Debin Rai", url: "https://sewait.up.railway.app" }],
   creator: "Debin Rai",
   publisher: "SewaIT",
+  applicationName: "SewaIT",
+  appleWebApp: {
+    title: "SewaIT",
+    capable: true,
+    statusBarStyle: "default",
+  },
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   openGraph: {
-    title: "SewaIT - Digital Utility Platform for Nepalis",
-    description: "Your daily companion for Nepali Calendar, Gold Rates, and Government Services.",
+    title: "SewaIT – Nepali Calendar, Gold Rates & Official Guides",
+    description: "SewaIT is a Nepali utility platform providing today’s Nepali date, Tithi, gold rates, weather updates, and official government guides for Nepalis.",
     url: "https://sewait.up.railway.app",
     siteName: "SewaIT",
     locale: "ne_NP",
@@ -47,14 +50,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "SewaIT - Digital Utility Platform",
-    description: "Founded by Debin Rai, SewaIT simplifies digital life for Nepalis.",
+    title: "SewaIT – Nepali Calendar, Gold Rates & Official Guides",
+    description: "SewaIT is a Nepali utility platform providing today’s Nepali date, Tithi, gold rates, weather updates, and official government guides for Nepalis.",
     creator: "@SewaIT",
   },
   icons: {
     icon: [
-      { url: "/assets/favicon/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/assets/favicon/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/assets/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
       { url: "/assets/favicon/favicon.ico" },
     ],
     apple: "/assets/favicon/apple-touch-icon.png",
@@ -90,6 +92,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ne" className="light" suppressHydrationWarning>
       <head>
         <meta name="google-site-verification" content="dp_oL0KNsg0OGz0oNnciIxqsjzUw_QsFVzmTywxd8NU" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "SewaIT",
+              "url": "https://sewait.up.railway.app",
+              "logo": "https://sewait.up.railway.app/assets/favicon/web-app-manifest-512x512.png",
+              "alternateName": ["Sewa IT", "SajiloSathi"],
+              "founder": {
+                "@type": "Person",
+                "name": "Debin Rai"
+              }
+            })
+          }}
+        />
       </head>
       <body
         className={`${inter.variable} ${mukta.variable} ${notoSansDevanagari.variable} antialiased bg-background-light text-slate-800 font-body`}
