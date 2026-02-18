@@ -62,8 +62,9 @@ export async function updateSession(request: NextRequest) {
     return res;
 }
 
-export async function setSession(user: { id: string; email: string; role: string }) {
-    const expires = new Date(Date.now() + 30 * 60 * 1000);
+export async function setSession(user: { id: string; email: string; role: string }, rememberMe: boolean = false) {
+    // If rememberMe is true, session lasts 30 days, otherwise 30 minutes
+    const expires = new Date(Date.now() + (rememberMe ? 30 * 24 * 60 * 60 * 1000 : 30 * 60 * 1000));
     const session = await encrypt({
         user: { id: user.id, email: user.email, role: user.role },
         expires

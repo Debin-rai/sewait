@@ -3,6 +3,8 @@ import ServicesGrid from "@/components/home/ServicesGrid";
 import WidgetsGrid from "@/components/home/WidgetsGrid";
 import TasksSection from "@/components/home/TasksSection";
 import AdSlot from "@/components/ads/AdSlot";
+import PersonalReminders from "@/components/PersonalReminders";
+import PremiumPlans from "@/components/home/PremiumPlans";
 
 export default function Home() {
   const jsonLd = {
@@ -50,9 +52,15 @@ export default function Home() {
         <AdSlot position="HOME_HERO" className="mb-12 h-[200px] md:h-[400px]" />
         <ServicesGrid />
         <WidgetsGrid />
-        <div className="mt-8">
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-12 items-start">
           <TasksSection />
+          <div className="lg:col-span-2">
+            <PersonalReminders />
+          </div>
         </div>
+
+        <PremiumPlans />
       </div>
     </div>
   );

@@ -8,6 +8,11 @@ export default function AnalyticsTracker() {
     const initialized = useRef(false);
 
     useEffect(() => {
+        // Track session start if not already tracked
+        if (!sessionStorage.getItem('sewait_session_start')) {
+            sessionStorage.setItem('sewait_session_start', Date.now().toString());
+        }
+
         // Only track once per path change
         const recordHit = async () => {
             try {
@@ -15,12 +20,17 @@ export default function AnalyticsTracker() {
                 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
                 const device = isMobile ? "mobile" : "desktop";
 
+                // Get or generate visitor ID for retention tracking
+                const { getVisitorId } = await import("@/lib/cookies");
+                const visitorId = getVisitorId();
+
                 await fetch("/api/sewait-portal-99/analytics", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         path: pathname,
-                        device: device
+                        device: device,
+                        visitorId: visitorId
                     }),
                 });
             } catch (error) {

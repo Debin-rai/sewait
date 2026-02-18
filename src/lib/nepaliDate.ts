@@ -1,8 +1,4 @@
-/**
- * Simple Nepali Date Utility for SewaIT
- * This provides basic BS date formatting based on a constant offset for the current year.
- * In a production app, use 'ad-bs-converter' or similar library.
- */
+import NepaliDate from 'nepali-date-converter';
 
 const nepaliMonths = [
     "वैशाख", "जेठ", "असार", "साउन", "भदौ", "असोज", "कात्तिक", "मंसिर", "पुस", "माघ", "फागुन", "चैत"
@@ -21,16 +17,12 @@ export function toNepaliNumber(num: number | string): string {
 }
 
 export function getCurrentNepaliDate() {
-    // Current approach: Simple static offset for 2080/2081 transition
-    // February 17, 2026 AD is roughly Phagun 5, 2082 BS
     const now = new Date();
+    const npDate = new NepaliDate(now);
 
-    // For demonstration and within the scope of this task:
-    // We'll return a formatted string for today's date in Nepali
-    // Feb 17 2026 -> 2082 Phagun 5
-    const year = 2082;
-    const month = 10; // Phagun (0-indexed)
-    const day = 5;
+    const year = npDate.getYear();
+    const month = npDate.getMonth(); // 0-indexed
+    const day = npDate.getDate();
     const dayOfWeek = now.getDay();
 
     return {

@@ -106,7 +106,7 @@ export async function GET() {
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { path, device } = body;
+        const { path, device, visitorId } = body;
 
         if (!path) return NextResponse.json({ error: 'Path required' }, { status: 400 });
 
@@ -123,8 +123,9 @@ export async function POST(request: Request) {
         const date = new Date();
         date.setUTCHours(0, 0, 0, 0);
 
-        // Generate Anonymized Visitor Hash (IP + Date)
-        const visitorHash = crypto
+        // Generate Anonymized Visitor Hash (Client ID or IP + Date)
+        // If client provides a visitorId (cookie-based), use it. Otherwise fallback to IP-based.
+        const finalVisitorHash = visitorId || crypto
             .createHash('md5')
             .update(`${clientIp}-${date.toISOString()}`)
             .digest('hex');
@@ -134,14 +135,14 @@ export async function POST(request: Request) {
             where: {
                 pageUrl_visitorHash_date: {
                     pageUrl: path,
-                    visitorHash: visitorHash,
+                    visitorHash: finalVisitorHash,
                     date: date
                 }
             },
             update: {}, // Do nothing if already exists for today
             create: {
                 pageUrl: path,
-                visitorHash: visitorHash,
+                visitorHash: finalVisitorHash,
                 date: date,
                 country: request.headers.get('x-vercel-ip-country') || 'Unknown'
             }

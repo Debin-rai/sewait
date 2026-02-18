@@ -82,6 +82,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
 import SmoothScroll from "@/components/SmoothScroll";
+import PwaPrompt from "@/components/PwaPrompt";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -96,6 +97,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ClientLayout>
             {children}
             <AnalyticsTracker />
+            <PwaPrompt />
           </ClientLayout>
         </SmoothScroll>
       </body>

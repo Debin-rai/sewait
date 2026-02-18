@@ -35,13 +35,20 @@ export async function POST(request: Request) {
     }
 
     try {
-        const { email, password } = await request.json();
+        const { email, password, rememberMe } = await request.json();
 
         if (!email || !password) {
             return NextResponse.json(
                 { error: "Email and password are required" },
                 { status: 400 }
             );
+        }
+
+        // Verify CSRF
+        const { verifyCsrfToken } = await import("@/lib/csrf");
+        const isValidCsrf = await verifyCsrfToken(request);
+        if (!isValidCsrf) {
+            return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
         }
 
         const user = await prisma.user.findUnique({
@@ -136,7 +143,7 @@ export async function POST(request: Request) {
             }
         });
 
-        await setSession(user);
+        await setSession(user, rememberMe);
 
         return NextResponse.json({ success: true, user: { email: user.email, name: user.name } });
     } catch (error) {

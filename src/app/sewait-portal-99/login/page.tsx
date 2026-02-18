@@ -18,12 +18,20 @@ export default function AdminLoginPage() {
         const formData = new FormData(e.target as HTMLFormElement);
         const email = formData.get("email");
         const password = formData.get("password");
+        const rememberMe = (e.target as HTMLFormElement).remember.checked;
 
         try {
+            // Get CSRF token from cookie
+            const { getCookie } = await import("@/lib/cookies");
+            const csrfToken = getCookie("sewait_csrf_token");
+
             const response = await fetch("/api/auth/login", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-csrf-token": csrfToken || ""
+                },
+                body: JSON.stringify({ email, password, rememberMe }),
             });
 
             const data = await response.json();

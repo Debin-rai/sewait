@@ -28,7 +28,12 @@ export default function AdSlot({ position, className = "", aspectRatio = "auto" 
                 if (Array.isArray(data) && data.length > 0) {
                     // Pick a random ad if multiple are active for the same slot
                     const randomIndex = Math.floor(Math.random() * data.length);
-                    setAd(data[randomIndex]);
+                    const selectedAd = data[randomIndex];
+                    setAd(selectedAd);
+
+                    // Track impression in cookie
+                    const { trackAdImpression } = await import("@/lib/cookies");
+                    trackAdImpression(selectedAd.id);
                 }
             } catch (error) {
                 console.error("Ad fetch error:", error);
