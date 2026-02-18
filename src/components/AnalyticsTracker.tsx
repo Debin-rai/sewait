@@ -16,6 +16,13 @@ export default function AnalyticsTracker() {
         // Only track once per path change
         const recordHit = async () => {
             try {
+                // Check if device is excluded
+                const { getCookie } = await import("@/lib/cookies");
+                if (getCookie('sewait_exclude_analytics') === 'true') {
+                    console.log("Analytics: Device excluded, skipping track.");
+                    return;
+                }
+
                 // Detect device type
                 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
                 const device = isMobile ? "mobile" : "desktop";

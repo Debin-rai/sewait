@@ -220,6 +220,45 @@ export default function AdminSettingsPage() {
                     </div>
                 </section>
 
+                {/* Developer Preferences */}
+                <section className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+                    <div className="flex items-center gap-4 mb-8">
+                        <div className="size-12 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-500">
+                            <span className="material-symbols-outlined font-black">developer_mode</span>
+                        </div>
+                        <div>
+                            <h3 className="font-black text-xl text-slate-800 dark:text-white">Developer Preferences</h3>
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Internal Control</p>
+                        </div>
+                    </div>
+
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800">
+                            <div>
+                                <p className="font-bold text-sm text-slate-700 dark:text-slate-200">Exclude My Device</p>
+                                <p className="text-[10px] text-slate-500 font-medium">Stop tracking hits from this browser</p>
+                            </div>
+                            <button
+                                onClick={async () => {
+                                    const { getCookie, setCookie } = await import("@/lib/cookies");
+                                    const isExcluded = getCookie('sewait_exclude_analytics') === 'true';
+                                    setCookie('sewait_exclude_analytics', isExcluded ? 'false' : 'true', 365);
+                                    window.location.reload();
+                                }}
+                                className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${typeof document !== 'undefined' && document.cookie.includes('sewait_exclude_analytics=true')
+                                        ? 'bg-primary'
+                                        : 'bg-slate-200 dark:bg-slate-600'
+                                    }`}
+                            >
+                                <div className={`absolute top-1 left-1 size-4 bg-white rounded-full transition-transform ${typeof document !== 'undefined' && document.cookie.includes('sewait_exclude_analytics=true')
+                                        ? 'translate-x-6'
+                                        : 'translate-x-0'
+                                    }`} />
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
                 {/* System Logs */}
                 <section className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm md:col-span-2">
                     <div className="flex items-center justify-between mb-8">

@@ -113,10 +113,12 @@ export async function POST(request: Request) {
         // Get Client IP
         const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '127.0.0.1';
 
-        // 1. Filter Admin IP or Session
+        // 1. Filter Admin IP or Session or Exclusion Cookie
         const session = await getSession();
-        if (clientIp === ADMIN_IP || (session && session.user?.role === "ADMIN")) {
-            return NextResponse.json({ success: true, message: 'Admin visit ignored' });
+        const exclusionCookie = request.headers.get('cookie')?.includes('sewait_exclude_analytics=true');
+
+        if (clientIp === ADMIN_IP || (session && session.user?.role === "ADMIN") || exclusionCookie) {
+            return NextResponse.json({ success: true, message: 'Internal visit ignored' });
         }
 
         // Normalize date to midnight UTC
