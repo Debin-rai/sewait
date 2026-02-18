@@ -71,6 +71,9 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  verification: {
+    google: "dp_oL0KNsg0OGz0oNnciIxqsjzUw_QsFVzmTywxd8NU",
+  },
 };
 
 import ClientLayout from "./ClientLayout";
@@ -78,18 +81,23 @@ import AnalyticsTracker from "@/components/AnalyticsTracker";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
+import SmoothScroll from "@/components/SmoothScroll";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ne" className="light" suppressHydrationWarning>
       <head>
+        <meta name="google-site-verification" content="dp_oL0KNsg0OGz0oNnciIxqsjzUw_QsFVzmTywxd8NU" />
       </head>
       <body
         className={`${inter.variable} ${mukta.variable} ${notoSansDevanagari.variable} antialiased bg-background-light text-slate-800 font-body`}
       >
-        <ClientLayout>
-          {children}
-          <AnalyticsTracker />
-        </ClientLayout>
+        <SmoothScroll>
+          <ClientLayout>
+            {children}
+            <AnalyticsTracker />
+          </ClientLayout>
+        </SmoothScroll>
       </body>
     </html>
   );
