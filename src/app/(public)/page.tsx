@@ -4,7 +4,6 @@ import WidgetsGrid from "@/components/home/WidgetsGrid";
 import TasksSection from "@/components/home/TasksSection";
 import AdSlot from "@/components/ads/AdSlot";
 import PersonalReminders from "@/components/PersonalReminders";
-import PersonalReminders from "@/components/PersonalReminders";
 
 export default function Home() {
   const jsonLd = {
