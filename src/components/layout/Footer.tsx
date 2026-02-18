@@ -75,7 +75,7 @@ export default function Footer() {
                 </div>
 
                 <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-slate-500">
-                    <p className="uppercase">© 2024 SewaIT Inc. All rights reserved.</p>
+                    <p className="uppercase">© 2026 SewaIT Inc. All rights reserved.</p>
                     <div className="flex items-center gap-2">
                         <span className="font-medium">OFFICIAL UTILITY PLATFORM BY</span>
                         <div className="flex items-center gap-1">

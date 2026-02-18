@@ -15,6 +15,7 @@ export default function Header() {
         { href: "/gold-silver", label: "Gold & Silver" },
         { href: "/nepse", label: "NEPSE" },
         { href: "/guides", label: "Gov. Services" },
+        { href: "/about", label: "About" },
     ];
 
     return (
