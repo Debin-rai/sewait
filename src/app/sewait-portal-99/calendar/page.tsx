@@ -278,7 +278,7 @@ export default function CalendarManagementPage() {
                         {gridDays.map((item, idx) => (
                             <div
                                 key={idx}
-                                onClick={() => !item.padding && handleDateClick(item.bsDate)}
+                                onClick={() => !item.padding && item.bsDate && handleDateClick(item.bsDate)}
                                 className={`aspect-square rounded-2xl p-2 md:p-3 border transition-all cursor-pointer group relative overflow-hidden flex flex-col ${item.padding
                                     ? 'bg-transparent border-transparent cursor-default'
                                     : 'bg-slate-50/50 dark:bg-slate-800/30 border-transparent hover:border-[#1a355b]/20 hover:bg-white dark:hover:bg-slate-800 shadow-sm'
