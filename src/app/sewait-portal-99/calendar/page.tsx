@@ -185,7 +185,20 @@ export default function CalendarManagementPage() {
         const year = viewDate.getYear();
         const month = viewDate.getMonth();
         const firstDayOfMonth = new NepaliDate(year, month, 1).getDay(); // 0 (Sun) to 6 (Sat)
-        const daysInMonth = new NepaliDate(year, month, 1).getDaysInMonth();
+
+        let daysInMonth = 29;
+        for (let d = 29; d <= 32; d++) {
+            try {
+                const date = new NepaliDate(year, month, d);
+                if (date.getMonth() === month) {
+                    daysInMonth = d;
+                } else {
+                    break;
+                }
+            } catch (e) {
+                break;
+            }
+        }
 
         const grid = [];
         // Padding for start of month
