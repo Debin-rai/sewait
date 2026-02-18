@@ -12,7 +12,7 @@ export default function GoldSilverPage() {
         '@context': 'https://schema.org',
         '@type': 'Product',
         'name': 'Gold (24K) - 1 Tola',
-        'image': 'https://sewait.com.np/assets/images/gold-coin.png',
+        'image': 'https://sewait.up.railway.app/assets/images/gold-coin.png',
         'description': 'Current market price of 24 Karat Gold in Nepal per Tola.',
         'brand': {
             '@type': 'Brand',
@@ -20,7 +20,7 @@ export default function GoldSilverPage() {
         },
         'offers': {
             '@type': 'Offer',
-            'url': 'https://sewait.com.np/gold-silver',
+            'url': 'https://sewait.up.railway.app/gold-silver',
             'priceCurrency': 'NPR',
             'price': '118500',
             'priceValidUntil': new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0],

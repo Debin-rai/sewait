@@ -2,4 +2,4 @@ User-agent: *
 Disallow: /sewait-portal-99
 Disallow: /api/admin
 
-Sitemap: http://localhost:3000/sitemap.xml
+Sitemap: https://sewait.up.railway.app/sitemap.xml

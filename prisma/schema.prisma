@@ -51,7 +51,7 @@ model CalendarDay {
   id         String          @id @default(cuid())
   bsDate     String          @unique // e.g., "2081-01-01"
   adDate     DateTime
-  tithi      String
+  tithi      String?
   sunrise    String?         // Kathmandu standard time
   sunset     String?
   events     CalendarEvent[]
@@ -60,14 +60,15 @@ model CalendarDay {
 }
 
 model CalendarEvent {
-  id             String      @id @default(cuid())
-  name           String
-  type           String      // FESTIVAL, HOLIDAY, RITUAL
-  isPublicHoliday Boolean    @default(false)
-  dayId          String
-  day            CalendarDay @relation(fields: [dayId], references: [id], onDelete: Cascade)
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  id              String      @id @default(cuid())
+  name            String
+  type            String      // FESTIVAL, HOLIDAY, RITUAL, GOVERNMENT
+  description     String?
+  isPublicHoliday Boolean     @default(false)
+  dayId           String
+  day             CalendarDay @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 
   @@index([dayId])
 }

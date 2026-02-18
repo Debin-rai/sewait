@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://sewait.com.np'
+    const baseUrl = 'https://sewait.up.railway.app'
 
     // Core static routes
     const routes = [

@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   description: "SewaIT, founded by Debin Rai, provides today's Nepali date, Tithi, location-based weather, and official government guides for Nepalis.",
   keywords: ["SewaIT", "Debin Rai", "Nepali Calendar", "Sarkari Guides", "Gold Price Nepal", "today's date", "tithi", "Nepal government services", "आजको मिती", "सुन चाँदी मूल्य", "NEPSE"],
-  authors: [{ name: "Debin Rai", url: "https://sewait.com.np" }],
+  authors: [{ name: "Debin Rai", url: "https://sewait.up.railway.app" }],
   creator: "Debin Rai",
   publisher: "SewaIT",
   formatDetection: {
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "SewaIT - Digital Utility Platform for Nepalis",
     description: "Your daily companion for Nepali Calendar, Gold Rates, and Government Services.",
-    url: "https://sewait.com.np",
+    url: "https://sewait.up.railway.app",
     siteName: "SewaIT",
     locale: "ne_NP",
     type: "website",

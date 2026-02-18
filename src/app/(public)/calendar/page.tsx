@@ -2,9 +2,9 @@ import { Metadata } from "next";
 import CalendarClient from "./CalendarClient";
 
 export const metadata: Metadata = {
-    title: "Nepali Calendar 2081 | Upcoming Festivals & Tithi | SewaIT",
-    description: "Check today's Nepali date, tithi, and upcoming festivals like Dashain and Tihar. SewaIT's accurate Nepali Calendar 2080-2081.",
-    keywords: ["Nepali Calendar 2081", "आजको मिती", "Today Nepali Date", "Tithi Today", "Nepali Festivals"],
+    title: "नेपाली पात्रो २०८१ | चाडपर्व र तिथि | SewaIT",
+    description: "आजको नेपाली मिति, तिथि, र दशैं तिहार जस्ता आउँदै गरेका चाडपर्वहरू हेर्नुहोस्। SewaIT को सही नेपाली पात्रो २०८०-२०८१।",
+    keywords: ["Nepali Calendar 2081", "आजको मिती", "Today Nepali Date", "Tithi Today", "Nepali Festivals", "नेपाली पात्रो"],
 };
 
 export default function CalendarPage() {
@@ -17,13 +17,13 @@ export default function CalendarPage() {
         'eventAttendanceMode': 'https://schema.org/OnlineEventAttendanceMode',
         'location': {
             '@type': 'VirtualLocation',
-            'url': 'https://sewait.com.np/calendar'
+            'url': 'https://sewait.up.railway.app/calendar'
         },
         'description': 'Daily Panchang, Tithi, and Auspicious timestamps for today.',
         'organizer': {
             '@type': 'Organization',
             'name': 'SewaIT',
-            'url': 'https://sewait.com.np'
+            'url': 'https://sewait.up.railway.app'
         }
     };
 

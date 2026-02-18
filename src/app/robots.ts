@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: '/',
             disallow: ['/admin/', '/sewait-portal-99/', '/api/admin/'],
         },
-        sitemap: 'https://sewait.com.np/sitemap.xml',
+        sitemap: 'https://sewait.up.railway.app/sitemap.xml',
     }
 }

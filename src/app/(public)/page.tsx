@@ -10,25 +10,25 @@ export default function Home() {
     '@graph': [
       {
         '@type': 'WebSite',
-        '@id': 'https://sewait.com.np/#website',
-        'url': 'https://sewait.com.np',
+        '@id': 'https://sewait.up.railway.app/#website',
+        'url': 'https://sewait.up.railway.app',
         'name': 'SewaIT',
         'description': 'Digital Utility Platform for Nepalis',
         'publisher': {
-          '@id': 'https://sewait.com.np/#organization'
+          '@id': 'https://sewait.up.railway.app/#organization'
         },
         'inLanguage': 'ne-NP'
       },
       {
         '@type': 'Organization',
-        '@id': 'https://sewait.com.np/#organization',
+        '@id': 'https://sewait.up.railway.app/#organization',
         'name': 'SewaIT',
-        'url': 'https://sewait.com.np',
-        'logo': 'https://sewait.com.np/assets/images/Logo.jpg',
+        'url': 'https://sewait.up.railway.app',
+        'logo': 'https://sewait.up.railway.app/assets/images/Logo.jpg',
         'founder': {
           '@type': 'Person',
           'name': 'Debin Rai',
-          'url': 'https://sewait.com.np/about'
+          'url': 'https://sewait.up.railway.app/about'
         },
         'sameAs': [
           'https://facebook.com/sewait',
