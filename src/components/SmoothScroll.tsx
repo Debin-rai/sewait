@@ -1,34 +1,12 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
-import Lenis from "lenis";
+import { ReactNode } from "react";
 
 interface SmoothScrollProps {
     children: ReactNode;
 }
 
+// Smooth scrolling is handled via CSS scroll-behavior in globals.css
 export default function SmoothScroll({ children }: SmoothScrollProps) {
-    useEffect(() => {
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            orientation: "vertical",
-            gestureOrientation: "vertical",
-            smoothWheel: true,
-            touchMultiplier: 2,
-        });
-
-        function raf(time: number) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-
-        requestAnimationFrame(raf);
-
-        return () => {
-            lenis.destroy();
-        };
-    }, []);
-
     return <>{children}</>;
 }
