@@ -101,7 +101,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               "name": "SewaIT",
               "url": "https://sewait.up.railway.app",
               "logo": "https://sewait.up.railway.app/assets/favicon/web-app-manifest-512x512.png",
-              "alternateName": ["Sewa IT", "SajiloSathi"],
+              "alternateName": ["Sewa IT"],
               "founder": {
                 "@type": "Person",
                 "name": "Debin Rai"

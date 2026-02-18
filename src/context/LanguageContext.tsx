@@ -329,7 +329,7 @@ const translations: Record<Language, Translations> = {
             newsletter: "सूचना प्राप्त गर्नुहोस्",
             newsletterDesc: "महत्वपूर्ण सरकारी सूचनाहरू सिधै इमेलमा प्राप्त गर्न दर्ता गर्नुहोस्।",
             subscribe: "दर्ता गर्नुहोस्",
-            copyright: "© 2024 SewaIT Inc. All rights reserved.",
+            copyright: "© 2026 SewaIT Inc. All rights reserved.",
             platform: "OFFICIAL UTILITY PLATFORM BY",
         },
     },

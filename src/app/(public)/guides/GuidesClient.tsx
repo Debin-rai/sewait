@@ -75,7 +75,7 @@ export default function GuidesClient() {
                     </div>
                     <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-center text-center gap-8">
                         <h1 className="text-white text-4xl md:text-6xl font-black leading-tight tracking-tight font-nepali">
-                            सरकारी प्रक्रिया अब सजिलो। <br />
+                            सरकारी प्रक्रिया अब सरल। <br />
                             <span className="text-blue-300 font-sans text-3xl md:text-4xl mt-2 block">Government processes made easy.</span>
                         </h1>
                         <p className="text-blue-100 text-lg md:text-xl max-w-2xl font-medium">

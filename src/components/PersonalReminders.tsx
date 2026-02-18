@@ -62,7 +62,7 @@ export default function PersonalReminders() {
                     <div>
                         <h3 className="font-black text-slate-900 dark:text-white tracking-tight">Daily Reminders</h3>
                         <p className="text-[10px] font-black text-primary uppercase tracking-widest leading-none mt-1">
-                            Your Companion <span className="nepali-font font-medium ml-1">तपाईंको साथी</span>
+                            Your Companion <span className="nepali-font font-medium ml-1">तपाईंको डिजिटल सहायक</span>
                         </p>
                     </div>
                 </div>
@@ -99,8 +99,8 @@ export default function PersonalReminders() {
                         <div
                             key={r.id}
                             className={`flex items-center gap-4 p-5 rounded-3xl border transition-all duration-300 group ${r.completed
-                                    ? 'bg-slate-50/30 dark:bg-slate-800/20 border-transparent opacity-50'
-                                    : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-primary/30 hover:shadow-lg'
+                                ? 'bg-slate-50/30 dark:bg-slate-800/20 border-transparent opacity-50'
+                                : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-primary/30 hover:shadow-lg'
                                 }`}
                         >
                             <button

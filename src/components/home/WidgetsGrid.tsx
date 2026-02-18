@@ -7,8 +7,10 @@ import FadeIn from "@/components/animations/FadeIn";
 
 export default function WidgetsGrid() {
     const [config, setConfig] = useState<any>({});
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        setMounted(true);
         fetch("/api/public/config")
             .then(res => res.json())
             .then(data => setConfig(data))
@@ -16,6 +18,8 @@ export default function WidgetsGrid() {
     }, []);
 
     const isVisible = (key: string) => config[key] !== 'false';
+
+    if (!mounted) return null;
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">

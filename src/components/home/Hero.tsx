@@ -10,7 +10,10 @@ export default function Hero() {
     const [nextEvent, setNextEvent] = useState<any>(null);
     const [nepaliDate, setNepaliDate] = useState(getCurrentNepaliDate());
 
+    const [mounted, setMounted] = useState(false);
+
     useEffect(() => {
+        setMounted(true);
         const fetchAllData = async () => {
             try {
                 const [gRes, nRes, cRes] = await Promise.all([
@@ -76,7 +79,7 @@ export default function Hero() {
                             </div>
                             <div className="flex items-center gap-1.5 md:gap-2 whitespace-nowrap">
                                 <span className="material-symbols-outlined text-white/60 text-sm md:text-lg">schedule</span>
-                                <span>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                <span>{mounted ? new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "--:--"}</span>
                             </div>
                         </div>
                         <div className="flex-1 ticker-wrap text-[10px] md:text-xs font-black tracking-widest text-white/70 overflow-hidden">
