@@ -10,7 +10,7 @@ export default function PremiumPlans() {
             features: ["Ad-supported", "Standard Calendar", "Basic Rates"],
             icon: <Zap className="size-5 text-slate-400" />,
             current: true,
-            color: "slate"
+            theme: "slate"
         },
         {
             name: "Pro",
@@ -19,104 +19,101 @@ export default function PremiumPlans() {
             icon: <Sparkles className="size-5 text-amber-500" />,
             current: false,
             highlight: true,
-            color: "primary"
+            theme: "blue"
         },
         {
             name: "Enterprise",
             price: "Custom",
             features: ["API Access", "Bulk Services", "24/7 Support"],
-            icon: <ShieldCheck className="size-5 text-primary" />,
+            icon: <ShieldCheck className="size-5 text-indigo-500" />,
             current: false,
-            color: "indigo"
+            theme: "indigo"
         }
     ];
 
+    const getThemeClasses = (theme: string, highlight?: boolean) => {
+        if (highlight) {
+            return "bg-white dark:bg-slate-900 border-primary shadow-xl shadow-primary/10 ring-1 ring-primary/20 scale-105 z-10";
+        }
+        return "bg-white/80 dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all";
+    };
+
     return (
-        <div className="mt-24 mb-12 bg-gradient-to-br from-slate-50 to-white dark:from-slate-900/50 dark:to-slate-950 rounded-[3.5rem] p-12 md:p-20 border border-slate-100 dark:border-slate-800 shadow-2xl shadow-slate-200/50 dark:shadow-none relative overflow-hidden">
-            {/* Background Decoration */}
-            <div className="absolute -top-32 -right-32 size-96 bg-primary/5 rounded-full blur-[100px] animate-pulse" />
-            <div className="absolute -bottom-32 -left-32 size-96 bg-indigo-500/5 rounded-full blur-[100px] animate-pulse delay-1000" />
+        <section className="py-20 bg-slate-50 dark:bg-slate-950 px-4">
+            <div className="container mx-auto max-w-6xl">
+                <div className="text-center mb-16">
+                    <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tight">
+                        Choose Your <span className="text-primary">Experience</span>
+                    </h2>
+                    <p className="text-slate-500 dark:text-slate-400 font-medium max-w-2xl mx-auto">
+                        Transparent pricing for a streamlined utility experience. No hidden fees, just reliable service.
+                    </p>
+                </div>
 
-            <div className="text-center mb-20 relative z-10">
-                <span className="text-[11px] font-black text-primary uppercase tracking-[0.5em] mb-4 block animate-in fade-in slide-in-from-bottom-2 duration-1000">Official Service Tiers</span>
-                <h2 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-8 tracking-tighter leading-none animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-200">
-                    SajiloSathi Service Plans <br className="hidden md:block" />
-                    <span className="text-primary/20 nepali-font block mt-2">सजिलो साथी सेवा योजनाहरू</span>
-                </h2>
-                <div className="w-24 h-1.5 bg-primary/10 rounded-full mx-auto mb-8" />
-                <p className="text-lg text-slate-500 dark:text-slate-400 font-medium max-w-2xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-300">
-                    Experience the future of digital utilities in Nepal. Elevate your daily routines with our premium official toolsets and priority access.
-                </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 relative z-10">
-                {plans.map((plan, idx) => (
-                    <div
-                        key={idx}
-                        className={`group relative p-12 rounded-[3rem] transition-all duration-700 hover:-translate-y-6 ${plan.highlight
-                                ? 'bg-white dark:bg-slate-800 shadow-[0_50px_100px_-30px_rgba(26,53,91,0.2)] border-2 border-primary ring-[12px] ring-primary/5'
-                                : 'bg-white/40 dark:bg-slate-800/40 backdrop-blur-2xl border border-slate-100 dark:border-slate-700 hover:border-primary/20 hover:shadow-2xl hover:shadow-slate-200/50'
-                            }`}
-                    >
-                        {plan.highlight && (
-                            <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] font-black px-8 py-2 rounded-full uppercase tracking-[0.2em] shadow-xl shadow-primary/30 animate-bounce">
-                                Most Popular
-                            </div>
-                        )}
-
-                        <div className="flex items-center gap-5 mb-10">
-                            <div className={`size-16 rounded-[1.5rem] flex items-center justify-center transition-all duration-700 group-hover:scale-110 group-hover:rotate-12 ${plan.color === 'primary' ? 'bg-primary/10 text-primary' : 'bg-slate-50 dark:bg-slate-900 text-slate-400'
-                                }`}>
-                                {plan.icon}
-                            </div>
-                            <div>
-                                <h3 className="font-black text-slate-900 dark:text-white uppercase tracking-[0.15em] text-sm">{plan.name}</h3>
-                                <p className="text-[10px] text-primary/40 font-black tracking-widest uppercase mt-1">Sajilo Access</p>
-                            </div>
-                        </div>
-
-                        <div className="mb-10">
-                            <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">{plan.price}</span>
-                            {plan.price !== 'Free' && plan.price !== 'Custom' && (
-                                <span className="text-slate-400 text-xs font-black ml-2 uppercase tracking-widest">/ Mo</span>
-                            )}
-                        </div>
-
-                        <div className="h-px w-full bg-slate-100 dark:bg-slate-700 mb-10" />
-
-                        <ul className="space-y-6 mb-12">
-                            {plan.features.map((feature, fIdx) => (
-                                <li key={fIdx} className="flex items-center gap-5 text-sm text-slate-600 dark:text-slate-400 font-bold group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
-                                    <div className={`size-7 rounded-xl flex items-center justify-center shrink-0 transition-all duration-500 group-hover:scale-110 ${plan.highlight ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
-                                        }`}>
-                                        <Check className="size-4" strokeWidth={4} />
-                                    </div>
-                                    {feature}
-                                </li>
-                            ))}
-                        </ul>
-
-                        <button
-                            className={`w-full py-6 rounded-[2rem] font-black text-[11px] uppercase tracking-[0.25em] transition-all duration-700 ${plan.current
-                                    ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-default border border-slate-200 dark:border-slate-700'
-                                    : 'bg-primary hover:bg-primary/90 text-white shadow-2xl shadow-primary/20 hover:shadow-primary/50 hover:scale-[1.02] active:scale-95'
-                                }`}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch pt-8">
+                    {plans.map((plan, idx) => (
+                        <div
+                            key={idx}
+                            className={`relative flex flex-col p-8 rounded-[2.5rem] border ${getThemeClasses(plan.theme, plan.highlight)}`}
                         >
-                            {plan.current ? 'Your Active Plan' : 'Get Started'}
-                        </button>
-                    </div>
-                ))}
-            </div>
+                            {plan.highlight && (
+                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest shadow-lg shadow-primary/30">
+                                    Most Popular
+                                </div>
+                            )}
 
-            <div className="mt-20 text-center relative z-10">
-                <div className="inline-flex items-center gap-6 px-10 py-4 bg-slate-50 dark:bg-slate-900 rounded-full border border-slate-100 dark:border-slate-800">
-                    <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Official Partners</p>
-                    <div className="w-1 h-1 bg-slate-300 dark:bg-slate-700 rounded-full" />
-                    <span className="text-xs font-black text-slate-600 dark:text-slate-400 group-hover:text-primary transition-colors">eSewa</span>
-                    <span className="text-xs font-black text-slate-600 dark:text-slate-400 group-hover:text-primary transition-colors">Khalti</span>
-                    <span className="text-xs font-black text-slate-600 dark:text-slate-400 group-hover:text-primary transition-colors">ConnectIPS</span>
+                            <div className="flex items-center justify-between mb-8">
+                                <div className={`p-3 rounded-2xl ${plan.highlight ? 'bg-primary/10 text-primary' : 'bg-slate-100 dark:bg-slate-800'}`}>
+                                    {plan.icon}
+                                </div>
+                                <span className="text-xs font-black uppercase tracking-widest text-slate-400">{plan.name} Access</span>
+                            </div>
+
+                            <div className="mb-8">
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white">{plan.price}</span>
+                                    {plan.price !== "Free" && plan.price !== "Custom" && (
+                                        <span className="text-sm font-bold text-slate-500">/ mo</span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="space-y-4 mb-10 flex-grow">
+                                {plan.features.map((feature, fIdx) => (
+                                    <div key={fIdx} className="flex items-center gap-3">
+                                        <div className={`size-5 rounded-full flex items-center justify-center ${plan.highlight ? 'bg-green-500/10 text-green-500' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
+                                            <Check className="size-3 stroke-[4]" />
+                                        </div>
+                                        <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{feature}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <button
+                                className={`w-full py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all ${plan.current
+                                        ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-default'
+                                        : plan.highlight
+                                            ? 'bg-primary text-white shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95'
+                                            : 'bg-slate-900 dark:bg-white dark:text-slate-900 text-white hover:bg-slate-800'
+                                    }`}
+                            >
+                                {plan.current ? "Your Active Plan" : "Get Started"}
+                            </button>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="mt-16 pt-8 border-t border-slate-100 dark:border-slate-800 text-center">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">Trusted by individual users across Nepal</p>
+                    <div className="flex flex-wrap justify-center items-center gap-8 opacity-40 grayscale pointer-events-none">
+                        <span className="text-lg font-black tracking-tighter">ESTD. 2024</span>
+                        <div className="size-1.5 rounded-full bg-slate-300"></div>
+                        <span className="text-lg font-black tracking-tighter uppercase">Community Driven</span>
+                        <div className="size-1.5 rounded-full bg-slate-300"></div>
+                        <span className="text-lg font-black tracking-tighter uppercase">Secure Tooling</span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
     );
 }

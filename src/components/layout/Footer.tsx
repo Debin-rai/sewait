@@ -13,11 +13,11 @@ export default function Footer() {
                             <div className="relative w-8 h-8 overflow-hidden rounded-lg">
                                 <img
                                     src="/assets/images/Final-logo.png"
-                                    alt="SajiloSathi Logo"
+                                    alt="SewaIT Logo"
                                     className="w-full h-full object-contain"
                                 />
                             </div>
-                            <span className="text-xl font-bold">Sajilo<span className="text-primary">Sathi</span></span>
+                            <span className="text-xl font-bold">Sewa<span className="text-primary">IT</span></span>
                         </div>
                         <p className="text-slate-600 text-xs leading-relaxed mb-6">
                             Our goal is to simplify citizens&apos; lives by bringing Nepal Government&apos;s digital services to one place.
@@ -26,7 +26,7 @@ export default function Footer() {
                             <Link href="#" className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-primary transition-colors hover:text-white group">
                                 <span className="material-symbols-outlined text-sm text-slate-500 group-hover:text-white">public</span>
                             </Link>
-                            <Link href="mailto:contact@sajilosathi.com" className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-primary transition-colors hover:text-white group">
+                            <Link href="mailto:contact@sewait.com" className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-primary transition-colors hover:text-white group">
                                 <span className="material-symbols-outlined text-sm text-slate-500 group-hover:text-white">mail</span>
                             </Link>
                         </div>
@@ -75,7 +75,7 @@ export default function Footer() {
                 </div>
 
                 <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-slate-500">
-                    <p className="uppercase">© 2024 SajiloSathi Inc. All rights reserved.</p>
+                    <p className="uppercase">© 2024 SewaIT Inc. All rights reserved.</p>
                     <div className="flex items-center gap-2">
                         <span className="font-medium">OFFICIAL UTILITY PLATFORM BY</span>
                         <div className="flex items-center gap-1">

@@ -14,7 +14,7 @@ export default function Home() {
         '@type': 'WebSite',
         '@id': 'https://sewait.up.railway.app/#website',
         'url': 'https://sewait.up.railway.app',
-        'name': 'SajiloSathi',
+        'name': 'SewaIT',
         'description': 'Digital Utility Platform for Nepalis',
         'publisher': {
           '@id': 'https://sewait.up.railway.app/#organization'
@@ -24,7 +24,7 @@ export default function Home() {
       {
         '@type': 'Organization',
         '@id': 'https://sewait.up.railway.app/#organization',
-        'name': 'SajiloSathi',
+        'name': 'SewaIT',
         'url': 'https://sewait.up.railway.app',
         'logo': 'https://sewait.up.railway.app/assets/images/Final-logo.png',
         'founder': {
@@ -34,8 +34,8 @@ export default function Home() {
           'url': 'https://sewait.up.railway.app/about'
         },
         'sameAs': [
-          'https://facebook.com/SajiloSathi',
-          'https://twitter.com/SajiloSathi'
+          'https://facebook.com/SewaIT',
+          'https://twitter.com/SewaIT'
         ]
       }
     ]

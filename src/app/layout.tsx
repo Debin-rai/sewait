@@ -24,31 +24,31 @@ const notoSansDevanagari = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "SajiloSathi - Nepali Calendar, Gold Rates & Official Guides",
-    template: "%s | SajiloSathi by Debin Rai",
+    default: "SewaIT - Nepali Calendar, Gold Rates & Official Guides",
+    template: "%s | SewaIT by Debin Rai",
   },
-  description: "SajiloSathi, formerly SewaIT, founded by Debin Rai, provides today's Nepali date, Tithi, location-based weather, and official government guides for Nepalis.",
-  keywords: ["SajiloSathi", "SewaIT", "Debin Rai", "Nepali Calendar", "Sarkari Guides", "Gold Price Nepal", "today's date", "tithi", "Nepal government services", "आजको मिती", "सुन चाँदी मूल्य", "NEPSE"],
+  description: "Official Nepali utility portal for real-time Gold/Silver rates, Nepali Calendar (Patro), and Government Service Guides.",
+  keywords: ["SewaIT", "Debin Rai", "Nepali Calendar", "Sarkari Guides", "Gold Price Nepal", "today's date", "tithi", "Nepal government services", "आजको मिती", "सुन चाँदी मूल्य", "NEPSE"],
   authors: [{ name: "Debin Rai", url: "https://sewait.up.railway.app" }],
   creator: "Debin Rai",
-  publisher: "SajiloSathi",
+  publisher: "SewaIT",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   openGraph: {
-    title: "SajiloSathi - Digital Utility Platform for Nepalis",
+    title: "SewaIT - Digital Utility Platform for Nepalis",
     description: "Your daily companion for Nepali Calendar, Gold Rates, and Government Services.",
     url: "https://sewait.up.railway.app",
-    siteName: "SajiloSathi",
+    siteName: "SewaIT",
     locale: "ne_NP",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SajiloSathi - Digital Utility Platform",
-    description: "Founded by Debin Rai, SajiloSathi simplifies digital life for Nepalis.",
+    title: "SewaIT - Digital Utility Platform",
+    description: "Founded by Debin Rai, SewaIT simplifies digital life for Nepalis.",
     creator: "@SewaIT",
   },
   icons: {
