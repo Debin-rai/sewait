@@ -14,7 +14,7 @@ export default function TermsPage() {
                 </header>
 
                 <div className="bg-white p-8 md:p-12 rounded-[40px] shadow-sm border border-slate-100 space-y-12 text-slate-700 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-                    <p className="font-medium text-slate-500">By using SewaIT, you agree to the following terms designed to protect the "trust-first" nature of our utility platform:</p>
+                    <p className="font-medium text-slate-500">By using SajiloSathi, you agree to the following terms designed to protect the "trust-first" nature of our utility platform:</p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                         <section className="space-y-4">
@@ -54,7 +54,7 @@ export default function TermsPage() {
                             Admin Authority
                         </h2>
                         <p className="text-sm leading-relaxed opacity-90 font-medium">
-                            Access to the SewaIT Admin Panel—the "brain" of our application—is strictly limited to authorized personnel and is monitored through comprehensive Activity Logs.
+                            Access to the SajiloSathi Admin Panel—the "brain" of our application—is strictly limited to authorized personnel and is monitored through comprehensive Activity Logs.
                         </p>
                     </section>
                 </div>

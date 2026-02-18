@@ -18,7 +18,7 @@ export default function MissionPage() {
                 <div className="space-y-12 text-slate-700 leading-relaxed text-lg animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
                     <section className="bg-white p-8 md:p-12 rounded-[40px] shadow-sm border border-slate-100 hover:shadow-xl transition-shadow duration-500">
                         <p className="mb-6 font-medium">
-                            At SewaIT, our mission is to empower every Nepali citizen with a "trust-first" digital toolkit that is accurate, accessible, and exceptionally secure.
+                            At SajiloSathi, our mission is to empower every Nepali citizen with a "trust-first" digital toolkit that is accurate, accessible, and exceptionally secure.
                         </p>
                         <p className="mb-0"> We strive to achieve this by:</p>
                     </section>

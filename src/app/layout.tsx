@@ -24,31 +24,31 @@ const notoSansDevanagari = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "SewaIT - Nepali Calendar, Gold Rates & Official Guides",
-    template: "%s | SewaIT by Debin Rai",
+    default: "SajiloSathi - Nepali Calendar, Gold Rates & Official Guides",
+    template: "%s | SajiloSathi by Debin Rai",
   },
-  description: "SewaIT, founded by Debin Rai, provides today's Nepali date, Tithi, location-based weather, and official government guides for Nepalis.",
-  keywords: ["SewaIT", "Debin Rai", "Nepali Calendar", "Sarkari Guides", "Gold Price Nepal", "today's date", "tithi", "Nepal government services", "आजको मिती", "सुन चाँदी मूल्य", "NEPSE"],
+  description: "SajiloSathi, formerly SewaIT, founded by Debin Rai, provides today's Nepali date, Tithi, location-based weather, and official government guides for Nepalis.",
+  keywords: ["SajiloSathi", "SewaIT", "Debin Rai", "Nepali Calendar", "Sarkari Guides", "Gold Price Nepal", "today's date", "tithi", "Nepal government services", "आजको मिती", "सुन चाँदी मूल्य", "NEPSE"],
   authors: [{ name: "Debin Rai", url: "https://sewait.up.railway.app" }],
   creator: "Debin Rai",
-  publisher: "SewaIT",
+  publisher: "SajiloSathi",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   openGraph: {
-    title: "SewaIT - Digital Utility Platform for Nepalis",
+    title: "SajiloSathi - Digital Utility Platform for Nepalis",
     description: "Your daily companion for Nepali Calendar, Gold Rates, and Government Services.",
     url: "https://sewait.up.railway.app",
-    siteName: "SewaIT",
+    siteName: "SajiloSathi",
     locale: "ne_NP",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SewaIT - Digital Utility Platform",
-    description: "Founded by Debin Rai, SewaIT simplifies digital life for Nepalis.",
+    title: "SajiloSathi - Digital Utility Platform",
+    description: "Founded by Debin Rai, SajiloSathi simplifies digital life for Nepalis.",
     creator: "@SewaIT",
   },
   icons: {
@@ -83,6 +83,7 @@ import Footer from "@/components/layout/Footer";
 
 import SmoothScroll from "@/components/SmoothScroll";
 import PwaPrompt from "@/components/PwaPrompt";
+import CookieConsent from "@/components/CookieConsent";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -98,6 +99,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
             <AnalyticsTracker />
             <PwaPrompt />
+            <CookieConsent />
           </ClientLayout>
         </SmoothScroll>
       </body>

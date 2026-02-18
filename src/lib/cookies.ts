@@ -20,10 +20,10 @@ export const setCookie = (name: string, value: string, days = 30) => {
  * Generates or retrieves a persistent visitor hash for DAU/Retention tracking
  */
 export const getVisitorId = (): string => {
-    let visitorId = getCookie('sewait_visitor_id');
+    let visitorId = getCookie('sajilosathi_visitor_id');
     if (!visitorId) {
         visitorId = crypto.randomUUID();
-        setCookie('sewait_visitor_id', visitorId, 365); // 1 year retention
+        setCookie('sajilosathi_visitor_id', visitorId, 365); // 1 year retention
     }
     return visitorId;
 };
@@ -32,8 +32,8 @@ export const getVisitorId = (): string => {
  * Tracks ad impressions in cookies to prevent fatigue
  */
 export const trackAdImpression = (adId: string) => {
-    const impressions = JSON.parse(getCookie('sewait_ad_hits') || '{}');
+    const impressions = JSON.parse(getCookie('sajilosathi_ad_hits') || '{}');
     impressions[adId] = (impressions[adId] || 0) + 1;
-    setCookie('sewait_ad_hits', JSON.stringify(impressions), 1); // 1 day window
+    setCookie('sajilosathi_ad_hits', JSON.stringify(impressions), 1); // 1 day window
     return impressions[adId];
 };

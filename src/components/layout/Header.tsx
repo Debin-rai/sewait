@@ -25,11 +25,11 @@ export default function Header() {
                         <div className="relative w-10 h-10 overflow-hidden rounded-lg">
                             <img
                                 src="/assets/images/Final-logo.png"
-                                alt="SewaIT Logo"
+                                alt="SajiloSathi Logo"
                                 className="w-full h-full object-contain"
                             />
                         </div>
-                        <h1 className="text-xl font-bold tracking-tight text-slate-800">Sewa<span className="text-primary">IT</span></h1>
+                        <h1 className="text-xl font-bold tracking-tight text-slate-800 text-nowrap">Sajilo<span className="text-primary">Sathi</span></h1>
                     </Link>
                     {/* Desktop Navigation */}
                     <nav className="hidden lg:flex items-center gap-6">

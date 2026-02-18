@@ -17,7 +17,7 @@ export default function PrivacyPage() {
                     <section>
                         <h2 className="text-xl font-black text-[#1a355b] uppercase tracking-widest mb-4">Privacy-Friendly Focus</h2>
                         <p className="leading-relaxed font-medium opacity-90">
-                            SewaIT is designed with a "privacy-friendly" focus, ensuring that your utility experience does not come at the cost of your personal data.
+                            SajiloSathi is designed with a "privacy-friendly" focus, ensuring that your utility experience does not come at the cost of your personal data.
                         </p>
                     </section>
 

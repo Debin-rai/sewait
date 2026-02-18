@@ -16,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/nepse',
         '/weather',
         '/guides',
+        '/cookie-policy',
     ].map((route) => ({
         url: `${baseUrl}${route}`,
         lastModified: new Date(),

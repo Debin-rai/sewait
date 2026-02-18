@@ -32,7 +32,7 @@ export default function ContactPage() {
                             </div>
                             <div>
                                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Inquiries</p>
-                                <p className="text-xl font-black text-[#1a355b] break-all">contact@sewait.com</p>
+                                <p className="text-xl font-black text-[#1a355b] break-all">contact@sajilosathi.com</p>
                             </div>
                         </div>
 
@@ -61,7 +61,7 @@ export default function ContactPage() {
                     <div className="bg-white p-8 md:p-12 rounded-[40px] border border-slate-100 shadow-sm animate-in fade-in slide-in-from-right-8 duration-1000">
                         <h2 className="text-2xl font-black text-[#1a355b] mb-6">Support Portal</h2>
                         <p className="text-slate-600 leading-relaxed mb-8 font-medium">
-                            We are committed to maintaining an open line of communication with the SewaIT community. Whether you have a question about a government process or feedback on our utility modules, we are here to help.
+                            We are committed to maintaining an open line of communication with the SajiloSathi community. Whether you have a question about a government process or feedback on our utility modules, we are here to help.
                         </p>
 
                         <div className="space-y-4">
