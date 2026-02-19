@@ -8,7 +8,7 @@ export default function Hero() {
     const [goldRate, setGoldRate] = useState<any>(null);
     const [nepse, setNepse] = useState<any>(null);
     const [nextEvent, setNextEvent] = useState<any>(null);
-    const [nepaliDate, setNepaliDate] = useState(getCurrentNepaliDate());
+    const [nepaliDate, setNepaliDate] = useState<any>(null);
 
     const [mounted, setMounted] = useState(false);
 
@@ -35,6 +35,7 @@ export default function Hero() {
         };
 
         fetchAllData();
+        setNepaliDate(getCurrentNepaliDate());
         const timer = setInterval(() => setNepaliDate(getCurrentNepaliDate()), 60000);
         return () => clearInterval(timer);
     }, []);
@@ -49,7 +50,13 @@ export default function Hero() {
                             <span className="text-[10px] md:text-xs font-black uppercase tracking-widest">Nepali Samvat <span className="nepali-font">नेपाली सम्वत्</span></span>
                         </div>
                         <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight text-white mb-1 md:mb-2">
-                            <span className="nepali-font">{nepaliDate.year} {nepaliDate.month} {nepaliDate.day},</span> <span className="text-white/90 nepali-font">{nepaliDate.dayName}</span>
+                            {nepaliDate ? (
+                                <>
+                                    <span className="nepali-font">{nepaliDate.year} {nepaliDate.month} {nepaliDate.day},</span> <span className="text-white/90 nepali-font">{nepaliDate.dayName}</span>
+                                </>
+                            ) : (
+                                <span className="opacity-0">Loading...</span>
+                            )}
                         </h2>
                         <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 mt-2 md:mt-4">
                             <div className="px-3 md:px-4 py-1 md:py-1.5 bg-slate-100/10 border border-white/20 rounded text-xs md:text-sm font-semibold text-white/90">

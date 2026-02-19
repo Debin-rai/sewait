@@ -57,11 +57,11 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.ico" },
-      { url: "/assets/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
     ],
     apple: "/apple-touch-icon.png",
   },
-  manifest: "/assets/favicon/site.webmanifest",
+  manifest: "/site.webmanifest",
   robots: {
     index: true,
     follow: true,
@@ -107,9 +107,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 "name": "Debin Rai",
                 "jobTitle": "Founder & Developer",
                 "url": "https://sewait.up.railway.app",
-                "sameAs": [
-                  // Add social links here if available later
-                ]
+                "sameAs": []
               }
             })
           }}

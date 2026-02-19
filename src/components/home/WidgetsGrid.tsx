@@ -17,9 +17,7 @@ export default function WidgetsGrid() {
             .catch(err => console.error("Config fetch failed", err));
     }, []);
 
-    const isVisible = (key: string) => config[key] !== 'false';
-
-    if (!mounted) return null;
+    const isVisible = (key: string) => !mounted || config[key] !== 'false';
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
@@ -32,7 +30,7 @@ export default function WidgetsGrid() {
                                 <span className="material-symbols-outlined text-primary">calendar_month</span>
                                 <h2 className="text-primary font-bold text-lg">Nepali Calendar <span className="nepali-font text-sm text-primary/60">पात्रो</span></h2>
                             </div>
-                            <span className="text-[10px] font-bold text-primary bg-primary/5 px-2 py-1 rounded-full uppercase tracking-tighter nepali-font">२०८० कार्तिक</span>
+                            <span className="text-[10px] font-bold text-primary bg-primary/5 px-2 py-1 rounded-full uppercase tracking-tighter nepali-font">२०८२ फागुन</span>
                         </div>
 
                         <div className="grid grid-cols-7 text-center text-[10px] font-bold text-slate-400 mb-4 uppercase tracking-widest">
