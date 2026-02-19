@@ -58,9 +58,12 @@ export default function Header() {
                             <span className="material-symbols-outlined text-slate-400 text-xl notranslate">search</span>
                         </div>
                         <input
+                            id="search-desktop"
+                            name="q"
                             className="w-full bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary/5 focus:border-primary rounded-xl pl-10 pr-20 text-xs py-2 transition-all outline-none"
                             placeholder="Search services..."
                             type="text"
+                            aria-label="Search services"
                         />
                         <button className="absolute right-1 bg-primary text-white text-[9px] font-bold px-3 py-1.5 rounded-lg hover:bg-primary-light transition-colors">
                             GO
@@ -130,9 +133,12 @@ export default function Header() {
                                 search
                             </span>
                             <input
+                                id="search-mobile"
+                                name="q"
                                 className="w-full bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary/5 focus:border-primary rounded-lg pl-10 pr-4 py-3 text-sm outline-none"
                                 placeholder="Search services..."
                                 type="text"
+                                aria-label="Search services"
                             />
                         </div>
                     </div>

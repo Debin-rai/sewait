@@ -27,9 +27,12 @@ export default function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                 <div className="relative group hidden lg:block">
                     <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
                     <input
+                        id="admin-search"
+                        name="admin-q"
                         className="pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary w-64 transition-all outline-none"
                         placeholder="Search system logs..."
                         type="text"
+                        aria-label="Search system logs"
                     />
                 </div>
                 <div className="flex items-center gap-1 md:gap-3">
