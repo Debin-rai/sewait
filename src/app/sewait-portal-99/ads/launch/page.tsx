@@ -81,7 +81,7 @@ export default function LaunchAdPage() {
         if (!tempImage || !croppedAreaPixels) return;
 
         setUploading(true);
-        setShowCropper(false);
+        // Don't close immediately in case of error
 
         try {
             const croppedImageBlob = await getCroppedImg(tempImage, croppedAreaPixels);
@@ -94,21 +94,33 @@ export default function LaunchAdPage() {
                 method: 'POST',
                 body: data
             });
+
+            if (!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.error || "Upload failed");
+            }
+
             const result = await res.json();
             if (result.url) {
                 setFormData(prev => ({ ...prev, imageUrl: result.url }));
+                setShowCropper(false); // Close ONLY on success
+                setTempImage(null);
             }
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
-            alert("Upload failed. Please try again.");
+            alert(`CRITICAL ERROR: ${err.message || "Unknown Failure"}`);
         } finally {
             setUploading(false);
-            setTempImage(null);
         }
     };
 
     const handleLaunch = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!formData.imageUrl || !formData.position || !formData.name) {
+            alert("Error: All primary fields (Position, Name, and Creative) are required.");
+            return;
+        }
+
         setLoading(true);
         try {
             const res = await fetch("/api/sewait-portal-99/ads", {
@@ -117,11 +129,16 @@ export default function LaunchAdPage() {
                 body: JSON.stringify(formData),
             });
             if (res.ok) {
+                alert("Campaign Synchronized Successfully!");
                 router.push("/sewait-portal-99/ads");
                 router.refresh();
+            } else {
+                const errData = await res.json();
+                alert(`PUBLISH FAILED: ${errData.error || "Database rejection"}`);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Failed to fetch ads", error);
+            alert(`NETWORK ERROR: ${error.message}`);
         } finally {
             setLoading(false);
         }
@@ -137,7 +154,7 @@ export default function LaunchAdPage() {
                             <h3 className="text-white font-black uppercase tracking-widest text-sm">Fine-Tune Creative</h3>
                             <p className="text-[10px] text-slate-500 font-bold">MATCHING {activePosition?.ratio} ASPECT RATIO</p>
                         </div>
-                        <button onClick={() => setShowCropper(false)} className="text-slate-400 hover:text-white transition-colors">
+                        <button type="button" onClick={() => setShowCropper(false)} className="text-slate-400 hover:text-white transition-colors">
                             <X size={24} />
                         </button>
                     </div>
@@ -166,6 +183,7 @@ export default function LaunchAdPage() {
                             />
                         </div>
                         <button
+                            type="button"
                             onClick={handleCropAndUpload}
                             className="bg-emerald-600 hover:bg-emerald-500 text-white font-black uppercase tracking-[0.2em] px-12 py-4 rounded-2xl shadow-2xl shadow-emerald-500/20 transition-all active:scale-95"
                         >
@@ -191,12 +209,14 @@ export default function LaunchAdPage() {
 
                 <div className="flex items-center gap-3">
                     <button
+                        type="button"
                         onClick={() => router.back()}
                         className="px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors"
                     >
                         Discard
                     </button>
                     <button
+                        type="button"
                         onClick={handleLaunch}
                         disabled={loading || !formData.imageUrl || !formData.position}
                         className="px-8 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:bg-slate-800 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-emerald-900/40 transition-all active:scale-95"
@@ -294,6 +314,15 @@ export default function LaunchAdPage() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-4">
                                     <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] block ml-1">Client Name</label>
+                                        <input
+                                            placeholder="SewaIT Ltd."
+                                            value={formData.client || ""}
+                                            onChange={e => setFormData({ ...formData, client: e.target.value })}
+                                            className="w-full bg-slate-950 border border-slate-800 rounded-2xl py-4 px-5 text-sm font-bold focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all placeholder:text-slate-700"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] block ml-1">Destination URL</label>
                                         <div className="relative flex items-center">
                                             <div className="absolute left-4 text-slate-600"><MousePointerClick size={16} /></div>
@@ -330,7 +359,7 @@ export default function LaunchAdPage() {
                                         </div>
                                     ) : formData.imageUrl ? (
                                         <div className="absolute inset-0">
-                                            <img src={formData.imageUrl} className="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-1000" />
+                                            <img src={formData.imageUrl} className="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-1000" key={formData.imageUrl} />
                                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 flex flex-col items-center justify-center p-4">
                                                 <Sparkles className="text-emerald-500 size-6 mb-2" />
                                                 <p className="text-[10px] font-black uppercase text-emerald-400">Creative Synchronized</p>

@@ -39,8 +39,8 @@ export async function POST(request: Request) {
                 position,
                 imageUrl,
                 link,
-                startDate: startDate ? new Date(startDate) : null,
-                endDate: endDate ? new Date(endDate) : null,
+                startDate: (startDate && startDate.trim() !== "") ? new Date(startDate) : null,
+                endDate: (endDate && endDate.trim() !== "") ? new Date(endDate) : null,
                 status: status || "ACTIVE",
             },
         });
