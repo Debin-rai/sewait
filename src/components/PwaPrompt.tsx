@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Download, Smartphone } from "lucide-react";
+import { Download } from "lucide-react";
 
 export default function PwaPrompt() {
     const [show, setShow] = useState(false);
@@ -11,24 +11,27 @@ export default function PwaPrompt() {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (!isMobile) return;
 
+        // Check if already installed
+        const isStandalone = window.matchMedia("(display-mode: standalone)").matches
+            || (window.navigator as any).standalone === true;
+        if (isStandalone) return;
+
         const handleBeforeInstallPrompt = (e: any) => {
             e.preventDefault();
             setDeferredPrompt(e);
+
+            // Show the custom prompt only when the browser event fires
+            const isDismissed = localStorage.getItem("pwa_prompt_dismissed");
+            if (!isDismissed) {
+                // Small delay so it doesn't overlap cookie consent or theme picker
+                setTimeout(() => setShow(true), 3000);
+            }
         };
 
         window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
-        // Timer to show popup every 10 seconds if not dismissed and prompt is available
-        const timer = setInterval(() => {
-            const isDismissed = localStorage.getItem("pwa_prompt_dismissed");
-            if (!isDismissed) {
-                setShow(true);
-            }
-        }, 10000);
-
         return () => {
             window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-            clearInterval(timer);
         };
     }, []);
 
@@ -39,18 +42,18 @@ export default function PwaPrompt() {
         if (outcome === "accepted") {
             setDeferredPrompt(null);
             setShow(false);
+            localStorage.setItem("pwa_prompt_dismissed", "true");
         }
     };
 
     const handleDismiss = () => {
         setShow(false);
-        // We set a flag to avoid constant annoyance, but the user asked for 10s.
-        // I'll honor the 10s request by NOT setting a long-term dismissal if they just close it,
-        // but maybe I'll add a "Don't show again" option later if they complain.
-        // For now, let's keep it visible per user instruction.
+        // Don't set permanent dismissal so it appears again next session
+        // But avoid re-showing in the same page load
+        localStorage.setItem("pwa_prompt_dismissed", "true");
     };
 
-    if (!show) return null;
+    if (!show || !deferredPrompt) return null;
 
     return (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-md z-[100] animate-in fade-in slide-in-from-bottom-5 duration-700">
@@ -78,7 +81,7 @@ export default function PwaPrompt() {
                         className="bg-primary hover:bg-primary-light text-white text-[10px] font-black px-4 py-2.5 rounded-xl transition-all active:scale-90 uppercase tracking-[0.2em] flex items-center gap-2 shadow-lg shadow-primary/30"
                     >
                         <Download size={14} strokeWidth={3} />
-                        Get App
+                        Install
                     </button>
                     <button
                         onClick={handleDismiss}

@@ -22,28 +22,28 @@ export default function Header() {
         <>
             <header className="sticky top-0 z-50 bg-white border-b border-slate-200 px-4 md:px-10 py-3 flex items-center justify-between shadow-sm">
                 <div className="flex items-center gap-10">
-                    <Link href="/" className="flex items-center gap-2">
-                        <div className="relative w-10 h-10 overflow-hidden rounded-lg">
+                    <Link href="/" className="flex items-center gap-2 group">
+                        <div className="relative w-10 h-10 overflow-hidden rounded-lg transition-transform duration-300 group-hover:scale-105">
                             <img
                                 src="/web-app-manifest-512x512.png"
                                 alt="SewaIT Logo"
                                 className="w-full h-full object-contain"
                             />
                         </div>
-                        <h1 className="text-xl font-bold tracking-tight text-slate-800">Sewa<span className="text-primary">IT</span></h1>
+                        <h1 className="text-xl font-bold tracking-tight text-slate-800 transition-colors duration-300 group-hover:text-slate-900">Sewa<span className="text-primary">IT</span></h1>
                     </Link>
                     {/* Desktop Navigation */}
-                    <nav className="hidden lg:flex items-center gap-6">
+                    <nav className="hidden lg:flex items-center gap-1">
                         {navLinks.map((link) => {
                             const isActive = pathname === link.href;
                             return (
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className={`${isActive
-                                        ? "text-primary text-sm font-bold border-b-2 border-primary"
-                                        : "text-slate-600 hover:text-primary text-sm font-semibold"
-                                        } transition-colors`}
+                                    className={`px-3 py-1.5 text-sm font-semibold rounded-lg transition-all duration-300 ${isActive
+                                        ? "text-primary font-bold nav-link-active"
+                                        : "text-slate-600 hover:text-primary hover:bg-primary/5 nav-link-hover"
+                                        }`}
                                 >
                                     {link.label}
                                 </Link>
@@ -66,14 +66,14 @@ export default function Header() {
                             aria-label="Search services"
                             autoComplete="off"
                         />
-                        <button className="absolute right-1 bg-primary text-white text-[9px] font-bold px-3 py-1.5 rounded-lg hover:bg-primary-light transition-colors">
+                        <button className="absolute right-1 bg-primary text-white text-[9px] font-bold px-3 py-1.5 rounded-lg hover:bg-primary-light transition-all duration-300 hover:shadow-md active:scale-95">
                             GO
                         </button>
                     </div>
                     {/* Mobile Menu Button */}
                     <button
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        className="lg:hidden p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                        className="lg:hidden p-2 hover:bg-slate-100 rounded-lg transition-all duration-300 active:scale-90"
                         aria-label="Toggle menu"
                     >
                         <span className="material-symbols-outlined text-slate-700">
@@ -109,17 +109,18 @@ export default function Header() {
 
                     {/* Mobile Navigation Links */}
                     <nav className="space-y-2">
-                        {navLinks.map((link) => {
+                        {navLinks.map((link, index) => {
                             const isActive = pathname === link.href;
                             return (
                                 <Link
                                     key={link.href}
                                     href={link.href}
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className={`block px-4 py-3 rounded-lg transition-all ${isActive
-                                        ? "bg-primary text-white font-bold"
-                                        : "text-slate-700 hover:bg-slate-100 font-semibold"
+                                    className={`block px-4 py-3 rounded-lg transition-all duration-300 ${isActive
+                                        ? "bg-primary text-white font-bold shadow-md"
+                                        : "text-slate-700 hover:bg-slate-100 hover:pl-6 font-semibold"
                                         }`}
+                                    style={{ animationDelay: `${index * 50}ms` }}
                                 >
                                     {link.label}
                                 </Link>
