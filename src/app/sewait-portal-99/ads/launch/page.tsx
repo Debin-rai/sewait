@@ -1,31 +1,33 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ChevronLeft, CloudUpload, Sparkles, Target, Calendar as CalendarIcon, Info, Monitor, MousePointerClick } from "lucide-react";
+import { ChevronLeft, CloudUpload, Sparkles, Target, Calendar as CalendarIcon, Info, Monitor, MousePointerClick, X } from "lucide-react";
+import Cropper from 'react-easy-crop';
+import { getCroppedImg } from "@/lib/cropUtils";
 
 const PLACEMENT_CATEGORIES = {
     "HOME": [
-        { id: "HOME_HERO", name: "Hero Banner (Top)", size: "1200x400", ratio: "3:1" },
-        { id: "HOME_SIDEBAR", name: "Sidebar Widget", size: "400x400", ratio: "1:1" },
-        { id: "HOME_FOOTER", name: "Footer Strip", size: "1200x200", ratio: "6:1" }
+        { id: "HOME_HERO", name: "Hero Banner (Top)", size: "1200x400", ratio: "3/1", aspect: 3 },
+        { id: "HOME_SIDEBAR", name: "Sidebar Widget", size: "400x400", ratio: "1/1", aspect: 1 },
+        { id: "HOME_FOOTER", name: "Footer Strip", size: "1200x200", ratio: "6/1", aspect: 6 }
     ],
     "CALENDAR": [
-        { id: "CALENDAR_TOP", name: "Top Banner", size: "1200x200", ratio: "6:1" },
-        { id: "CALENDAR_SIDEBAR", name: "Sidebar Widget", size: "400x400", ratio: "1:1" }
+        { id: "CALENDAR_TOP", name: "Top Banner", size: "1200x200", ratio: "6/1", aspect: 6 },
+        { id: "CALENDAR_SIDEBAR", name: "Sidebar Widget", size: "400x400", ratio: "1/1", aspect: 1 }
     ],
     "NEPSE": [
-        { id: "NEPSE_TOP", name: "Top Info Bar", size: "1200x150", ratio: "8:1" }
+        { id: "NEPSE_TOP", name: "Top Info Bar", size: "1200x150", ratio: "8/1", aspect: 8 }
     ],
     "GOLD_SILVER": [
-        { id: "GOLD_HEADER", name: "Header Banner", size: "1200x300", ratio: "4:1" }
+        { id: "GOLD_HEADER", name: "Header Banner", size: "1200x300", ratio: "4/1", aspect: 4 }
     ],
     "SERVICES": [
-        { id: "GOV_LIST", name: "List Interstitial", size: "800x200", ratio: "4:1" }
+        { id: "GOV_LIST", name: "List Interstitial", size: "800x200", ratio: "4/1", aspect: 4 }
     ],
     "WEATHER": [
-        { id: "WEATHER_BOTTOM", name: "Widget Bottom", size: "400x200", ratio: "2:1" }
+        { id: "WEATHER_BOTTOM", name: "Widget Bottom", size: "400x200", ratio: "2/1", aspect: 2 }
     ]
 };
 
@@ -46,15 +48,48 @@ export default function LaunchAdPage() {
         endDate: "",
     });
 
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Cropper State
+    const [tempImage, setTempImage] = useState<string | null>(null);
+    const [crop, setCrop] = useState({ x: 0, y: 0 });
+    const [zoom, setZoom] = useState(1);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+    const [showCropper, setShowCropper] = useState(false);
+
+    const activePosition = PLACEMENT_CATEGORIES[selectedPage as keyof typeof PLACEMENT_CATEGORIES]?.find(p => p.id === formData.position);
+
+    const onCropComplete = useCallback((_croppedArea: any, croppedAreaPixels: any) => {
+        setCroppedAreaPixels(croppedAreaPixels);
+    }, []);
+
+    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (!file) return;
+        if (file) {
+            if (!formData.position) {
+                alert("Please select a placement position first!");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = () => {
+                setTempImage(reader.result as string);
+                setShowCropper(true);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleCropAndUpload = async () => {
+        if (!tempImage || !croppedAreaPixels) return;
 
         setUploading(true);
-        const data = new FormData();
-        data.append('file', file);
+        setShowCropper(false);
 
         try {
+            const croppedImageBlob = await getCroppedImg(tempImage, croppedAreaPixels);
+            if (!croppedImageBlob) throw new Error("Cropping failed");
+
+            const data = new FormData();
+            data.append('file', croppedImageBlob, 'creative.jpg');
+
             const res = await fetch('/api/upload', {
                 method: 'POST',
                 body: data
@@ -65,8 +100,10 @@ export default function LaunchAdPage() {
             }
         } catch (err) {
             console.error(err);
+            alert("Upload failed. Please try again.");
         } finally {
             setUploading(false);
+            setTempImage(null);
         }
     };
 
@@ -90,10 +127,54 @@ export default function LaunchAdPage() {
         }
     };
 
-    const activePosition = PLACEMENT_CATEGORIES[selectedPage as keyof typeof PLACEMENT_CATEGORIES]?.find(p => p.id === formData.position);
-
     return (
         <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+            {/* Cropper Modal */}
+            {showCropper && tempImage && (
+                <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex flex-col">
+                    <div className="p-6 flex justify-between items-center border-b border-white/10">
+                        <div>
+                            <h3 className="text-white font-black uppercase tracking-widest text-sm">Fine-Tune Creative</h3>
+                            <p className="text-[10px] text-slate-500 font-bold">MATCHING {activePosition?.ratio} ASPECT RATIO</p>
+                        </div>
+                        <button onClick={() => setShowCropper(false)} className="text-slate-400 hover:text-white transition-colors">
+                            <X size={24} />
+                        </button>
+                    </div>
+                    <div className="flex-1 relative">
+                        <Cropper
+                            image={tempImage}
+                            crop={crop}
+                            zoom={zoom}
+                            aspect={activePosition?.aspect || 1}
+                            onCropChange={setCrop}
+                            onCropComplete={onCropComplete}
+                            onZoomChange={setZoom}
+                        />
+                    </div>
+                    <div className="p-8 bg-slate-900/50 border-t border-white/10 flex flex-col items-center gap-6">
+                        <div className="w-64">
+                            <input
+                                type="range"
+                                value={zoom}
+                                min={1}
+                                max={3}
+                                step={0.1}
+                                aria-labelledby="Zoom"
+                                onChange={(e) => setZoom(Number(e.target.value))}
+                                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                            />
+                        </div>
+                        <button
+                            onClick={handleCropAndUpload}
+                            className="bg-emerald-600 hover:bg-emerald-500 text-white font-black uppercase tracking-[0.2em] px-12 py-4 rounded-2xl shadow-2xl shadow-emerald-500/20 transition-all active:scale-95"
+                        >
+                            Finalize & Quantize
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {/* Dark Mode Specific Header */}
             <div className="border-b border-slate-900 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-[60] px-6 py-4 flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -149,7 +230,7 @@ export default function LaunchAdPage() {
                                             setSelectedPage(e.target.value);
                                             setFormData(prev => ({ ...prev, position: "" }));
                                         }}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-2xl py-4 px-5 text-sm font-bold focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                        className="w-full bg-slate-950 border border-slate-800 rounded-2xl py-4 px-5 text-sm font-bold focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all appearance-none"
                                     >
                                         <option value="HOME">Main Home Screen</option>
                                         <option value="CALENDAR">Nepali Patro (Calendar)</option>
@@ -179,8 +260,8 @@ export default function LaunchAdPage() {
                                             key={pos.id}
                                             onClick={() => setFormData(prev => ({ ...prev, position: pos.id }))}
                                             className={`p-5 rounded-2xl border-2 transition-all cursor-pointer relative group overflow-hidden ${formData.position === pos.id
-                                                    ? 'border-emerald-500 bg-emerald-500/5 shadow-[0_0_30px_-5px_rgba(16,185,129,0.2)]'
-                                                    : 'border-slate-800 hover:border-slate-700 bg-slate-950/50'
+                                                ? 'border-emerald-500 bg-emerald-500/5 shadow-[0_0_30px_-5px_rgba(16,185,129,0.2)]'
+                                                : 'border-slate-800 hover:border-slate-700 bg-slate-950/50'
                                                 }`}
                                         >
                                             <div className="relative z-10">
@@ -240,19 +321,19 @@ export default function LaunchAdPage() {
                                         }`}
                                     onClick={() => fileInputRef.current?.click()}
                                 >
-                                    <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileUpload} accept="image/*" />
+                                    <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileSelect} accept="image/*" />
 
                                     {uploading ? (
                                         <div className="flex flex-col items-center gap-2 animate-pulse">
                                             <div className="size-10 rounded-full border-2 border-emerald-500 border-t-transparent animate-spin"></div>
-                                            <p className="text-[10px] font-black uppercase text-emerald-500">Uploading Matrix...</p>
+                                            <p className="text-[10px] font-black uppercase text-emerald-500">Writing to ImgBB...</p>
                                         </div>
                                     ) : formData.imageUrl ? (
                                         <div className="absolute inset-0">
-                                            <img src={formData.imageUrl} className="w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform duration-1000" />
+                                            <img src={formData.imageUrl} className="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-1000" />
                                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 flex flex-col items-center justify-center p-4">
                                                 <Sparkles className="text-emerald-500 size-6 mb-2" />
-                                                <p className="text-[10px] font-black uppercase text-emerald-400">Creative Locked</p>
+                                                <p className="text-[10px] font-black uppercase text-emerald-400">Creative Synchronized</p>
                                                 <p className="text-[9px] text-slate-500 mt-1 uppercase">Click to recalibrate</p>
                                             </div>
                                         </div>
@@ -262,7 +343,7 @@ export default function LaunchAdPage() {
                                                 <CloudUpload size={24} />
                                             </div>
                                             <p className="text-xs font-black text-slate-300 uppercase tracking-widest leading-relaxed">Transmit Ad Creative</p>
-                                            <p className="text-[9px] text-slate-500 mt-2 font-medium">PNG, WEBP, or JPG accepted.<br />High fidelity recommended.</p>
+                                            <p className="text-[9px] text-slate-500 mt-2 font-medium">PNG, WEBP, or JPG accepted.<br />Cropping tool will open automatically.</p>
                                         </>
                                     )}
                                 </div>
@@ -319,14 +400,16 @@ export default function LaunchAdPage() {
                                 {/* Preview Card */}
                                 <div className="space-y-4">
                                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Rendered Output ({activePosition?.ratio || '---'})</p>
-                                    <div className={`w-full bg-slate-950 border border-slate-800 rounded-3xl relative overflow-hidden flex items-center justify-center transition-all duration-700 ${activePosition?.id === 'HOME_HERO' ? 'aspect-[3/1]' :
-                                            activePosition?.id === 'HOME_SIDEBAR' ? 'aspect-square' :
-                                                activePosition?.id === 'GOV_LIST' ? 'aspect-[4/1]' :
-                                                    'aspect-video'
+                                    <div className={`w-full bg-slate-950 border border-slate-800 rounded-3xl relative overflow-hidden flex items-center justify-center transition-all duration-700 ${activePosition?.id.includes('HERO') ? 'aspect-[3/1]' :
+                                        activePosition?.id.includes('SIDEBAR') ? 'aspect-square' :
+                                            activePosition?.id.includes('LIST') ? 'aspect-[4/1]' :
+                                                activePosition?.id.includes('FOOTER') ? 'aspect-[6/1]' :
+                                                    activePosition?.id.includes('BOTTOM') ? 'aspect-[2/1]' :
+                                                        'aspect-video'
                                         }`}>
                                         {formData.imageUrl ? (
                                             <>
-                                                <img src={formData.imageUrl} className="w-full h-full object-cover" />
+                                                <img src={formData.imageUrl} className="w-full h-full object-cover" key={formData.imageUrl} />
                                                 <div className="absolute top-2 right-2 bg-black/40 backdrop-blur-md px-2 py-0.5 rounded text-[8px] font-black text-white/90 uppercase tracking-widest">Sponsored</div>
                                             </>
                                         ) : (
