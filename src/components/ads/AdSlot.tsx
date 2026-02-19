@@ -62,13 +62,14 @@ export default function AdSlot({ position, className = "", aspectRatio = "auto" 
     if (!ad) return null;
 
     const content = (
-        <div className={`relative group overflow-hidden rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm transition-all hover:shadow-md ${className}`}>
+        <div className={`relative group overflow-hidden rounded-[2rem] border border-white/10 dark:border-white/5 shadow-2xl transition-all duration-500 hover:shadow-emerald-500/10 ${className}`}>
+            <div className={`absolute inset-0 bg-gradient-to-tr from-slate-900/40 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`}></div>
             <img
                 src={ad.imageUrl}
                 alt={ad.name}
-                className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ${aspectRatio === 'video' ? 'aspect-video' : ''}`}
+                className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ${aspectRatio === 'video' ? 'aspect-video' : ''}`}
             />
-            <div className="absolute top-2 right-2 bg-black/40 backdrop-blur-md px-1.5 py-0.5 rounded text-[8px] font-black text-white/80 uppercase tracking-widest z-10 pointer-events-none">
+            <div className="absolute top-3 right-3 bg-black/40 backdrop-blur-xl border border-white/10 px-2 py-1 rounded-lg text-[7px] font-black text-white/90 uppercase tracking-[0.2em] z-20 pointer-events-none shadow-xl">
                 Sponsored
             </div>
         </div>

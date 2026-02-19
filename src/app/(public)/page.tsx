@@ -49,7 +49,7 @@ export default function Home() {
       />
       <Hero />
       <div className="container mx-auto px-4 lg:px-10 py-16">
-        <AdSlot position="HOME_HERO" className="mb-12 h-[200px] md:h-[400px]" />
+        <AdSlot position="HOME_HERO" className="mb-12 aspect-[3/1] md:aspect-[3/1] lg:aspect-[3/1]" />
         <ServicesGrid />
         <WidgetsGrid />
 

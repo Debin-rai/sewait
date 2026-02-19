@@ -63,88 +63,99 @@ export default function AdsManagementPage() {
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
             {/* Header */}
-            <header className="flex flex-col md:flex-row justify-between items-end gap-4">
+            <header className="flex flex-col md:flex-row justify-between items-end gap-6 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm">
                 <div>
-                    <h2 className="text-3xl font-black text-emerald-600 dark:text-emerald-400 tracking-tight">Campaign Center</h2>
-                    <p className="text-slate-500 font-medium">Manage and monitor all active ad placements.</p>
+                    <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tighter">Ad Studio</h2>
+                    <p className="text-slate-500 font-bold uppercase text-[10px] tracking-[0.2em] mt-2">Intelligence & Campaign Management</p>
                 </div>
                 <Link
                     href="/sewait-portal-99/ads/launch"
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-2xl flex items-center gap-2 font-black text-sm shadow-xl shadow-emerald-200 transition-all active:scale-95"
+                    className="bg-primary hover:bg-primary-light text-white px-8 py-4 rounded-2xl flex items-center gap-3 font-black text-sm shadow-2xl shadow-primary/20 transition-all active:scale-95 uppercase tracking-widest"
                 >
-                    <span className="material-symbols-outlined text-xl">add_circle</span>
-                    Launch New Campaign
+                    <span className="material-symbols-outlined text-xl">rocket_launch</span>
+                    New Campaign
                 </Link>
             </header>
 
             {/* Ads List Table */}
-            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
-                        <thead className="bg-slate-50/50 dark:bg-slate-800/50 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                        <thead className="bg-slate-50/50 dark:bg-slate-800/50 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
                             <tr>
-                                <th className="px-8 py-5">Campaign & Client</th>
-                                <th className="px-8 py-5">Position</th>
-                                <th className="px-8 py-5">Performance</th>
-                                <th className="px-8 py-5">Status</th>
-                                <th className="px-8 py-5 text-right">Control</th>
+                                <th className="px-10 py-6">Campaign Info</th>
+                                <th className="px-10 py-6">Target slot</th>
+                                <th className="px-10 py-6">Analytics</th>
+                                <th className="px-10 py-6">Status</th>
+                                <th className="px-10 py-6 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {ads.length === 0 && !loading && (
                                 <tr>
-                                    <td colSpan={5} className="px-8 py-20 text-center">
-                                        <div className="flex flex-col items-center gap-3 opacity-20">
-                                            <span className="material-symbols-outlined text-6xl">campaign</span>
-                                            <p className="font-black uppercase tracking-widest text-xs">No active campaigns</p>
+                                    <td colSpan={5} className="px-10 py-32 text-center">
+                                        <div className="flex flex-col items-center gap-4 opacity-30">
+                                            <span className="material-symbols-outlined text-7xl text-slate-300">deployed_code</span>
+                                            <p className="font-black uppercase tracking-[0.3em] text-[10px]">No active campaigns ready</p>
                                         </div>
                                     </td>
                                 </tr>
                             )}
                             {ads.map((ad) => (
-                                <tr key={ad.id} className="hover:bg-slate-50/30 dark:hover:bg-slate-800/20 transition-colors group">
-                                    <td className="px-8 py-6">
-                                        <div className="flex items-center gap-4">
-                                            <div className="size-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex-shrink-0 overflow-hidden shadow-inner border border-slate-100 dark:border-slate-700">
-                                                <img src={ad.imageUrl} alt={ad.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                <tr key={ad.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition-all group">
+                                    <td className="px-10 py-8">
+                                        <div className="flex items-center gap-6">
+                                            <div className="size-20 rounded-[1.5rem] bg-slate-100 dark:bg-slate-800 flex-shrink-0 overflow-hidden shadow-inner border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform duration-500">
+                                                <img src={ad.imageUrl} alt={ad.name} className="w-full h-full object-cover" />
                                             </div>
                                             <div>
-                                                <p className="font-black text-slate-800 dark:text-white leading-tight">{ad.name}</p>
-                                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">{ad.client || 'Direct Client'}</p>
+                                                <p className="font-black text-slate-900 dark:text-white text-base leading-tight tracking-tight">{ad.name}</p>
+                                                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.1em] mt-1.5 flex items-center gap-2">
+                                                    <span className="size-1 bg-slate-400 rounded-full"></span>
+                                                    {ad.client || 'Direct Client'}
+                                                </p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-8 py-6">
-                                        <div className="flex flex-col gap-1">
-                                            <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded-full w-fit uppercase">{ad.position.split('_')[0]}</span>
-                                            <span className="text-xs font-bold text-slate-500">{ad.position.split('_').slice(1).join(' ').toLowerCase()}</span>
+                                    <td className="px-10 py-8">
+                                        <div className="flex flex-col gap-1.5">
+                                            <span className="text-[9px] font-black text-primary bg-primary/5 border border-primary/10 px-3 py-1 rounded-lg w-fit uppercase tracking-widest">{ad.position.split('_')[0]}</span>
+                                            <span className="text-xs font-bold text-slate-500 lowercase tracking-tight">{ad.position.split('_').slice(1).join(' ')}</span>
                                         </div>
                                     </td>
-                                    <td className="px-8 py-6">
-                                        <div className="flex flex-col">
-                                            <span className="text-sm font-black text-slate-800 dark:text-white">{ad.clicks || 0} Clicks</span>
-                                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Lifetime Interaction</span>
+                                    <td className="px-10 py-8">
+                                        <div className="flex items-center gap-3">
+                                            <div className="size-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                                                <span className="material-symbols-outlined text-sm text-slate-500">touch_app</span>
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-sm font-black text-slate-900 dark:text-white">{ad.clicks || 0}</span>
+                                                <span className="text-[9px] text-slate-400 font-bold uppercase tracking-tighter">Interactions</span>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className="px-8 py-6">
-                                        <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${ad.status === 'ACTIVE' ? 'bg-[#07883b]/10 text-[#07883b]' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
-                                            {ad.status}
-                                        </span>
+                                    <td className="px-10 py-8">
+                                        <div className="flex items-center gap-2">
+                                            <span className={`size-2 rounded-full ${ad.status === 'ACTIVE' ? 'bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-slate-400'}`}></span>
+                                            <span className={`text-[10px] font-black uppercase tracking-widest ${ad.status === 'ACTIVE' ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500'}`}>
+                                                {ad.status}
+                                            </span>
+                                        </div>
                                     </td>
-                                    <td className="px-8 py-6 text-right">
-                                        <div className="flex items-center justify-end gap-2">
+                                    <td className="px-10 py-8 text-right">
+                                        <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button
-                                                className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 rounded-xl transition-all"
-                                                title="View Details"
+                                                className="size-10 flex items-center justify-center bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary text-slate-500 rounded-xl transition-all"
+                                                title="View Analytics"
                                             >
-                                                <span className="material-symbols-outlined text-xl">analytics</span>
+                                                <span className="material-symbols-outlined text-xl">monitoring</span>
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(ad.id, ad.name)}
-                                                className="p-2 hover:bg-red-50 text-red-500 rounded-xl transition-all"
-                                                title="Delete Campaign"
+                                                className="size-10 flex items-center justify-center bg-red-50 dark:bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 rounded-xl transition-all"
+                                                title="Terminate Campaign"
                                             >
-                                                <span className="material-symbols-outlined text-xl">delete</span>
+                                                <span className="material-symbols-outlined text-xl">delete_sweep</span>
                                             </button>
                                         </div>
                                     </td>
