@@ -51,6 +51,16 @@ export async function GET(request: Request) {
             orderBy: { date: 'asc' }
         });
 
+        // Fetch guide creation stats for the period
+        const contentStats = await prisma.guide.groupBy({
+            by: ['createdAt'],
+            _count: { _all: true },
+            where: {
+                createdAt: { gte: startDate }
+            },
+            orderBy: { createdAt: 'asc' }
+        });
+
         // Generate full date range to ensure no gaps in the chart
         const chartData = [];
         for (let i = 0; i < daysToFetch; i++) {
@@ -65,11 +75,18 @@ export async function GET(request: Request) {
             const uniqueMatch = uniqueStats.find(s => s.date.toISOString().split('T')[0] === dateStr);
             const dauCount = uniqueMatch?._count._all || 0;
 
+            // Match content stats (Guides created)
+            const contentMatch = contentStats.filter(s => s.createdAt.toISOString().split('T')[0] === dateStr);
+            const contentCount = contentMatch.reduce((acc, curr) => acc + curr._count._all, 0);
+
             chartData.push({
                 date: dateStr,
                 label: format(date, dateFormat),
+                fullDate: format(date, 'PPP'), // e.g., April 29th, 2024
+                day: format(date, 'EEE'), // Sun, Mon...
                 hits,
-                dau: dauCount
+                dau: dauCount,
+                content: contentCount
             });
         }
 
@@ -157,6 +174,7 @@ export async function GET(request: Request) {
             periodUniques: periodUniques.length,
             periodHits,
             hitsTrend,
+            articleCount: await prisma.guide.count(),
             devices,
             locations,
             userRetention,

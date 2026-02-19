@@ -2,8 +2,141 @@
 
 import { useState, useEffect } from "react";
 
-export default function AdminDashboard() {
+const AnalyticsCard = ({
+    title,
+    value,
+    metric,
+    trend,
+    trendIcon,
+    colorClass,
+    lightColorClass,
+    loading: parentLoading
+}: {
+    title: string,
+    value: string | number,
+    metric: string,
+    trend?: string | number,
+    trendIcon?: string,
+    colorClass: string,
+    lightColorClass: string,
+    loading: boolean
+}) => {
     const [period, setPeriod] = useState("week");
+    const [chartData, setChartData] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [showMenu, setShowMenu] = useState(false);
+    const [selectedBar, setSelectedBar] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchCardData = async () => {
+            setLoading(true);
+            try {
+                const res = await fetch(`/api/sewait-portal-99/analytics?period=${period}`);
+                const data = await res.json();
+                setChartData(data.chart || []);
+            } catch (error) {
+                console.error(`Failed to fetch ${title} stats`, error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchCardData();
+    }, [period]);
+
+    const maxVal = Math.max(...chartData.map(d => d[metric]), 1);
+
+    return (
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col gap-4 relative">
+            <div className="flex justify-between items-start">
+                <div>
+                    <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">{title}</p>
+                    <h3 className={`text-3xl font-bold mt-1 ${colorClass}`}>
+                        {parentLoading ? "..." : value.toLocaleString()}
+                    </h3>
+                </div>
+                <div className="relative">
+                    <button
+                        onClick={() => setShowMenu(!showMenu)}
+                        className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-slate-400"
+                    >
+                        <span className="material-symbols-outlined text-lg">more_vert</span>
+                    </button>
+                    {showMenu && (
+                        <div className="absolute right-0 mt-2 w-32 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-20 overflow-hidden font-bold text-xs uppercase animate-in fade-in zoom-in duration-200">
+                            {['week', 'month', 'year'].map((p) => (
+                                <button
+                                    key={p}
+                                    onClick={() => { setPeriod(p); setShowMenu(false); }}
+                                    className={`w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors ${period === p ? colorClass : 'text-slate-500'}`}
+                                >
+                                    {p}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Performance Trend */}
+            {trend !== undefined && (
+                <div className={`px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-0.5 self-start ${trendIcon === 'trending_up' ? "bg-[#10b981]/10 text-[#10b981]" : trendIcon === 'horizontal_rule' ? "bg-slate-100 text-slate-500" : "bg-red-100 text-red-600"}`}>
+                    <span className="material-symbols-outlined text-xs">{trendIcon}</span> {typeof trend === 'number' ? `${Math.abs(trend)}%` : trend}
+                </div>
+            )}
+
+            {/* Interactive Bar Chart */}
+            <div className="flex flex-col gap-2 mt-2">
+                <div className="h-16 w-full flex items-end gap-1 px-1">
+                    {loading ? (
+                        Array(period === 'week' ? 7 : period === 'month' ? 15 : 12).fill(0).map((_, i) => (
+                            <div key={i} className="flex-1 bg-slate-100 dark:bg-slate-800 rounded-t h-1/2 animate-pulse"></div>
+                        ))
+                    ) : (
+                        chartData.map((d, i) => (
+                            <button
+                                key={i}
+                                onClick={() => setSelectedBar(selectedBar?.date === d.date ? null : d)}
+                                className={`flex-1 rounded-t transition-all duration-500 hover:scale-x-110 relative group ${selectedBar?.date === d.date ? colorClass.split(' ')[0].replace('text-', 'bg-') : i === chartData.length - 1 ? colorClass.split(' ')[0].replace('text-', 'bg-') : `${lightColorClass}`}`}
+                                style={{ height: `${Math.max((d[metric] / maxVal) * 100, 5)}%` }}
+                            >
+                                <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30 pointer-events-none font-bold shadow-lg border border-white/10">
+                                    {d.label}: {d[metric]}
+                                </div>
+                            </button>
+                        ))
+                    )}
+                </div>
+
+                {/* Labels (Only for Week view) */}
+                {period === 'week' && !loading && (
+                    <div className="flex justify-between px-1">
+                        {chartData.map((d, i) => (
+                            <div key={i} className="flex-1 text-center">
+                                <span className="text-[8px] font-bold text-slate-400 uppercase leading-none block">{d.day}</span>
+                                <span className="text-[7px] font-medium text-slate-300 block">{d.date.split('-')[2]}</span>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            {/* Selection Popup */}
+            {selectedBar && (
+                <div className="absolute inset-x-4 bottom-4 bg-[#1a355b] dark:bg-blue-900 text-white p-3 rounded-lg shadow-2xl flex justify-between items-center animate-in slide-in-from-bottom-2 duration-300 z-40 border border-white/10">
+                    <div className="flex flex-col">
+                        <span className="text-[10px] uppercase font-black text-white/60 tracking-widest">{selectedBar.fullDate}</span>
+                        <span className="text-sm font-bold">{selectedBar[metric].toLocaleString()} {title}</span>
+                    </div>
+                    <button onClick={() => setSelectedBar(null)} className="text-white/60 hover:text-white">
+                        <span className="material-symbols-outlined text-lg">close</span>
+                    </button>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default function AdminDashboard() {
     const [stats, setStats] = useState({
         dau: 0,
         totalUniques: 0,
@@ -12,14 +145,14 @@ export default function AdminDashboard() {
         articleCount: 0,
         status: "Healthy",
         recentLogs: [] as any[],
-        chart: [] as any[]
+        chart: [] as any[] // Keeps the raw week view for initial summary if needed
     });
     const [loading, setLoading] = useState(true);
 
     const fetchStats = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`/api/sewait-portal-99/analytics?period=${period}`);
+            const res = await fetch(`/api/sewait-portal-99/analytics?period=week`);
             const data = await res.json();
             if (data.dau !== undefined) {
                 setStats({
@@ -42,7 +175,7 @@ export default function AdminDashboard() {
 
     useEffect(() => {
         fetchStats();
-    }, [period]);
+    }, []);
 
     const formatRelativeTime = (dateString: string) => {
         const now = new Date();
@@ -65,116 +198,40 @@ export default function AdminDashboard() {
                     <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Dashboard Overview</h2>
                     <p className="text-slate-500 text-sm">Real-time system health and user engagement metrics.</p>
                 </div>
-
-                <div className="flex items-center gap-2 bg-white dark:bg-slate-900 p-1.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm self-start">
-                    {['week', 'month', 'year'].map((p) => (
-                        <button
-                            key={p}
-                            onClick={() => setPeriod(p)}
-                            className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${period === p
-                                ? "bg-[#1a355b] text-white shadow-md"
-                                : "text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800"
-                                }`}
-                        >
-                            {p}
-                        </button>
-                    ))}
-                </div>
             </div>
 
             {/* Stat Card Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {/* Daily Users (DAU) */}
-                <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col gap-4">
-                    <div className="flex justify-between items-start">
-                        <div>
-                            <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Daily Active Users</p>
-                            <h3 className="text-3xl font-bold mt-1 text-[#1a355b] dark:text-blue-400">
-                                {loading ? "..." : stats.dau.toLocaleString()}
-                            </h3>
-                        </div>
-                        <div className={`px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-0.5 ${stats.hitsTrend >= 0 ? "bg-[#10b981]/10 text-[#10b981]" : "bg-red-100 text-red-600"}`}>
-                            <span className="material-symbols-outlined text-xs">{stats.hitsTrend >= 0 ? "trending_up" : "trending_down"}</span> {Math.abs(stats.hitsTrend)}%
-                        </div>
-                    </div>
-                    {/* Dynamic Mini Bar Chart for DAU */}
-                    <div className="h-10 w-full flex items-end gap-1 px-1">
-                        {loading ? (
-                            Array(7).fill(0).map((_, i) => (
-                                <div key={i} className="flex-1 bg-slate-100 dark:bg-slate-800 rounded-t h-1/2 animate-pulse"></div>
-                            ))
-                        ) : (
-                            (() => {
-                                const maxVal = Math.max(...stats.chart.map(d => d.dau), 1);
-                                return stats.chart.map((d, i) => (
-                                    <div
-                                        key={i}
-                                        title={`${d.label}: ${d.dau} users`}
-                                        className={`flex-1 rounded-t transition-all duration-500 ${i === stats.chart.length - 1 ? "bg-[#1a355b] dark:bg-blue-500" : "bg-[#1a355b]/20 dark:bg-blue-500/20"}`}
-                                        style={{ height: `${Math.max((d.dau / maxVal) * 100, 5)}%` }}
-                                    ></div>
-                                ));
-                            })()
-                        )}
-                    </div>
-                </div>
-
-                {/* Total Unique Visitors */}
-                <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col gap-4">
-                    <div className="flex justify-between items-start">
-                        <div>
-                            <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Total Reach ({period})</p>
-                            <h3 className="text-3xl font-bold mt-1">
-                                {loading ? "..." : stats.periodUniques.toLocaleString()}
-                            </h3>
-                        </div>
-                        <div className="bg-[#10b981]/10 text-[#10b981] px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-0.5">
-                            <span className="material-symbols-outlined text-xs">trending_up</span> Live
-                        </div>
-                    </div>
-                    {/* Dynamic Mini Bar Chart for Total Reach (Hits) */}
-                    <div className="h-10 w-full flex items-end gap-1 px-1">
-                        {loading ? (
-                            Array(7).fill(0).map((_, i) => (
-                                <div key={i} className="flex-1 bg-slate-100 dark:bg-slate-800 rounded-t h-1/2 animate-pulse"></div>
-                            ))
-                        ) : (
-                            (() => {
-                                const maxVal = Math.max(...stats.chart.map(d => d.hits), 1);
-                                return stats.chart.map((d, i) => (
-                                    <div
-                                        key={i}
-                                        title={`${d.label}: ${d.hits} hits`}
-                                        className={`flex-1 rounded-t transition-all duration-500 ${i === stats.chart.length - 1 ? "bg-emerald-500" : "bg-emerald-500/20"}`}
-                                        style={{ height: `${Math.max((d.hits / maxVal) * 100, 5)}%` }}
-                                    ></div>
-                                ));
-                            })()
-                        )}
-                    </div>
-                </div>
-
-                {/* Articles Posted */}
-                <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col gap-4">
-                    <div className="flex justify-between items-start">
-                        <div>
-                            <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Content Assets</p>
-                            <h3 className="text-3xl font-bold mt-1">{loading ? "..." : stats.articleCount}</h3>
-                        </div>
-                        <div className="bg-slate-100 dark:bg-slate-800 text-slate-500 px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-0.5">
-                            <span className="material-symbols-outlined text-xs">horizontal_rule</span> Total
-                        </div>
-                    </div>
-                    <div className="h-10 w-full flex items-end gap-1 px-1">
-                        <div className="flex-1 bg-[#1a355b]/10 rounded-t h-1/2"></div>
-                        <div className="flex-1 bg-[#1a355b]/10 rounded-t h-1/2"></div>
-                        <div className="flex-1 bg-[#1a355b]/10 rounded-t h-1/2"></div>
-                        <div className="flex-1 bg-[#1a355b]/10 rounded-t h-1/2"></div>
-                        <div className="flex-1 bg-[#1a355b]/10 rounded-t h-1/2"></div>
-                        <div className="flex-1 bg-[#1a355b] rounded-t h-1/2"></div>
-                    </div>
-                </div>
-
+                <AnalyticsCard
+                    title="Daily Active Users"
+                    value={stats.dau}
+                    metric="dau"
+                    trend={stats.hitsTrend}
+                    trendIcon={stats.hitsTrend >= 0 ? "trending_up" : "trending_down"}
+                    colorClass="text-[#1a355b] dark:text-blue-400"
+                    lightColorClass="bg-[#1a355b]/20 dark:bg-blue-500/20"
+                    loading={loading}
+                />
+                <AnalyticsCard
+                    title="Total Reach"
+                    value={stats.periodUniques}
+                    metric="hits"
+                    trend="Live"
+                    trendIcon="trending_up"
+                    colorClass="text-emerald-500"
+                    lightColorClass="bg-emerald-500/20"
+                    loading={loading}
+                />
+                <AnalyticsCard
+                    title="Content Assets"
+                    value={stats.articleCount}
+                    metric="content"
+                    trend="Total"
+                    trendIcon="horizontal_rule"
+                    colorClass="text-[#1a355b]"
+                    lightColorClass="bg-[#1a355b]/10"
+                    loading={loading}
+                />
                 {/* System Health */}
                 <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col gap-4">
                     <div className="flex justify-between items-start">
@@ -186,8 +243,10 @@ export default function AdminDashboard() {
                             <span className="material-symbols-outlined text-xs">check_circle</span> Online
                         </div>
                     </div>
-                    <div className="h-10 w-full flex items-center gap-1 px-1 bg-slate-50 dark:bg-slate-800/50 rounded p-1">
-                        <div className="h-full w-full bg-gradient-to-r from-[#10b981]/20 via-[#10b981] to-[#10b981]/20 rounded-full animate-pulse"></div>
+                    <div className="mt-auto">
+                        <div className="h-10 w-full flex items-center gap-1 px-1 bg-slate-50 dark:bg-slate-800/50 rounded p-1">
+                            <div className="h-full w-full bg-gradient-to-r from-[#10b981]/20 via-[#10b981] to-[#10b981]/20 rounded-full animate-pulse"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -195,7 +254,7 @@ export default function AdminDashboard() {
             {/* Recent Updates Table */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-white dark:bg-slate-900 sticky left-0">
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">Recent Activity & Logs</h3>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">Recent Activity &amp; Logs</h3>
                     <div className="flex gap-2">
                         <button className="text-sm font-semibold text-[#1a355b] hover:bg-[#1a355b]/5 px-3 py-1.5 rounded-lg transition-colors">Export CSV</button>
                         <button className="text-sm font-semibold bg-[#1a355b] text-white px-4 py-1.5 rounded-lg hover:bg-[#1a355b]/90 transition-colors shadow-sm">View All</button>
@@ -303,3 +362,4 @@ export default function AdminDashboard() {
         </div>
     );
 }
+
