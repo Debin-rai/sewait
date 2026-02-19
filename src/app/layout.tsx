@@ -27,10 +27,10 @@ const notoSansDevanagari = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL("https://sewait.up.railway.app"),
   title: "SewaIT – Nepali Calendar, Gold Rates & Official Guides",
-  description: "SewaIT by Debin Rai: Your all-in-one Nepali utility hub. Features include Live Nepali Calendar with Tithi, Daily Gold/Silver rates, accurate Weather updates, NEPSE stock data, and comprehensive official Government Service Guides.",
-  keywords: ["SewaIT", "Debin Rai", "Nepali Calendar", "Sarkari Guides", "Gold Price Nepal", "today's date", "tithi", "Nepal government services", "आजको मिती", "सुन चाँदी मूल्य", "NEPSE"],
-  authors: [{ name: "Debin Rai", url: "https://sewait.up.railway.app" }],
-  creator: "Debin Rai",
+  description: "SewaIT Founder Debin C. Rai: Your all-in-one Nepali utility hub. Features include Live Nepali Calendar with Tithi, Daily Gold/Silver rates, accurate Weather updates, NEPSE stock data, and comprehensive official Government Service Guides.",
+  keywords: ["SewaIT", "Debin C. Rai", "SewaIT Founder", "Nepali Calendar", "Sarkari Guides", "Gold Price Nepal", "today's date", "tithi", "Nepal government services", "आजको मिती", "सुन चाँदी मूल्य", "NEPSE"],
+  authors: [{ name: "Debin C. Rai", url: "https://sewait.up.railway.app" }],
+  creator: "Debin C. Rai",
   publisher: "SewaIT",
   applicationName: "SewaIT",
   appleWebApp: {
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "SewaIT – Nepali Calendar, Gold Rates & Official Guides",
-    description: "SewaIT by Debin Rai: Your all-in-one Nepali utility hub. Features include Live Nepali Calendar with Tithi, Daily Gold/Silver rates, accurate Weather updates, NEPSE stock data, and comprehensive official Government Service Guides.",
+    description: "SewaIT Founder Debin C. Rai: Your all-in-one Nepali utility hub. Features include Live Nepali Calendar with Tithi, Daily Gold/Silver rates, accurate Weather updates, NEPSE stock data, and comprehensive official Government Service Guides.",
     url: "https://sewait.up.railway.app",
     siteName: "SewaIT",
     locale: "ne_NP",
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "SewaIT – Nepali Calendar, Gold Rates & Official Guides",
-    description: "SewaIT by Debin Rai: Your all-in-one Nepali utility hub. Features include Live Nepali Calendar with Tithi, Daily Gold/Silver rates, accurate Weather updates, NEPSE stock data, and comprehensive official Government Service Guides.",
+    description: "SewaIT Founder Debin C. Rai: Your all-in-one Nepali utility hub. Features include Live Nepali Calendar with Tithi, Daily Gold/Silver rates, accurate Weather updates, NEPSE stock data, and comprehensive official Government Service Guides.",
     creator: "@SewaIT",
     images: ["/web-app-manifest-512x512.png"],
   },
@@ -118,8 +118,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               "alternateName": ["Sewa IT"],
               "founder": {
                 "@type": "Person",
-                "name": "Debin Rai",
-                "jobTitle": "Founder & Developer",
+                "name": "Debin C. Rai",
+                "jobTitle": "SewaIT Founder & Developer",
                 "url": "https://sewait.up.railway.app",
                 "sameAs": []
               }
@@ -132,9 +132,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Person",
-              "name": "Debin Rai",
+              "name": "Debin C. Rai",
               "url": "https://sewait.up.railway.app",
-              "jobTitle": "Founder of SewaIT",
+              "jobTitle": "SewaIT Founder",
               "worksFor": {
                 "@type": "Organization",
                 "name": "SewaIT"

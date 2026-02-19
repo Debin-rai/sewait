@@ -16,8 +16,8 @@ export default function AboutPage() {
                 <div className="bg-white p-8 md:p-12 rounded-[40px] shadow-sm border border-slate-100 space-y-12 text-slate-700 animate-in fade-in slide-in-from-bottom-8 duration-1000">
                     <section className="space-y-6">
                         <p className="text-xl font-medium leading-relaxed">
-                            SewaIT is a Nepali utility platform founded by <span className="text-[#1a355b] font-black">Debin Rai</span>.
-                            As the Founder of SewaIT, Debin envisioned a digital space where every Nepali can easily access
+                            SewaIT is a Nepali utility platform founded by <span className="text-[#1a355b] font-black">Debin C. Rai</span>.
+                            As the Founder of SewaIT, Debin C. Rai envisioned a digital space where every Nepali can easily access
                             essential tools like the calendar, gold rates, and government guides.
                         </p>
                         <p className="text-slate-500 leading-relaxed">
@@ -34,11 +34,11 @@ export default function AboutPage() {
 
                         <div className="flex flex-col md:flex-row gap-8 items-start">
                             <div className="bg-slate-50 p-8 rounded-[32px] border border-slate-100 flex-1">
-                                <h3 className="text-xl font-black text-[#1a355b] mb-4">Debin Rai</h3>
-                                <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">IT Specialist & Designer</p>
+                                <h3 className="text-xl font-black text-[#1a355b] mb-4">Debin C. Rai</h3>
+                                <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">SewaIT Founder & IT Specialist</p>
 
                                 <div className="space-y-4 text-slate-600 font-medium">
-                                    <p>Based in <span className="text-[#1a355b] font-bold">Khotang</span>, Debin is an NSS Management faculty passout with a deep passion for technology and design.</p>
+                                    <p>Based in <span className="text-[#1a355b] font-bold">Khotang</span>, Debin C. Rai is an NSS Management faculty passout with a deep passion for technology and design.</p>
                                     <p>As an IT specialist and designer, he envisioned SewaIT as a way to simplify digital Nepal. His focus is on creating tools that are not only functional but also beautiful and secure.</p>
                                 </div>
                             </div>
@@ -59,7 +59,7 @@ export default function AboutPage() {
                         __html: JSON.stringify({
                             "@context": "https://schema.org",
                             "@type": "Person",
-                            "name": "Debin Rai",
+                            "name": "Debin C. Rai",
                             "jobTitle": ["Founder", "IT Specialist", "Designer"],
                             "url": "https://sewait.up.railway.app/about",
                             "address": {
@@ -68,7 +68,7 @@ export default function AboutPage() {
                                 "addressCountry": "NP"
                             },
                             "alumniOf": "NSS Management",
-                            "description": "Founder of SewaIT, IT Specialist, and Designer from Khotang."
+                            "description": "SewaIT Founder, IT Specialist, and Designer from Khotang."
                         })
                     }}
                 />

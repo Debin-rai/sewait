@@ -30,8 +30,8 @@ export default function Home() {
         'founder': {
           '@type': 'Person',
           '@id': 'https://sewait.up.railway.app/#founder',
-          'name': 'Debin Rai',
-          'url': 'https://sewait.up.railway.app/about'
+          'name': 'Debin C. Rai',
+          'jobTitle': 'SewaIT Founder',
         },
         'sameAs': [
           'https://facebook.com/SewaIT',
