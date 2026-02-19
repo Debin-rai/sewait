@@ -3,28 +3,92 @@ import prisma from '@/lib/prisma';
 import { verifyAdmin, getSession } from '@/lib/auth';
 import crypto from 'crypto';
 
+import crypto from 'crypto';
+import { startOfDay, subDays, format } from 'date-fns';
+
 const ADMIN_IP = "27.34.111.188";
 
-export async function GET() {
+export async function GET(request: Request) {
     const session = await verifyAdmin();
     if (!session) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { searchParams } = new URL(request.url);
+    const period = searchParams.get('period') || 'week'; // week, month, year
+
     try {
-        // Normalize date for today (DAU)
-        const today = new Date();
-        today.setUTCHours(0, 0, 0, 0);
+        // Normalize date for today
+        const todayAtMidnight = startOfDay(new Date());
 
-        const yesterday = new Date(today);
-        yesterday.setUTCDate(today.getUTCDate() - 1);
+        let daysToFetch = 7;
+        let dateFormat = 'EEE'; // Mon, Tue...
+        if (period === 'month') {
+            daysToFetch = 30;
+            dateFormat = 'MMM d';
+        } else if (period === 'year') {
+            daysToFetch = 365;
+            dateFormat = 'MMM';
+        }
 
-        // Fetch daily hits (time series)
-        const daily = await prisma.dailyAnalytic.findMany({
-            orderBy: { date: 'desc' },
-            take: 30
+        const startDate = subDays(todayAtMidnight, daysToFetch - 1);
+
+        // Fetch daily analytics for the period
+        const dailyStats = await prisma.dailyAnalytic.groupBy({
+            by: ['date'],
+            _sum: { hits: true },
+            where: {
+                date: { gte: startDate }
+            },
+            orderBy: { date: 'asc' }
         });
 
+        // Fetch unique page analytics for the period (uniques per page)
+        const uniqueStats = await prisma.pageAnalytic.groupBy({
+            by: ['date'],
+            _count: { _all: true },
+            where: {
+                date: { gte: startDate }
+            },
+            orderBy: { date: 'asc' }
+        });
+
+        // Generate full date range to ensure no gaps in the chart
+        const chartData = [];
+        for (let i = 0; i < daysToFetch; i++) {
+            const date = subDays(todayAtMidnight, (daysToFetch - 1) - i);
+            const dateStr = date.toISOString().split('T')[0];
+
+            // Match daily stats (Hits)
+            const dailyMatch = dailyStats.find(s => s.date.toISOString().split('T')[0] === dateStr);
+            const hits = dailyMatch?._sum.hits || 0;
+
+            // Match unique stats (DAU)
+            const uniqueMatch = uniqueStats.find(s => s.date.toISOString().split('T')[0] === dateStr);
+            const dauCount = uniqueMatch?._count._all || 0;
+
+            chartData.push({
+                date: dateStr,
+                label: format(date, dateFormat),
+                hits,
+                dau: dauCount
+            });
+        }
+
+        // Aggregate by month if period is year
+        let finalChart = chartData;
+        if (period === 'year') {
+            const months: Record<string, any> = {};
+            chartData.forEach(d => {
+                const monthLabel = format(new Date(d.date), 'MMM');
+                if (!months[monthLabel]) {
+                    months[monthLabel] = { label: monthLabel, hits: 0, dau: 0 };
+                }
+                months[monthLabel].hits += d.hits;
+                months[monthLabel].dau += d.dau;
+            });
+            finalChart = Object.values(months);
+        }
         // Fetch top pages hits
         const visitors = await prisma.visitorAnalytic.findMany({
             orderBy: { hits: 'desc' },
@@ -60,42 +124,46 @@ export async function GET() {
 
         // 3. User Retention (Simple repeat visitor calculation)
         const totalVisits = await prisma.pageAnalytic.count();
-        const uniqueVisitors = await prisma.pageAnalytic.groupBy({
+        const uniqueVisitorsCount = await prisma.pageAnalytic.groupBy({
             by: ['visitorHash'],
         });
-        const repeatCount = totalVisits - uniqueVisitors.length;
+        const repeatCount = totalVisits - uniqueVisitorsCount.length;
         const userRetention = totalVisits > 0 ? Math.round((repeatCount / totalVisits) * 100) + '%' : '0%';
 
-        // Calculate real DAU (Unique visitors today)
-        const dau = await prisma.pageAnalytic.count({
+        // Calculate Period Totals
+        const periodHits = chartData.reduce((acc, curr) => acc + curr.hits, 0);
+
+        // Accurate unique visitors for the period
+        const periodUniques = await prisma.pageAnalytic.groupBy({
+            by: ['visitorHash'],
             where: {
-                date: today
+                date: { gte: startDate }
             }
         });
+
+        // Calculate real DAU (Unique visitors today)
+        const dau = chartData[chartData.length - 1]?.dau || 0;
 
         // Get yesterday's DAU for trend calculation
-        const yesterdayDau = await prisma.pageAnalytic.count({
-            where: {
-                date: yesterday
-            }
-        });
+        const yesterdayDau = chartData[chartData.length - 2]?.dau || 0;
 
         // Calculate trend (%)
-        const hitsTrend = yesterdayDau === 0 ? 100 : Math.round(((dau - yesterdayDau) / yesterdayDau) * 100);
+        const hitsTrend = yesterdayDau === 0 ? (dau === 0 ? 0 : 100) : Math.round(((dau - yesterdayDau) / yesterdayDau) * 100);
 
         // Get total unique visitors (lifetime)
-        const totalUniques = await prisma.pageAnalytic.count();
+        const lifetimeUniques = await prisma.pageAnalytic.count(); // Approximate or raw count
 
         return NextResponse.json({
-            daily,
-            visitors,
             dau,
-            totalUniques,
+            totalUniques: lifetimeUniques,
+            periodUniques: periodUniques.length,
+            periodHits,
             hitsTrend,
             devices,
             locations,
             userRetention,
-            avgSessionDuration: '3m 45s' // Mock for now as session end tracking is not implemented
+            avgSessionDuration: '3m 45s',
+            chart: finalChart
         });
     } catch (error) {
         console.error("Fetch analytics error:", error);

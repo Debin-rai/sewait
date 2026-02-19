@@ -3,40 +3,46 @@
 import { useState, useEffect } from "react";
 
 export default function AdminDashboard() {
+    const [period, setPeriod] = useState("week");
     const [stats, setStats] = useState({
         dau: 0,
         totalUniques: 0,
+        periodUniques: 0,
         hitsTrend: 0,
         articleCount: 0,
         status: "Healthy",
-        recentLogs: [] as any[]
+        recentLogs: [] as any[],
+        chart: [] as any[]
     });
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                const res = await fetch("/api/sewait-portal-99/analytics");
-                const data = await res.json();
-                if (data.dau !== undefined) {
-                    setStats({
-                        dau: data.dau,
-                        totalUniques: data.totalUniques,
-                        hitsTrend: data.hitsTrend,
-                        articleCount: data.articleCount,
-                        status: "Healthy",
-                        recentLogs: data.recentLogs || []
-                    });
-                }
-            } catch (error) {
-                console.error("Failed to fetch dashboard stats", error);
-            } finally {
-                setLoading(false);
+    const fetchStats = async () => {
+        setLoading(true);
+        try {
+            const res = await fetch(`/api/sewait-portal-99/analytics?period=${period}`);
+            const data = await res.json();
+            if (data.dau !== undefined) {
+                setStats({
+                    dau: data.dau,
+                    totalUniques: data.totalUniques,
+                    periodUniques: data.periodUniques,
+                    hitsTrend: data.hitsTrend,
+                    articleCount: data.articleCount,
+                    status: "Healthy",
+                    recentLogs: data.recentLogs || [],
+                    chart: data.chart || []
+                });
             }
-        };
+        } catch (error) {
+            console.error("Failed to fetch dashboard stats", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         fetchStats();
-    }, []);
+    }, [period]);
 
     const formatRelativeTime = (dateString: string) => {
         const now = new Date();
@@ -54,9 +60,26 @@ export default function AdminDashboard() {
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
-            <div className="flex flex-col gap-1">
-                <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Dashboard Overview</h2>
-                <p className="text-slate-500 text-sm">Real-time system health and user engagement metrics.</p>
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex flex-col gap-1">
+                    <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Dashboard Overview</h2>
+                    <p className="text-slate-500 text-sm">Real-time system health and user engagement metrics.</p>
+                </div>
+
+                <div className="flex items-center gap-2 bg-white dark:bg-slate-900 p-1.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm self-start">
+                    {['week', 'month', 'year'].map((p) => (
+                        <button
+                            key={p}
+                            onClick={() => setPeriod(p)}
+                            className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${period === p
+                                ? "bg-[#1a355b] text-white shadow-md"
+                                : "text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800"
+                                }`}
+                        >
+                            {p}
+                        </button>
+                    ))}
+                </div>
             </div>
 
             {/* Stat Card Grid */}
@@ -74,13 +97,25 @@ export default function AdminDashboard() {
                             <span className="material-symbols-outlined text-xs">{stats.hitsTrend >= 0 ? "trending_up" : "trending_down"}</span> {Math.abs(stats.hitsTrend)}%
                         </div>
                     </div>
+                    {/* Dynamic Mini Bar Chart for DAU */}
                     <div className="h-10 w-full flex items-end gap-1 px-1">
-                        <div className="flex-1 bg-[#1a355b]/10 rounded-t h-1/2"></div>
-                        <div className="flex-1 bg-[#1a355b]/10 rounded-t h-2/3"></div>
-                        <div className="flex-1 bg-[#1a355b]/10 rounded-t h-1/3"></div>
-                        <div className="flex-1 bg-[#1a355b]/10 rounded-t h-4/5"></div>
-                        <div className="flex-1 bg-[#1a355b]/10 rounded-t h-1/2"></div>
-                        <div className="flex-1 bg-[#1a355b] rounded-t h-full"></div>
+                        {loading ? (
+                            Array(7).fill(0).map((_, i) => (
+                                <div key={i} className="flex-1 bg-slate-100 dark:bg-slate-800 rounded-t h-1/2 animate-pulse"></div>
+                            ))
+                        ) : (
+                            (() => {
+                                const maxVal = Math.max(...stats.chart.map(d => d.dau), 1);
+                                return stats.chart.map((d, i) => (
+                                    <div
+                                        key={i}
+                                        title={`${d.label}: ${d.dau} users`}
+                                        className={`flex-1 rounded-t transition-all duration-500 ${i === stats.chart.length - 1 ? "bg-[#1a355b] dark:bg-blue-500" : "bg-[#1a355b]/20 dark:bg-blue-500/20"}`}
+                                        style={{ height: `${Math.max((d.dau / maxVal) * 100, 5)}%` }}
+                                    ></div>
+                                ));
+                            })()
+                        )}
                     </div>
                 </div>
 
@@ -88,22 +123,34 @@ export default function AdminDashboard() {
                 <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col gap-4">
                     <div className="flex justify-between items-start">
                         <div>
-                            <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Total Reach</p>
+                            <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Total Reach ({period})</p>
                             <h3 className="text-3xl font-bold mt-1">
-                                {loading ? "..." : stats.totalUniques.toLocaleString()}
+                                {loading ? "..." : stats.periodUniques.toLocaleString()}
                             </h3>
                         </div>
                         <div className="bg-[#10b981]/10 text-[#10b981] px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-0.5">
                             <span className="material-symbols-outlined text-xs">trending_up</span> Live
                         </div>
                     </div>
+                    {/* Dynamic Mini Bar Chart for Total Reach (Hits) */}
                     <div className="h-10 w-full flex items-end gap-1 px-1">
-                        <div className="flex-1 bg-[#1a355b]/10 rounded-t h-2/3"></div>
-                        <div className="flex-1 bg-[#1a355b]/10 rounded-t h-1/2"></div>
-                        <div className="flex-1 bg-[#1a355b]/10 rounded-t h-3/4"></div>
-                        <div className="flex-1 bg-[#1a355b]/10 rounded-t h-2/3"></div>
-                        <div className="flex-1 bg-[#1a355b]/10 rounded-t h-5/6"></div>
-                        <div className="flex-1 bg-[#1a355b] rounded-t h-3/4"></div>
+                        {loading ? (
+                            Array(7).fill(0).map((_, i) => (
+                                <div key={i} className="flex-1 bg-slate-100 dark:bg-slate-800 rounded-t h-1/2 animate-pulse"></div>
+                            ))
+                        ) : (
+                            (() => {
+                                const maxVal = Math.max(...stats.chart.map(d => d.hits), 1);
+                                return stats.chart.map((d, i) => (
+                                    <div
+                                        key={i}
+                                        title={`${d.label}: ${d.hits} hits`}
+                                        className={`flex-1 rounded-t transition-all duration-500 ${i === stats.chart.length - 1 ? "bg-emerald-500" : "bg-emerald-500/20"}`}
+                                        style={{ height: `${Math.max((d.hits / maxVal) * 100, 5)}%` }}
+                                    ></div>
+                                ));
+                            })()
+                        )}
                     </div>
                 </div>
 
