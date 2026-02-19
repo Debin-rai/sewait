@@ -14,6 +14,7 @@ export default function Home() {
         '@id': 'https://sewait.up.railway.app/#website',
         'url': 'https://sewait.up.railway.app',
         'name': 'SewaIT',
+        'alternateName': ['SewaIT', 'Sewa IT'],
         'description': 'Digital Utility Platform for Nepalis',
         'publisher': {
           '@id': 'https://sewait.up.railway.app/#organization'

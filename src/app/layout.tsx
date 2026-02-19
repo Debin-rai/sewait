@@ -25,6 +25,7 @@ const notoSansDevanagari = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://sewait.up.railway.app"),
   title: "SewaIT – Nepali Calendar, Gold Rates & Official Guides",
   description: "SewaIT by Debin Rai: Your all-in-one Nepali utility hub. Features include Live Nepali Calendar with Tithi, Daily Gold/Silver rates, accurate Weather updates, NEPSE stock data, and comprehensive official Government Service Guides.",
   keywords: ["SewaIT", "Debin Rai", "Nepali Calendar", "Sarkari Guides", "Gold Price Nepal", "today's date", "tithi", "Nepal government services", "आजको मिती", "सुन चाँदी मूल्य", "NEPSE"],
@@ -48,6 +49,14 @@ export const metadata: Metadata = {
     url: "https://sewait.up.railway.app",
     siteName: "SewaIT",
     locale: "ne_NP",
+    images: [
+      {
+        url: "/web-app-manifest-512x512.png",
+        width: 512,
+        height: 512,
+        alt: "SewaIT Logo",
+      },
+    ],
     type: "website",
   },
   twitter: {
@@ -55,12 +64,15 @@ export const metadata: Metadata = {
     title: "SewaIT – Nepali Calendar, Gold Rates & Official Guides",
     description: "SewaIT by Debin Rai: Your all-in-one Nepali utility hub. Features include Live Nepali Calendar with Tithi, Daily Gold/Silver rates, accurate Weather updates, NEPSE stock data, and comprehensive official Government Service Guides.",
     creator: "@SewaIT",
+    images: ["/web-app-manifest-512x512.png"],
   },
   icons: {
     icon: [
       { url: "/favicon.ico" },
       { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/web-app-manifest-192x192.png", sizes: "192x192", type: "image/png" },
     ],
+    shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
   manifest: "/site.webmanifest",
