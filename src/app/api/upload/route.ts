@@ -19,11 +19,11 @@ export async function POST(request: Request) {
 
         // Use ImgBB for permanent hosting (Railway ephemeral disk fix)
         // Sign up for a free key at https://api.imgbb.com/
-        const IMGBB_API_KEY = process.env.IMGBB_API_KEY;
+        const IMGBB_API_KEY = process.env.IMGBB_API_KEY || '65a1bc2014ec534580a037bf4b0c7d81';
 
         if (!IMGBB_API_KEY) {
             return NextResponse.json({
-                error: 'Server configuration error: IMGBB_API_KEY is not set in environment variables.'
+                error: 'Server configuration error: IMGBB_API_KEY is not set.'
             }, { status: 500 });
         }
 
