@@ -18,8 +18,14 @@ export async function POST(request: Request) {
         }
 
         // Use ImgBB for permanent hosting (Railway ephemeral disk fix)
-        // Note: Using a public key for now, user should ideally set IMGBB_API_KEY in ENV
-        const IMGBB_API_KEY = process.env.IMGBB_API_KEY || '6d207e02198a847aa98d0a2a901485a5'; // Fallback to a default or request from user
+        // Sign up for a free key at https://api.imgbb.com/
+        const IMGBB_API_KEY = process.env.IMGBB_API_KEY;
+
+        if (!IMGBB_API_KEY) {
+            return NextResponse.json({
+                error: 'Server configuration error: IMGBB_API_KEY is not set in environment variables.'
+            }, { status: 500 });
+        }
 
         const imgbbFormData = new FormData();
         imgbbFormData.append('image', file);

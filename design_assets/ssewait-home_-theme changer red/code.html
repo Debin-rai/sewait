@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html class="light" lang="ne"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>सजिलो साथी - SajiloSathi</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#b91c1c", // Festive Red
+                        "accent-gold": "#fbbf24", // Vibrant Yellow
+                        "background-light": "#fffcf2",
+                        "background-dark": "#13181f",
+                        "nepal-blue": "#003893"
+                    },
+                    fontFamily: {
+                        "display": ["Mukta", "Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.375rem",
+                        "lg": "0.75rem",
+                        "xl": "1.25rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        :root {
+            --hero-bg: radial-gradient(circle at center, #ef4444 0%, #b91c1c 100%);
+            --festive-pattern: url('https://www.transparenttextures.com/patterns/p6.png');
+        }
+        .ticker-wrap {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .ticker {
+            display: inline-block;
+            animation: ticker 35s linear infinite;
+        }
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hero-festive {
+            background: var(--hero-bg);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-festive::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: var(--festive-pattern);
+            opacity: 0.1;
+            pointer-events: none;
+        }.hero-festive::after {
+            content: "";
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #fbbf24 0%, transparent 70%);
+            filter: blur(60px);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        h1, h2, h3, .nepali-font {
+            font-family: 'Mukta', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-body text-slate-800 antialiased">
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-red-100 px-4 md:px-10 py-3 flex items-center justify-between">
+<div class="flex items-center gap-10">
+<div class="flex items-center gap-2">
+<div class="p-1.5 bg-primary rounded-lg text-white shadow-lg shadow-red-200">
+<span class="material-symbols-outlined block text-2xl">grid_view</span>
+</div>
+<h1 class="text-primary text-2xl font-extrabold tracking-tight">सजिलो<span class="text-accent-gold">साथी</span></h1>
+</div>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-primary text-sm font-bold border-b-2 border-primary transition-colors" href="#">गृहपृष्ठ</a>
+<a class="text-slate-600 hover:text-primary text-sm font-semibold transition-colors" href="#">पात्रो</a>
+<a class="text-slate-600 hover:text-primary text-sm font-semibold transition-colors" href="#">मौसम</a>
+<a class="text-slate-600 hover:text-primary text-sm font-semibold transition-colors" href="#">सुनचाँदी</a>
+<a class="text-slate-600 hover:text-primary text-sm font-semibold transition-colors" href="#">नेप्से</a>
+<a class="text-slate-600 hover:text-primary text-sm font-semibold transition-colors" href="#">सरकारी सेवा</a>
+</nav>
+</div>
+<div class="flex items-center gap-4 flex-1 max-w-md ml-auto">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
+<input class="w-full bg-slate-50 border-slate-200 focus:ring-primary focus:border-primary rounded-lg pl-10 text-sm py-2 transition-all" placeholder="समाचार, स्टक वा घटना खोज्नुहोस्..." type="text"/>
+</div>
+<button class="flex items-center justify-center p-2 text-primary hover:bg-red-50 rounded-lg">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<section class="hero-festive text-white border-b border-red-800">
+<div class="container mx-auto px-4 lg:px-10 py-12 text-center relative z-10">
+<div class="mb-4">
+<div class="flex flex-col items-center gap-4">
+<div class="flex items-center gap-2 text-accent-gold mb-1">
+<span class="material-symbols-outlined text-2xl">event_note</span>
+<span class="text-sm font-bold uppercase tracking-widest opacity-90 nepali-font">नेपाली सम्वत्</span>
+</div>
+<h2 class="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-2 drop-shadow-lg nepali-font">
+                    २०८० कार्तिक १५, <span class="text-accent-gold">बुधबार</span>
+</h2>
+<div class="flex flex-col md:flex-row items-center gap-6 mt-4">
+<div class="flex flex-col items-center">
+<span class="text-xl md:text-2xl font-bold px-8 py-3 bg-accent-gold text-primary rounded-2xl shadow-2xl shadow-black/20 nepali-font">एकादशी तिथि</span>
+</div>
+<div class="hidden md:block h-12 w-px bg-white/30"></div>
+<div class="flex flex-col items-center">
+<span class="text-xl md:text-2xl font-bold text-white drop-shadow-md nepali-font">दशैं आउन ५ दिन बाँकी</span>
+<span class="text-xs uppercase tracking-tighter opacity-80 font-bold">(घटस्थापना)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-black/30 backdrop-blur-md py-3 border-t border-white/10">
+<div class="container mx-auto px-4 lg:px-10 flex flex-wrap items-center justify-between gap-6">
+<div class="flex items-center gap-6 text-sm font-bold">
+<div class="flex items-center gap-2 pr-6 border-r border-white/20">
+<span class="material-symbols-outlined text-accent-gold text-xl">sunny</span>
+<span class="nepali-font">काठमाडौं: २२°C</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-gold text-xl">schedule</span>
+<span>१०:४५ AM</span>
+</div>
+</div>
+<div class="flex-1 ticker-wrap hidden md:block text-sm font-bold tracking-wide text-white/90">
+<div class="ticker">
+<span class="mx-8 nepali-font">नेप्से: २,०४५.६३ <span class="text-green-400">▲ ०.४५%</span></span>
+<span class="mx-8 nepali-font">सुन (२४ क्यारेट): NPR १,१८,००० <span class="text-red-400">▼ ०.२%</span></span>
+<span class="mx-8">USD/NPR: १३२.४० <span class="text-green-400">▲ ०.०५%</span></span>
+<span class="mx-8 text-accent-gold font-black nepali-font">बडा दशैं २०८० को मंगलमय शुभकामना!</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<main class="container mx-auto px-4 lg:px-10 py-10">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+<div class="lg:col-span-1 bg-white border border-red-50 shadow-sm rounded-xl p-5 hover:shadow-lg transition-all">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-primary font-bold text-lg nepali-font">नेपाली पात्रो</h2>
+<span class="text-xs font-bold text-primary bg-red-50 px-2 py-1 rounded">२०८० कार्तिक</span>
+</div>
+<div class="grid grid-cols-7 text-center text-xs font-bold text-slate-400 mb-2">
+<span>आइत</span><span>सोम</span><span>मंगल</span><span>बुध</span><span>बिही</span><span>शुक्र</span><span>शनि</span>
+</div>
+<div class="grid grid-cols-7 text-center gap-y-1 text-sm font-semibold">
+<span class="py-2 text-slate-300">२८</span><span class="py-2 text-slate-300">२९</span><span class="py-2 text-slate-300">३०</span>
+<span class="py-2 hover:bg-red-50 rounded cursor-pointer">१</span><span class="py-2 hover:bg-red-50 rounded cursor-pointer">२</span>
+<span class="py-2 hover:bg-red-50 rounded cursor-pointer">३</span><span class="py-2 hover:bg-red-50 rounded cursor-pointer">४</span>
+<span class="py-2 hover:bg-red-50 rounded cursor-pointer">५</span><span class="py-2 hover:bg-red-50 rounded cursor-pointer">६</span>
+<span class="py-2 hover:bg-red-50 rounded cursor-pointer">७</span><span class="py-2 hover:bg-red-50 rounded cursor-pointer">८</span>
+<span class="py-2 hover:bg-red-50 rounded cursor-pointer">९</span><span class="py-2 hover:bg-red-50 rounded cursor-pointer">१०</span>
+<span class="py-2 hover:bg-red-50 rounded cursor-pointer">११</span><span class="py-2 hover:bg-red-50 rounded cursor-pointer">१२</span>
+<span class="py-2 hover:bg-red-50 rounded cursor-pointer">१३</span><span class="py-2 hover:bg-red-50 rounded cursor-pointer">१४</span>
+<span class="py-2 bg-primary text-white rounded-lg font-bold shadow-md shadow-red-200">१५</span><span class="py-2 hover:bg-red-50 rounded cursor-pointer">१६</span>
+<span class="py-2 hover:bg-red-50 rounded cursor-pointer">१७</span><span class="py-2 hover:bg-red-50 rounded cursor-pointer">१८</span>
+</div>
+<div class="mt-6 pt-4 border-t border-slate-50">
+<p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 nepali-font">आगामी पर्व</p>
+<div class="flex items-center gap-3 bg-red-50/50 p-2 rounded-lg border border-red-100/50">
+<div class="w-1.5 h-10 bg-accent-gold rounded-full"></div>
+<div>
+<p class="text-sm font-bold text-primary nepali-font">दशैं (घटस्थापना)</p>
+<p class="text-xs text-slate-500">५ दिन बाँकी • असोज २८</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white border border-red-50 shadow-sm rounded-xl p-5 hover:shadow-lg transition-all">
+<h2 class="text-primary font-bold text-lg mb-4 nepali-font">बजार भाउ</h2>
+<div class="space-y-4">
+<div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+<div class="flex justify-between items-start mb-1">
+<span class="text-xs font-bold text-slate-500 uppercase nepali-font">सुन (२४ क्यारेट) / तोला</span>
+<span class="text-red-500 text-xs font-bold flex items-center"><span class="material-symbols-outlined text-sm">arrow_downward</span> रू २५०</span>
+</div>
+<p class="text-xl font-black text-primary">NPR १,१८,०००</p>
+</div>
+<div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+<div class="flex justify-between items-start mb-1">
+<span class="text-xs font-bold text-slate-500 uppercase nepali-font">चाँदी / तोला</span>
+<span class="text-green-500 text-xs font-bold flex items-center"><span class="material-symbols-outlined text-sm">arrow_upward</span> रू ५</span>
+</div>
+<p class="text-xl font-black text-primary">NPR १,४००</p>
+</div>
+<div class="text-center">
+<p class="text-[10px] text-slate-400 nepali-font">अपडेट: १०:१५ AM • महासंघ</p>
+<button class="mt-2 text-xs font-bold text-primary hover:underline nepali-font">विस्तृत विवरण हेर्नुहोस्</button>
+</div>
+</div>
+</div>
+<div class="bg-white border border-red-50 shadow-sm rounded-xl p-5 hover:shadow-lg transition-all">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-primary font-bold text-lg nepali-font">नेप्से सारांश</h2>
+<span class="flex items-center text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded uppercase nepali-font">बजार खुला</span>
+</div>
+<div class="mb-6">
+<p class="text-xs font-bold text-slate-400 uppercase nepali-font">वर्तमान सूचकांक</p>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-black text-primary">२,०४५.६३</span>
+<span class="text-green-600 text-sm font-bold">+९.२० (०.४५%)</span>
+</div>
+<div class="w-full h-12 bg-slate-50 mt-2 rounded flex items-center justify-center">
+<div class="w-full h-px bg-slate-200 relative">
+<div class="absolute inset-0 flex items-center justify-around">
+<div class="w-1 h-3 bg-green-400 rounded-full"></div>
+<div class="w-1 h-5 bg-green-500 rounded-full"></div>
+<div class="w-1 h-8 bg-green-600 rounded-full"></div>
+<div class="w-1 h-4 bg-green-400 rounded-full"></div>
+<div class="w-1 h-6 bg-green-500 rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-3">
+<p class="text-xs font-bold text-slate-400 uppercase nepali-font">प्रमुख सुधारकर्ता</p>
+<div class="flex justify-between items-center text-sm border-b border-slate-50 pb-2">
+<span class="font-bold text-primary">NTC</span>
+<span class="text-green-600 font-bold">+४.५%</span>
+</div>
+<div class="flex justify-between items-center text-sm border-b border-slate-50 pb-2">
+<span class="font-bold text-primary">ADBL</span>
+<span class="text-green-600 font-bold">+३.२%</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="font-bold text-primary">HDL</span>
+<span class="text-green-600 font-bold">+२.८%</span>
+</div>
+</div>
+</div>
+<div class="bg-white border border-red-50 shadow-sm rounded-xl p-5 hover:shadow-lg transition-all">
+<h2 class="text-primary font-bold text-lg mb-4 nepali-font">मौसम पूर्वानुमान</h2>
+<div class="flex items-center gap-4 mb-6">
+<span class="material-symbols-outlined text-accent-gold text-5xl">wb_sunny</span>
+<div>
+<p class="text-3xl font-black text-primary">२२°C</p>
+<p class="text-sm font-medium text-slate-500 nepali-font">सफा • काठमाडौं</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<div class="text-center p-2 bg-red-50/30 rounded-lg border border-red-100/30">
+<p class="text-[10px] font-bold text-slate-400 nepali-font">बिही</p>
+<span class="material-symbols-outlined text-slate-400 my-1">partly_cloudy_day</span>
+<p class="text-sm font-bold text-primary">२१°</p>
+</div>
+<div class="text-center p-2 bg-red-50/30 rounded-lg border border-red-100/30">
+<p class="text-[10px] font-bold text-slate-400 nepali-font">शुक्र</p>
+<span class="material-symbols-outlined text-slate-400 my-1">wb_sunny</span>
+<p class="text-sm font-bold text-primary">२३°</p>
+</div>
+<div class="text-center p-2 bg-red-50/30 rounded-lg border border-red-100/30">
+<p class="text-[10px] font-bold text-slate-400 nepali-font">शनि</p>
+<span class="material-symbols-outlined text-slate-400 my-1">cloud</span>
+<p class="text-sm font-bold text-primary">२०°</p>
+</div>
+</div>
+<div class="mt-4 flex items-center justify-between text-xs text-slate-500 nepali-font">
+<span>आद्रता: ४५%</span>
+<span>हावा: ८ किमी/घ</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+<div class="lg:col-span-2 space-y-6">
+<div class="flex items-center justify-between border-b border-red-100 pb-4">
+<h2 class="text-2xl font-black text-primary nepali-font">ताजा समाचार</h2>
+<a class="text-sm font-bold text-primary hover:text-accent-gold nepali-font" href="#">थप समाचार हेर्नुहोस् →</a>
+</div>
+<article class="group cursor-pointer p-4 hover:bg-red-50/30 rounded-xl transition-colors">
+<div class="flex flex-col gap-1">
+<h3 class="text-xl font-bold text-slate-800 group-hover:text-primary transition-colors nepali-font">सरकारद्वारा २०८० सालको दशैं बिदाको औपचारिक घोषणा</h3>
+<p class="text-slate-600 text-sm leading-relaxed line-clamp-2 nepali-font">गृह मन्त्रालयले आगामी दशैं पर्वको अवसरमा घटस्थापना देखि कोजाग्रत पूर्णिमा सम्मको बिदाको क्यालेन्डर सार्वजनिक गरेको छ...</p>
+<div class="flex items-center gap-3 text-xs text-slate-400 mt-2">
+<span class="font-bold text-primary nepali-font">राष्ट्रिय</span>
+<span>• २ घण्टा अघि</span>
+</div>
+</div>
+</article>
+<article class="group cursor-pointer p-4 hover:bg-red-50/30 rounded-xl transition-colors">
+<div class="flex flex-col gap-1">
+<h3 class="text-xl font-bold text-slate-800 group-hover:text-primary transition-colors nepali-font">राष्ट्र बैंकद्वारा लघु तथा साना उद्यमी लक्षित नयाँ मौद्रिक नीति सार्वजनिक</h3>
+<p class="text-slate-600 text-sm leading-relaxed line-clamp-2 nepali-font">नेपाल राष्ट्र बैंकले काठमाडौं उपत्यका लगायत देशैभरिका साना व्यवसायीहरूलाई लक्षित गर्दै सहुलियतपूर्ण ऋणको व्यवस्था गरेको छ...</p>
+<div class="flex items-center gap-3 text-xs text-slate-400 mt-2">
+<span class="font-bold text-primary nepali-font">अर्थतन्त्र</span>
+<span>• ५ घण्टा अघि</span>
+</div>
+</div>
+</article>
+<article class="group cursor-pointer p-4 hover:bg-red-50/30 rounded-xl transition-colors">
+<div class="flex flex-col gap-1">
+<h3 class="text-xl font-bold text-slate-800 group-hover:text-primary transition-colors nepali-font">चाडबाडको सपिङमा डिजिटल भुक्तानी ३० प्रतिशतले वृद्धि</h3>
+<p class="text-slate-600 text-sm leading-relaxed line-clamp-2 nepali-font">दशैंको किनमेलमा उपभोक्ताहरूले नगद भन्दा डिजिटल वालेट र मोबाइल बैंकिङ प्रयोग गर्न थालेपछि कारोबारमा उल्लेख्य वृद्धि देखिएको छ...</p>
+<div class="flex items-center gap-3 text-xs text-slate-400 mt-2">
+<span class="font-bold text-primary nepali-font">प्रविधि</span>
+<span>• ८ घण्टा अघि</span>
+</div>
+</div>
+</article>
+</div>
+<div class="space-y-8">
+<div class="bg-accent-gold/5 border-2 border-accent-gold/20 rounded-xl p-6 shadow-sm relative overflow-hidden">
+<div class="absolute -top-4 -right-4 text-accent-gold/10 pointer-events-none">
+<span class="material-symbols-outlined text-8xl">edit_note</span>
+</div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">push_pin</span>
+<h2 class="text-primary font-bold text-lg nepali-font">तपाईंका कार्यहरू</h2>
+</div>
+<ul class="space-y-4 relative z-10">
+<li class="flex items-start gap-3">
+<input class="mt-1 rounded border-primary/30 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-primary nepali-font">विद्युत महसुल बुझाउने (NEA)</span>
+<span class="text-xs text-slate-500 nepali-font">अन्तिम मिति: कार्तिक २०</span>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<input class="mt-1 rounded border-primary/30 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-primary nepali-font">परिवारका लागि दशैंको उपहार किन्ने</span>
+<span class="text-xs text-slate-500 nepali-font">यो हप्ता</span>
+</div>
+</li>
+</ul>
+<button class="w-full mt-6 py-2 bg-white border border-primary/20 text-primary font-bold text-xs rounded-lg hover:bg-red-50 transition-colors uppercase tracking-widest nepali-font">+ नयाँ कार्य थप्नुहोस्</button>
+</div>
+<div class="bg-primary text-white p-8 rounded-2xl flex flex-col items-center text-center shadow-xl shadow-red-200">
+<div class="mb-4 bg-white/20 p-4 rounded-full">
+<span class="material-symbols-outlined text-accent-gold text-4xl">favorite</span>
+</div>
+<h3 class="font-bold text-xl mb-2 tracking-tight nepali-font">नेपालीका लागि, नेपालीद्वारा</h3>
+<p class="text-sm text-red-100 leading-relaxed nepali-font">सजिलो साथी हरेक नेपालीको दैनिक आवश्यकता पूरा गर्न बनाइएको हो। हाम्रो सेवा, हाम्रो गर्व।</p>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-white border-t border-red-100 mt-20 py-12">
+<div class="container mx-auto px-4 lg:px-10">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
+<div class="col-span-1">
+<div class="flex items-center gap-2 mb-4">
+<div class="p-1 bg-primary rounded text-white scale-75">
+<span class="material-symbols-outlined block text-lg">grid_view</span>
+</div>
+<h2 class="text-primary text-xl font-black">सजिलो<span class="text-accent-gold">साथी</span></h2>
+</div>
+<p class="text-sm text-slate-500 leading-relaxed mb-6 nepali-font">आधुनिक नेपाली जीवनशैलीका लागि आवश्यक सम्पूर्ण जानकारीहरू एकै ठाउँमा।</p>
+<div class="flex gap-4">
+<a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">social_leaderboard</span></a>
+<a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">alternate_email</span></a>
+</div>
+</div>
+<div>
+<h4 class="font-bold text-primary mb-4 nepali-font">मुख्य सुविधाहरू</h4>
+<ul class="space-y-2 text-sm text-slate-500 nepali-font">
+<li><a class="hover:text-primary transition-colors" href="#">नेपाली पात्रो २०८०</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">मौसम पूर्वानुमान</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">शेयर बजार (नेप्से)</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">सुनचाँदीको दरभाउ</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-primary mb-4 nepali-font">कम्पनी</h4>
+<ul class="space-y-2 text-sm text-slate-500 nepali-font">
+<li><a class="hover:text-primary transition-colors" href="#">हाम्रो बारेमा</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">सम्पर्क</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">गोपनीयता नीति</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">सेवाका सर्तहरू</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-primary mb-4 nepali-font">न्यूजलेटर</h4>
+<p class="text-sm text-slate-500 mb-4 nepali-font">दैनिक मुख्य समाचार आफ्नो इमेलमा प्राप्त गर्नुहोस्।</p>
+<div class="flex shadow-sm">
+<input class="w-full text-xs bg-slate-50 border-slate-200 rounded-l-lg focus:ring-primary focus:border-primary" placeholder="email@example.com" type="email"/>
+<button class="bg-primary text-white text-xs px-4 rounded-r-lg font-bold nepali-font">सामेल हुनुहोस्</button>
+</div>
+</div>
+</div>
+<div class="border-t border-slate-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">© २०८० SajiloSathi Labs. सर्वाधिकार सुरक्षित।</p>
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Proudly Made in</span>
+<div class="flex flex-col w-5 h-6 relative overflow-hidden" title="Nepal Flag Inspired">
+<div class="absolute inset-0 bg-[#003893] clip-path-nepal">
+<div class="h-1/2 bg-[#dc143c]"></div>
+</div>
+<span class="text-xl leading-none">🇳🇵</span>
+</div>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Nepal</span>
+</div>
+</div>
+</div>
+</footer>
+
+</body></html>
