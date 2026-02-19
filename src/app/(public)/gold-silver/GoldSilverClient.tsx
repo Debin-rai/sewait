@@ -2,6 +2,7 @@
 
 import { useLanguage } from "@/context/LanguageContext";
 import { useState } from "react";
+import AdSlot from "@/components/ads/AdSlot";
 
 export default function GoldSilverClient() {
     const { t } = useLanguage();
@@ -32,6 +33,9 @@ export default function GoldSilverClient() {
     return (
         <div className="bg-slate-50 min-h-screen text-slate-900 pb-12">
             <main className="max-w-[1400px] mx-auto px-6 py-10">
+                {/* GOLD_SILVER_TOP Ad Slot */}
+                <AdSlot position="GOLD_SILVER_TOP" className="mb-8 aspect-[6/1] w-full" />
+
                 {/* Breadcrumbs & Title */}
                 <div className="mb-10">
                     <nav className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-widest mb-6">
@@ -148,6 +152,8 @@ export default function GoldSilverClient() {
                                 </div>
                             </div>
                         </div>
+
+                        <AdSlot position="GOLD_SILVER_SIDEBAR" className="aspect-square w-full" />
                     </div>
                 </div>
 

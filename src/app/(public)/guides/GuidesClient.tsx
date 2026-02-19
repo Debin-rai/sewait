@@ -3,6 +3,7 @@
 import { useLanguage } from "@/context/LanguageContext";
 import Link from "next/link";
 import { useState } from "react";
+import AdSlot from "@/components/ads/AdSlot";
 
 export default function GuidesClient() {
     const { t } = useLanguage();
@@ -278,6 +279,8 @@ export default function GuidesClient() {
                                 </div>
                             </div>
 
+                            <AdSlot position="GUIDES_SIDEBAR" className="aspect-square w-full" />
+
                             {/* Trust Banner */}
                             <div className="bg-primary/5 rounded-2xl border border-primary/10 p-6">
                                 <h5 className="text-primary text-sm font-bold mb-3 flex items-center gap-2">
@@ -294,6 +297,10 @@ export default function GuidesClient() {
                         </div>
                     </div>
                 </section>
+
+                <div className="container mx-auto px-6 md:px-20 pb-16">
+                    <AdSlot position="GUIDES_BOTTOM" className="w-full aspect-[6/1]" />
+                </div>
             </main>
         </div>
     );

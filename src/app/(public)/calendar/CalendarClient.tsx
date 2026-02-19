@@ -4,6 +4,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useState, useEffect } from "react";
 import FadeIn from "@/components/animations/FadeIn";
 import NepaliDate from "nepali-date-converter";
+import AdSlot from "@/components/ads/AdSlot";
 
 export default function CalendarClient() {
     const { language } = useLanguage();
@@ -128,6 +129,9 @@ export default function CalendarClient() {
     return (
         <div className="bg-background-light dark:bg-background-dark min-h-screen text-slate-900 dark:text-slate-100 pb-12 font-sans">
             <main className="max-w-[1400px] mx-auto px-6 py-8">
+                {/* CALENDAR_TOP Ad Slot */}
+                <AdSlot position="CALENDAR_TOP" className="mb-8 aspect-[6/1] w-full" />
+
                 {/* Header Section */}
                 <FadeIn direction="down" delay={0.1}>
                     <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
@@ -200,6 +204,8 @@ export default function CalendarClient() {
                                 </p>
                             </div>
                         </FadeIn>
+
+                        <AdSlot position="CALENDAR_SIDEBAR" className="aspect-square w-full" />
                     </div>
 
                     {/* Center Column: Calendar Grid */}

@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { ArrowLeft, Calendar, FileText, Tag } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import AdSlot from "@/components/ads/AdSlot";
 
 // Since we are using Next.js 15, we need to handle async params correctly
 export default async function GuidePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -68,6 +69,10 @@ Please visit the nearest office for more details.
 
                     <div className="p-8 md:p-12 prose prose-slate max-w-none prose-headings:font-nepali prose-headings:text-primary">
                         <ReactMarkdown>{content}</ReactMarkdown>
+                    </div>
+
+                    <div className="border-t border-slate-100 p-8">
+                        <AdSlot position="GUIDE_CONTENT_BOTTOM" className="w-full aspect-[6/1]" />
                     </div>
                 </article>
             </main>

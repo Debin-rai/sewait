@@ -303,12 +303,14 @@ export default function WeatherClient() {
                                 <p className="text-sm font-black text-slate-800">{formatTime(weather?.current?.sunset)}</p>
                             </div>
                         </div>
+
+                        <AdSlot position="WEATHER_SIDEBAR" className="aspect-square w-full" />
                     </div>
                 </div>
 
                 {/* Advertisement Slot */}
                 <div className="mt-12">
-                    <AdSlot position="WEATHER_BOTTOM" className="w-full h-[200px]" />
+                    <AdSlot position="WEATHER_BOTTOM" className="w-full aspect-[6/1]" />
                 </div>
 
                 {/* Footer Disclaimer */}

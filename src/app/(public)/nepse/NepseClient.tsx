@@ -2,6 +2,7 @@
 
 import { useLanguage } from "@/context/LanguageContext";
 import { useState } from "react";
+import AdSlot from "@/components/ads/AdSlot";
 
 export default function NepseClient() {
     const { t } = useLanguage();
@@ -38,6 +39,9 @@ export default function NepseClient() {
     return (
         <div className="bg-slate-50 min-h-screen text-slate-900 pb-12">
             <main className="max-w-[1280px] mx-auto px-6 py-8">
+                {/* NEPSE_TOP Ad Slot */}
+                <AdSlot position="NEPSE_TOP" className="mb-8 aspect-[6/1] w-full" />
+
                 {/* Market Status & Top Stats */}
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-10 gap-6">
                     <div className="flex flex-col gap-1">
@@ -192,6 +196,8 @@ export default function NepseClient() {
                                 </button>
                             </div>
                         </div>
+
+                        <AdSlot position="NEPSE_SIDEBAR" className="aspect-square w-full" />
 
                         {/* Quick Insight */}
                         <div className="bg-primary text-white rounded-2xl shadow-xl p-6 relative overflow-hidden group">
