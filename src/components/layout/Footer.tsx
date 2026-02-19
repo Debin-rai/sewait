@@ -69,6 +69,7 @@ export default function Footer() {
                                 placeholder="your@email.com"
                                 className="bg-slate-50 border border-slate-200 rounded-lg text-xs px-4 py-2 flex-1 focus:ring-1 focus:ring-primary focus:border-primary outline-none"
                                 aria-label="Email address for notifications"
+                                autoComplete="email"
                             />
                             <button className="bg-primary text-white text-[10px] font-bold px-4 py-2 rounded-lg hover:bg-primary-light transition-colors">
                                 Subscribe

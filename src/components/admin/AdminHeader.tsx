@@ -33,6 +33,7 @@ export default function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                         placeholder="Search system logs..."
                         type="text"
                         aria-label="Search system logs"
+                        autoComplete="off"
                     />
                 </div>
                 <div className="flex items-center gap-1 md:gap-3">

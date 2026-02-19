@@ -82,6 +82,7 @@ export default function PersonalReminders() {
                     placeholder="Pay Internet Bill... इन्टरनेट बिल तिर्नुहोस्"
                     className="flex-1 bg-slate-50 dark:bg-slate-800/50 border-2 border-transparent focus:border-primary/20 rounded-2xl px-5 py-4 text-sm font-medium outline-none transition-all placeholder:text-slate-400 dark:text-white"
                     aria-label="New reminder text"
+                    autoComplete="off"
                 />
                 <button
                     onClick={addReminder}

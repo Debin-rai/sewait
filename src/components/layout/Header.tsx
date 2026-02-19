@@ -64,6 +64,7 @@ export default function Header() {
                             placeholder="Search services..."
                             type="text"
                             aria-label="Search services"
+                            autoComplete="off"
                         />
                         <button className="absolute right-1 bg-primary text-white text-[9px] font-bold px-3 py-1.5 rounded-lg hover:bg-primary-light transition-colors">
                             GO
@@ -139,6 +140,7 @@ export default function Header() {
                                 placeholder="Search services..."
                                 type="text"
                                 aria-label="Search services"
+                                autoComplete="off"
                             />
                         </div>
                     </div>
