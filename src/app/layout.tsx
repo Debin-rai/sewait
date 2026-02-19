@@ -24,7 +24,7 @@ const notoSansDevanagari = localFont({
 
 export const metadata: Metadata = {
   title: "SewaIT – Nepali Calendar, Gold Rates & Official Guides",
-  description: "Explore SewaIT - Your ultimate Nepali utility hub featuring a live Nepali Calendar with Tithi, real-time Gold and Silver rates, accurate Weather updates, NEPSE stock data, and comprehensive official Government Service guides. Built for digital convenience in Nepal.",
+  description: "SewaIT by Debin Rai: Your all-in-one Nepali utility hub. Features include Live Nepali Calendar with Tithi, Daily Gold/Silver rates, accurate Weather updates, NEPSE stock data, and comprehensive official Government Service Guides.",
   keywords: ["SewaIT", "Debin Rai", "Nepali Calendar", "Sarkari Guides", "Gold Price Nepal", "today's date", "tithi", "Nepal government services", "आजको मिती", "सुन चाँदी मूल्य", "NEPSE"],
   authors: [{ name: "Debin Rai", url: "https://sewait.up.railway.app" }],
   creator: "Debin Rai",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "SewaIT – Nepali Calendar, Gold Rates & Official Guides",
-    description: "Explore SewaIT - Your ultimate Nepali utility hub featuring a live Nepali Calendar with Tithi, real-time Gold and Silver rates, accurate Weather updates, NEPSE stock data, and comprehensive official Government Service guides. Built for digital convenience in Nepal.",
+    description: "SewaIT by Debin Rai: Your all-in-one Nepali utility hub. Features include Live Nepali Calendar with Tithi, Daily Gold/Silver rates, accurate Weather updates, NEPSE stock data, and comprehensive official Government Service Guides.",
     url: "https://sewait.up.railway.app",
     siteName: "SewaIT",
     locale: "ne_NP",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "SewaIT – Nepali Calendar, Gold Rates & Official Guides",
-    description: "Explore SewaIT - Your ultimate Nepali utility hub featuring a live Nepali Calendar with Tithi, real-time Gold and Silver rates, accurate Weather updates, NEPSE stock data, and comprehensive official Government Service guides. Built for digital convenience in Nepal.",
+    description: "SewaIT by Debin Rai: Your all-in-one Nepali utility hub. Features include Live Nepali Calendar with Tithi, Daily Gold/Silver rates, accurate Weather updates, NEPSE stock data, and comprehensive official Government Service Guides.",
     creator: "@SewaIT",
   },
   icons: {

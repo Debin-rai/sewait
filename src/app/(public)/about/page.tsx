@@ -17,7 +17,8 @@ export default function AboutPage() {
                     <section className="space-y-6">
                         <p className="text-xl font-medium leading-relaxed">
                             SewaIT is a Nepali utility platform founded by <span className="text-[#1a355b] font-black">Debin Rai</span>.
-                            It provides daily-use tools such as the Nepali calendar, gold rates, weather updates, and official government guides.
+                            As the Founder of SewaIT, Debin envisioned a digital space where every Nepali can easily access
+                            essential tools like the calendar, gold rates, and government guides.
                         </p>
                         <p className="text-slate-500 leading-relaxed">
                             Our platform is built with a "trust-first" approach, ensuring that every Nepali citizen has access to
