@@ -193,3 +193,28 @@ model PageAnalytic {
   @@unique([pageUrl, visitorHash, date])
   @@index([date])
 }
+
+// --- 5. Sewa AI Chat System ---
+
+model ChatSession {
+  id          String        @id @default(cuid())
+  title       String?       // Auto-generated title from first message
+  visitorHash String?       // To identify anonymous users session
+  status      String        @default("ACTIVE") // ACTIVE, ARCHIVED, DELETED
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  messages    ChatMessage[]
+
+  @@index([visitorHash])
+}
+
+model ChatMessage {
+  id        String      @id @default(cuid())
+  role      String      // system, user, assistant
+  content   String      @db.Text
+  sessionId String
+  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+
+  @@index([sessionId])
+}

@@ -18,6 +18,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         { href: "/sewait-portal-99/calendar", label: "Calendar", icon: "calendar_month" },
         { href: "/sewait-portal-99/content", label: "Content Manager", icon: "description" },
         { href: "/sewait-portal-99/analytics", label: "Analytics", icon: "analytics" },
+        { href: "/sewait-portal-99/chat", label: "AI Chat History", icon: "forum" },
         { href: "/sewait-portal-99/settings", label: "Admin Settings", icon: "settings" },
         { href: "/sewait-portal-99/logs", label: "System Logs", icon: "history" },
         { href: "/sewait-portal-99/guides", label: "Sarkari Guides", icon: "account_balance" },

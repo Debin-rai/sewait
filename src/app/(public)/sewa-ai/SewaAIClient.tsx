@@ -14,11 +14,22 @@ export default function SewaAIClient() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [chatHistory, setChatHistory] = useState<{ id: string, title: string, date: string }[]>([]);
+    const [sessionId, setSessionId] = useState<string | null>(null);
+    const [chatHistory, setChatHistory] = useState<{ id: string, title: string, createdAt: string }[]>([]);
     const scrollRef = useRef<HTMLDivElement>(null);
 
     // Initialize with welcome message and load history
     useEffect(() => {
+        const fetchHistory = async () => {
+            try {
+                const res = await fetch("/api/sewait-portal-99/chat");
+                const data = await res.json();
+                setChatHistory(data.sessions || []);
+            } catch (error) {
+                console.error("Failed to fetch history:", error);
+            }
+        };
+
         const savedMessages = localStorage.getItem("sewa_ai_messages");
         if (savedMessages) {
             const parsed = JSON.parse(savedMessages);
@@ -33,13 +44,7 @@ export default function SewaAIClient() {
             ]);
         }
 
-        // Static placeholder history for the sidebar
-        setChatHistory([
-            { id: "1", title: "Today's Gold Rate", date: "Today" },
-            { id: "2", title: "Passport Application Help", date: "Yesterday" },
-            { id: "3", title: "Weather in Pokhara", date: "2 days ago" },
-            { id: "4", title: "Nepali Calendar Tithi", date: "Feb 18" },
-        ]);
+        fetchHistory();
     }, []);
 
     // Scroll to bottom when messages change
@@ -74,15 +79,20 @@ export default function SewaAIClient() {
                         role: m.role,
                         content: m.content,
                     })),
+                    sessionId,
                 }),
             });
 
             const data = await res.json();
             if (data.error) throw new Error(data.error);
 
+            if (data.sessionId && !sessionId) {
+                setSessionId(data.sessionId);
+            }
+
             const aiMessage: Message = {
                 role: "assistant",
-                content: data.reply,
+                content: data.message.content,
                 timestamp: new Date(),
             };
 
@@ -101,6 +111,28 @@ export default function SewaAIClient() {
         }
     };
 
+    const handleHistoryClick = async (session: any) => {
+        setIsLoading(true);
+        try {
+            // In a real app, you'd have an API to get full transcript for a session
+            // For now, we'll try to fetch messages for this session
+            const res = await fetch(`/api/sewait-portal-99/chat/${session.id}`);
+            const data = await res.json();
+            if (data.messages) {
+                setMessages(data.messages.map((m: any) => ({
+                    role: m.role,
+                    content: m.content,
+                    timestamp: new Date(m.createdAt)
+                })));
+                setSessionId(session.id);
+            }
+        } catch (error) {
+            console.error("Failed to load session:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const clearChat = () => {
         const initialMessage: Message = {
             role: "assistant",
@@ -108,6 +140,7 @@ export default function SewaAIClient() {
             timestamp: new Date(),
         };
         setMessages([initialMessage]);
+        setSessionId(null);
         localStorage.removeItem("sewa_ai_messages");
     };
 
@@ -119,7 +152,7 @@ export default function SewaAIClient() {
     ];
 
     return (
-        <div className="flex flex-col lg:flex-row h-[calc(100vh-64px)] bg-slate-50 overflow-hidden">
+        <div className="flex flex-col lg:flex-row h-screen bg-slate-50 overflow-hidden fixed inset-0 z-[100]">
             {/* Sidebar - Desktop Only */}
             <aside className="hidden lg:flex flex-col w-80 bg-white border-r border-slate-200 p-6">
                 <button
@@ -137,10 +170,14 @@ export default function SewaAIClient() {
                             {chatHistory.map((item) => (
                                 <button
                                     key={item.id}
-                                    className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 text-slate-600 hover:text-primary transition-all text-left group"
+                                    onClick={() => handleHistoryClick(item)}
+                                    className={`w-full flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 text-slate-600 hover:text-primary transition-all text-left group ${sessionId === item.id ? 'bg-slate-50 border-l-4 border-primary' : ''}`}
                                 >
                                     <span className="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">history</span>
-                                    <span className="text-xs font-bold truncate">{item.title}</span>
+                                    <div className="flex flex-col min-w-0">
+                                        <span className="text-xs font-bold truncate">{item.title}</span>
+                                        <span className="text-[8px] text-slate-400">{new Date(item.createdAt).toLocaleDateString()}</span>
+                                    </div>
                                 </button>
                             ))}
                         </div>
@@ -197,8 +234,8 @@ export default function SewaAIClient() {
                                 </div>
                                 <div>
                                     <div className={`p-4 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${m.role === "user"
-                                            ? "bg-primary text-white font-medium rounded-tr-none shadow-lg shadow-primary/20"
-                                            : "bg-white border border-slate-100 text-slate-700 font-medium rounded-tl-none shadow-sm"
+                                        ? "bg-primary text-white font-medium rounded-tr-none shadow-lg shadow-primary/20"
+                                        : "bg-white border border-slate-100 text-slate-700 font-medium rounded-tl-none shadow-sm"
                                         }`}>
                                         {m.content}
                                     </div>
@@ -228,19 +265,21 @@ export default function SewaAIClient() {
                 {/* Input area */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-slate-50 via-slate-50 to-transparent">
                     <div className="max-w-4xl mx-auto space-y-4">
-                        {/* Quick Actions */}
-                        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
-                            {quickActions.map((action, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => handleSend(action.label)}
-                                    className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-full text-[10px] font-black text-slate-600 hover:border-primary hover:text-primary transition-all whitespace-nowrap shadow-sm active:scale-95"
-                                >
-                                    <span className="material-symbols-outlined text-sm">{action.icon}</span>
-                                    {action.label}
-                                </button>
-                            ))}
-                        </div>
+                        {/* Quick Actions - Only show if conversation hasn't really started */}
+                        {messages.length <= 1 && (
+                            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none animate-in fade-in slide-in-from-bottom-2">
+                                {quickActions.map((action, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => handleSend(action.label)}
+                                        className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-full text-[10px] font-black text-slate-600 hover:border-primary hover:text-primary transition-all whitespace-nowrap shadow-sm active:scale-95"
+                                    >
+                                        <span className="material-symbols-outlined text-sm">{action.icon}</span>
+                                        {action.label}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
 
                         {/* Input Bar */}
                         <div className="relative flex items-center gap-2">
