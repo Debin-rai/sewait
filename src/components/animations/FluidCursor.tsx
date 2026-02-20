@@ -1,14 +1,17 @@
 "use client";
 
 import React, { useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { Renderer, Camera, Geometry, Program, Mesh, Vec2, Vec3, Polyline } from 'ogl';
 
 export default function FluidCursor() {
     const containerRef = useRef<HTMLDivElement>(null);
+    const pathname = usePathname();
 
     useEffect(() => {
-        // Disable on mobile/touch devices
-        if (typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)) {
+        // Disable on mobile/touch devices OR admin routes
+        const isAdmin = pathname?.startsWith('/sewait-portal-99');
+        if (isAdmin || (typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0))) {
             return;
         }
 
@@ -26,7 +29,8 @@ export default function FluidCursor() {
         camera.position.z = 3;
 
         const mouse = new Vec3();
-        const lastMouse = new Vec3();
+        // Initialize mouse at center to avoid (0,0) jump
+        mouse.set(0, 0, 0);
 
         const resolution = { value: new Vec2() };
 
@@ -40,11 +44,11 @@ export default function FluidCursor() {
 
         // Detect if dark mode is active to choose color
         const isDark = document.documentElement.classList.contains('dark');
-        const color = isDark ? new Vec3(0.4, 0.7, 1.0) : new Vec3(0.0, 0.4, 0.8); // Blue/Cyan tones
+        const color = isDark ? new Vec3(0.4, 0.7, 1.0) : new Vec3(0.0, 0.4, 0.8);
 
         const count = 40;
         const points: Vec3[] = [];
-        for (let i = 0; i < count; i++) points.push(new Vec3());
+        for (let i = 0; i < count; i++) points.push(new Vec3(0, 0, 0));
 
         const polyline = new Polyline(gl, {
             points,
@@ -62,17 +66,24 @@ export default function FluidCursor() {
 
                 void main() {
                     vUv = uv;
-                    vec2 aspect = vec2(uResolution.x / uResolution.y, 1);
+                    vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
                     vec2 p = position.xy * aspect;
                     vec2 n = next.xy * aspect;
                     
-                    vec2 dir = normalize(n - p);
+                    vec2 diff = n - p;
+                    float len = length(diff);
+                    if (len < 0.001) {
+                        gl_Position = vec4(position.xy, 0.0, 1.0);
+                        return;
+                    }
+
+                    vec2 dir = diff / len;
                     vec2 normal = vec2(-dir.y, dir.x);
                     
                     normal /= aspect;
                     normal *= uThickness * (1.0 - uv.x);
                     
-                    gl_Position = vec4(position.xy + normal * side, 0, 1);
+                    gl_Position = vec4(position.xy + normal * side, 0.0, 1.0);
                 }
             `,
             fragment: `
@@ -93,7 +104,6 @@ export default function FluidCursor() {
         const mesh = new Mesh(gl, { geometry: polyline.geometry, program: polyline.program });
 
         const handleMouseMove = (e: MouseEvent) => {
-            // Use window size for normalization, not canvas size
             mouse.set(
                 (e.clientX / window.innerWidth) * 2 - 1,
                 (e.clientY / window.innerHeight) * -2 + 1,
@@ -129,7 +139,7 @@ export default function FluidCursor() {
                 gl.canvas.parentElement.removeChild(gl.canvas);
             }
         };
-    }, []);
+    }, [pathname]);
 
     return <div ref={containerRef} className="fixed inset-0 pointer-events-none z-[9999]" />;
 }
