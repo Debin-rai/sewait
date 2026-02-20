@@ -12,12 +12,12 @@ const ADMIN_IP = "27.34.111.188"; // User specified IP
 export async function POST(request: Request) {
     const ip = request.headers.get("x-forwarded-for")?.split(',')[0] || "unknown";
 
-    if (ip !== ADMIN_IP && ip !== "127.0.0.1" && process.env.NODE_ENV === "production") {
-        return NextResponse.json(
-            { error: "Access Denied: IP not authorized." },
-            { status: 403 }
-        );
-    }
+    // if (ip !== ADMIN_IP && ip !== "127.0.0.1" && process.env.NODE_ENV === "production") {
+    //     return NextResponse.json(
+    //         { error: "Access Denied: IP not authorized." },
+    //         { status: 403 }
+    //     );
+    // }
 
     // Clean up old entries
     const now = Date.now();
