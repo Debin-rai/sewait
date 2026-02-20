@@ -26,19 +26,21 @@ export default function FluidCursor() {
         camera.position.z = 3;
 
         const mouse = new Vec3();
-        const velocity = new Vec3();
         const lastMouse = new Vec3();
+
+        const resolution = { value: new Vec2() };
 
         function resize() {
             renderer.setSize(window.innerWidth, window.innerHeight);
             camera.perspective({ aspect: gl.canvas.width / gl.canvas.height });
+            resolution.value.set(gl.canvas.width, gl.canvas.height);
         }
         window.addEventListener('resize', resize, false);
         resize();
 
         // Detect if dark mode is active to choose color
         const isDark = document.documentElement.classList.contains('dark');
-        const color = isDark ? new Vec2(0.3, 0.6) : new Vec2(0.1, 0.4); // Blue/Cyan tones
+        const color = isDark ? new Vec3(0.4, 0.7, 1.0) : new Vec3(0.0, 0.4, 0.8); // Blue/Cyan tones
 
         const count = 40;
         const points: Vec3[] = [];
@@ -63,28 +65,40 @@ export default function FluidCursor() {
                     vec2 aspect = vec2(uResolution.x / uResolution.y, 1);
                     vec2 p = position.xy * aspect;
                     vec2 n = next.xy * aspect;
-                    vec3 dir = vec3(normalize(n - p), 0);
-                    vec3 normal = vec3(-dir.y, dir.x, 0);
-                    normal.xy /= aspect;
+                    
+                    vec2 dir = normalize(n - p);
+                    vec2 normal = vec2(-dir.y, dir.x);
+                    
+                    normal /= aspect;
                     normal *= uThickness * (1.0 - uv.x);
-                    gl_Position = vec4(position + normal * side, 1);
+                    
+                    gl_Position = vec4(position.xy + normal * side, 0, 1);
+                }
+            `,
+            fragment: `
+                precision highp float;
+                uniform vec3 uColor;
+                varying vec2 vUv;
+                void main() {
+                    gl_FragColor = vec4(uColor, 1.0 - vUv.x);
                 }
             `,
             uniforms: {
                 uColor: { value: color },
-                uThickness: { value: 0.04 },
+                uThickness: { value: 0.02 },
+                uResolution: resolution,
             },
         });
 
         const mesh = new Mesh(gl, { geometry: polyline.geometry, program: polyline.program });
 
         const handleMouseMove = (e: MouseEvent) => {
+            // Use window size for normalization, not canvas size
             mouse.set(
-                (e.clientX / gl.canvas.width) * 2 - 1,
-                (e.clientY / gl.canvas.height) * -2 + 1,
+                (e.clientX / window.innerWidth) * 2 - 1,
+                (e.clientY / window.innerHeight) * -2 + 1,
                 0
             );
-            lastMouse.copy(mouse);
         };
 
         window.addEventListener('mousemove', handleMouseMove, false);
@@ -96,9 +110,9 @@ export default function FluidCursor() {
             // Move points
             for (let i = points.length - 1; i >= 0; i--) {
                 if (i === 0) {
-                    points[i].lerp(mouse, 0.3);
+                    points[i].lerp(mouse, 0.15);
                 } else {
-                    points[i].lerp(points[i - 1], 0.35);
+                    points[i].lerp(points[i - 1], 0.2);
                 }
             }
 
