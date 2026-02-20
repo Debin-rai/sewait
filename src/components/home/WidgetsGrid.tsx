@@ -109,39 +109,44 @@ export default function WidgetsGrid() {
                 </FadeIn>
             )}
 
-            {isVisible('MODULE_NEPSE') && (
+            {isVisible('MODULE_SEWA_AI') && (
                 <FadeIn delay={0.3} className="h-full">
-                    {/* NEPSE Widget */}
-                    <Link href="/nepse" className="bg-white border border-slate-100 shadow-sm rounded-2xl p-6 hover:shadow-lg transition-all border-t-4 border-t-primary block h-full">
+                    {/* Sewa AI Widget */}
+                    <Link href="/sewa-ai" className="bg-white border border-slate-100 shadow-sm rounded-2xl p-6 hover:shadow-lg transition-all border-t-4 border-t-primary block h-full overflow-hidden relative group">
+                        <div className="absolute top-0 right-0 p-3 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <span className="material-symbols-outlined text-8xl">smart_toy</span>
+                        </div>
+
                         <div className="flex items-center justify-between mb-6">
                             <div className="flex items-center gap-2">
-                                <span className="material-symbols-outlined text-primary">monitoring</span>
-                                <h2 className="text-primary font-bold text-lg">NEPSE Summary <span className="nepali-font text-sm text-primary/60">नेप्से</span></h2>
+                                <span className="material-symbols-outlined text-primary">smart_toy</span>
+                                <h2 className="text-primary font-bold text-lg">Sewa AI <span className="nepali-font text-sm text-primary/60">सेवा AI</span></h2>
                             </div>
-                            <span className="text-[9px] font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded border border-green-100 uppercase tracking-tighter">Market Open</span>
+                            <span className="text-[9px] font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded border border-orange-100 uppercase tracking-tighter animate-pulse">New</span>
                         </div>
 
-                        <div className="mb-8">
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Current Index</p>
-                            <div className="flex items-baseline gap-2">
-                                <span className="text-3xl font-bold text-slate-900 tracking-tighter">2,045.63</span>
-                                <span className="text-green-600 text-xs font-bold flex items-center bg-green-50 px-1.5 py-0.5 rounded">
-                                    +9.20 <span className="text-[10px] ml-1">(0.45%)</span>
-                                </span>
-                            </div>
+                        <div className="mb-6">
+                            <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                                Namaste! I am your AI assistant. Ask me anything about:
+                            </p>
                         </div>
 
-                        <div className="space-y-3">
+                        <div className="space-y-2">
                             {[
-                                { symbol: "NTC", change: "+4.5%" },
-                                { symbol: "ADBL", change: "+3.2%" },
-                                { symbol: "HDL", change: "+2.8%" }
-                            ].map((stock, i) => (
-                                <div key={i} className="flex justify-between items-center py-2.5 border-b border-slate-50 last:border-0 group cursor-pointer">
-                                    <span className="text-xs font-bold text-slate-600 group-hover:text-primary transition-colors">{stock.symbol}</span>
-                                    <span className="text-xs font-bold text-green-600 bg-green-50/50 px-2 py-0.5 rounded group-hover:bg-green-100 transition-colors">{stock.change}</span>
+                                { label: "Gold & Silver Rates", icon: "payments" },
+                                { label: "Government Procedures", icon: "gavel" },
+                                { label: "Weather & Calendar", icon: "event" }
+                            ].map((item, i) => (
+                                <div key={i} className="flex items-center gap-3 p-2 bg-slate-50 rounded-xl border border-slate-100 group-hover:border-primary/20 transition-all">
+                                    <span className="material-symbols-outlined text-primary text-sm">{item.icon}</span>
+                                    <span className="text-[10px] font-bold text-slate-600">{item.label}</span>
                                 </div>
                             ))}
+                        </div>
+
+                        <div className="mt-6 pt-4 border-t border-slate-50 flex items-center justify-between">
+                            <span className="text-[10px] font-bold text-primary group-hover:underline underline-offset-4">Try SewaAI now</span>
+                            <span className="material-symbols-outlined text-primary group-hover:translate-x-1 transition-transform">arrow_forward</span>
                         </div>
                     </Link>
                 </FadeIn>

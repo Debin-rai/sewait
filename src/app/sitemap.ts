@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/mission',
         '/calendar',
         '/gold-silver',
-        '/nepse',
+        '/sewa-ai',
         '/weather',
         '/guides',
         '/cookie-policy',

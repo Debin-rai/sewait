@@ -10,7 +10,7 @@ type Translations = {
         calendar: string;
         weather: string;
         rates: string;
-        nepse: string;
+        sewaAi: string;
         services: string;
         searchPlaceholder: string;
         search: string;
@@ -45,10 +45,9 @@ type Translations = {
             silver: string;
             source: string;
         };
-        nepse: {
+        sewaAi: {
             title: string;
-            marketOpen: string;
-            currentIndex: string;
+            desc: string;
         };
         weather: {
             title: string;
@@ -99,7 +98,7 @@ const translations: Record<Language, Translations> = {
             calendar: "Calendar",
             weather: "Weather",
             rates: "Gold & Silver",
-            nepse: "NEPSE",
+            sewaAi: "Sewa AI",
             services: "Gov. Services",
             searchPlaceholder: "Search government services or info...",
             search: "Search",
@@ -139,10 +138,9 @@ const translations: Record<Language, Translations> = {
                 silver: "Silver / Tola",
                 source: "Source: Nepal Gold & Silver Merchants Federation",
             },
-            nepse: {
-                title: "NEPSE Summary",
-                marketOpen: "Market Open",
-                currentIndex: "Current Index",
+            sewaAi: {
+                title: "Sewa AI Sumamry",
+                desc: "Your Nepali AI Assistant",
             },
             weather: {
                 title: "Weather",
@@ -219,7 +217,7 @@ const translations: Record<Language, Translations> = {
             calendar: "पात्रो",
             weather: "मौसम",
             rates: "सुनचाँदी",
-            nepse: "नेप्से",
+            sewaAi: "सेवा AI",
             services: "सरकारी सेवा",
             searchPlaceholder: "सरकारी सेवा वा जानकारी खोज्नुहोस्...",
             search: "खोज्नुहोस्",
@@ -259,10 +257,9 @@ const translations: Record<Language, Translations> = {
                 silver: "चाँदी / तोला",
                 source: "स्रोत: नेपाल सुनचाँदी व्यवसायी महासंघ",
             },
-            nepse: {
-                title: "नेप्से सारांश",
-                marketOpen: "बजार खुला",
-                currentIndex: "वर्तमान सूचकांक",
+            sewaAi: {
+                title: "सेवा AI सारांश",
+                desc: "तपाईको नेपाली AI सहयोगी",
             },
             weather: {
                 title: "मौसम",

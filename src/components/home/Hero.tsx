@@ -55,7 +55,6 @@ const themeConfig: Record<HeroTheme, {
 export default function Hero() {
     const { heroTheme } = useHeroTheme();
     const [goldRate, setGoldRate] = useState<any>(null);
-    const [nepse, setNepse] = useState<any>(null);
     const [nextEvent, setNextEvent] = useState<any>(null);
     const [nepaliDate, setNepaliDate] = useState<any>(null);
     const [mounted, setMounted] = useState(false);
@@ -80,13 +79,11 @@ export default function Hero() {
         setMounted(true);
         const fetchAllData = async () => {
             try {
-                const [gRes, nRes, cRes] = await Promise.all([
+                const [gRes, cRes] = await Promise.all([
                     fetch("/api/sewait-portal-99/rates/gold"),
-                    fetch("/api/sewait-portal-99/rates/nepse"),
                     fetch("/api/sewait-portal-99/calendar?limit=1")
                 ]);
                 setGoldRate(await gRes.json());
-                setNepse(await nRes.json());
                 const calendarData = await cRes.json();
                 if (Array.isArray(calendarData) && calendarData.length > 0) {
                     const dayWithEvent = calendarData.find((d: any) => d.events && d.events.length > 0);
@@ -178,14 +175,7 @@ export default function Hero() {
                             </div>
                             <div className="flex-1 ticker-wrap text-[10px] md:text-xs font-black tracking-widest text-white/70 overflow-hidden">
                                 <div className="ticker gap-12 whitespace-nowrap">
-                                    {nepse && (
-                                        <span className="flex items-center gap-2">
-                                            NEPSE: <span className="text-white">{nepse.index?.toLocaleString()}</span>
-                                            <span className={nepse.change >= 0 ? "text-green-400" : "text-red-400"}>
-                                                {nepse.change >= 0 ? "▲" : "▼"} {Math.abs(nepse.change)} ({nepse.percentChange}%)
-                                            </span>
-                                        </span>
-                                    )}
+
                                     {goldRate && (
                                         <span className="flex items-center gap-2">
                                             GOLD (24K): <span className="text-white">NPR {goldRate.gold24?.toLocaleString()}</span>

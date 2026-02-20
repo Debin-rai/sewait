@@ -7,7 +7,7 @@ const navItems = [
     { href: "/", icon: "home", label: "Home" },
     { href: "/calendar", icon: "calendar_month", label: "Calendar" },
     { href: "/gold-silver", icon: "payments", label: "Rates" },
-    { href: "/nepse", icon: "monitoring", label: "NEPSE" },
+    { href: "/sewa-ai", icon: "smart_toy", label: "SewaAI" },
     { href: "/guides", icon: "gavel", label: "Services" },
 ];
 
@@ -24,8 +24,8 @@ export default function MobileBottomNav() {
                             key={item.href}
                             href={item.href}
                             className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all min-w-[56px] ${isActive
-                                    ? "text-primary"
-                                    : "text-slate-400 hover:text-slate-600"
+                                ? "text-primary"
+                                : "text-slate-400 hover:text-slate-600"
                                 }`}
                         >
                             <span

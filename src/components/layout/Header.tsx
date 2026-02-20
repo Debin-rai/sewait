@@ -13,7 +13,7 @@ export default function Header() {
         { href: "/calendar", label: "Calendar" },
         { href: "/weather", label: "Weather" },
         { href: "/gold-silver", label: "Gold & Silver" },
-        { href: "/nepse", label: "NEPSE" },
+        { href: "/sewa-ai", label: "Sewa AI", isNew: true },
         { href: "/guides", label: "Gov. Services" },
         { href: "/about", label: "About" },
     ];
@@ -40,12 +40,18 @@ export default function Header() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className={`px-3 py-1.5 text-sm font-semibold rounded-lg transition-all duration-300 ${isActive
+                                    className={`px-3 py-1.5 text-sm font-semibold rounded-lg transition-all duration-300 relative ${isActive
                                         ? "text-primary font-bold nav-link-active"
                                         : "text-slate-600 hover:text-primary hover:bg-primary/5 nav-link-hover"
                                         }`}
                                 >
                                     {link.label}
+                                    {(link as any).isNew && (
+                                        <span className="absolute -top-1.5 -right-1 flex h-2 w-2">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+                                        </span>
+                                    )}
                                 </Link>
                             );
                         })}

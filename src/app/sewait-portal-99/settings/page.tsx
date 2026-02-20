@@ -117,12 +117,12 @@ export default function AdminSettingsPage() {
                                 info: "When ON, displays the live weather widget on the home page using OpenWeatherMap API."
                             },
                             {
-                                key: "MODULE_NEPSE",
-                                label: "Market Data (NEPSE)",
-                                desc: "Stock ticker and market status",
-                                icon: 'monitoring',
-                                color: 'text-green-500',
-                                info: "When ON, shows real-time NEPSE index and top stock movers on the dashboard."
+                                key: "MODULE_SEWA_AI",
+                                label: "Sewa AI Assistant",
+                                desc: "Nepalese focused AI chatbot",
+                                icon: 'smart_toy',
+                                color: 'text-primary',
+                                info: "When ON, enables the Sewa AI chat page and home teaser card."
                             },
                             {
                                 key: "MODULE_GOLD",
@@ -195,7 +195,7 @@ export default function AdminSettingsPage() {
                     <div className="space-y-6">
                         {[
                             { key: "API_WEATHER", label: "OpenWeatherMap Secret" },
-                            { key: "API_NEPSE", label: "NEPSE Scraper Endpoint" },
+                            { key: "API_SEWA_AI", label: "SewaAI API Key (OpenRouter)" },
                             { key: "API_GITHUB", label: "GitHub Access Token (repo, read:user)" },
                             { key: "API_NOTIFICATION", label: "System Notification Gateway" },
                             { key: "API_CHATBOT_ID", label: "Chatbot Widget ID (Tawk.to)" }
