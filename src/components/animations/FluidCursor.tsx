@@ -27,6 +27,8 @@ export default function FluidCursor() {
             uniform float uDPR;
             uniform float uThickness;
 
+            varying vec2 vUv;
+
             vec4 getPosition() {
                 vec4 current = vec4(position, 1);
 
@@ -41,10 +43,8 @@ export default function FluidCursor() {
                 vec2 normal = vec2(-tangent.y, tangent.x);
                 normal /= aspect;
 
-                // Taper the line to be fatter in the middle, and skinny at the ends using the uv.y
-                // In our case, uv.x goes from 0 at the head to 1 at the tail.
-                // We want it to be thick at the head and taper at the tail.
-                normal *= mix(1.0, 0.1, pow(uv.x, 2.0));
+                // Taper the line: thick at head (uv.y=0), thin at tail (uv.y=1)
+                normal *= mix(1.0, 0.1, pow(uv.y, 2.0));
 
                 // When the points are on top of each other, shrink the line to avoid artifacts.
                 float dist = length(nextScreen - prevScreen);
@@ -59,6 +59,7 @@ export default function FluidCursor() {
             }
 
             void main() {
+                vUv = uv;
                 gl_Position = getPosition();
             }
         `;
@@ -69,9 +70,9 @@ export default function FluidCursor() {
             uniform vec3 uColor2;
             varying vec2 vUv;
             void main() {
-                // Gradient from uColor1 to uColor2 along the trail
-                vec3 color = mix(uColor1, uColor2, vUv.x);
-                gl_FragColor = vec4(color, (1.0 - vUv.x) * 0.9);
+                // Gradient from uColor1 to uColor2 along the trail (vUv.y)
+                vec3 color = mix(uColor1, uColor2, vUv.y);
+                gl_FragColor = vec4(color, (1.0 - vUv.y) * 0.9);
             }
         `;
 
