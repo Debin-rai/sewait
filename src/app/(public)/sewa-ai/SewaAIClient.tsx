@@ -268,7 +268,11 @@ export default function SewaAIClient() {
             <main className="flex-1 flex flex-col relative h-full">
                 {/* Chat Header */}
                 <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-4 h-20 flex items-center justify-between z-10 shrink-0">
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                        <Link href="/" className="lg:hidden p-2 bg-slate-50 dark:bg-slate-800 rounded-xl text-slate-500 hover:text-primary transition-all flex items-center gap-1">
+                            <ArrowLeft size={18} strokeWidth={3} />
+                            <span className="text-[10px] font-black uppercase tracking-tighter">Back</span>
+                        </Link>
                         <button onClick={() => setIsHistoryOpen(true)} className="lg:hidden p-2 bg-slate-50 dark:bg-slate-800 rounded-xl text-slate-500 hover:text-primary transition-all">
                             <Menu size={22} strokeWidth={2.5} />
                         </button>
@@ -276,7 +280,7 @@ export default function SewaAIClient() {
                             <div className="size-11 bg-primary/10 rounded-2xl flex items-center justify-center overflow-hidden border border-primary/10">
                                 <Bot className="text-primary size-6 animate-pulse" />
                             </div>
-                            <div>
+                            <div className="hidden xs:block">
                                 <h2 className="text-base font-black text-slate-900 dark:text-white tracking-tight -mb-1 text-left">Sewa AI</h2>
                                 <div className="flex items-center gap-1.5">
                                     <div className="size-1.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]" />

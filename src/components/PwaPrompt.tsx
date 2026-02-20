@@ -23,30 +23,33 @@ export default function PwaPrompt() {
 
         if (isStandalone) return;
 
+        const checkAndTrigger = () => {
+            const isDismissed = localStorage.getItem("pwa_prompt_dismissed");
+            const consent = localStorage.getItem("sewait_cookie_consent");
+            if (!isDismissed && consent && !show) {
+                setTimeout(() => setShow(true), 15000);
+            }
+        };
+
         const handleBeforeInstallPrompt = (e: any) => {
             e.preventDefault();
             setDeferredPrompt(e);
-
-            const isDismissed = localStorage.getItem("pwa_prompt_dismissed");
-            if (!isDismissed) {
-                setTimeout(() => setShow(true), 4000);
-            }
+            checkAndTrigger();
         };
 
         // For iOS, we show it manually since beforeinstallprompt isn't supported
-        if (ios) {
-            const isDismissed = localStorage.getItem("pwa_prompt_dismissed");
-            if (!isDismissed) {
-                setTimeout(() => setShow(true), 5000);
-            }
+        if (isIOS) {
+            checkAndTrigger();
         }
 
         window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+        const interval = setInterval(checkAndTrigger, 2000);
 
         return () => {
             window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+            clearInterval(interval);
         };
-    }, []);
+    }, [show, isIOS]);
 
     const handleInstall = async () => {
         if (!deferredPrompt) return;

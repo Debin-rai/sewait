@@ -16,14 +16,29 @@ export default function ThemePickerPopup() {
     const [showGear, setShowGear] = useState(false);
 
     useEffect(() => {
-        const dismissed = sessionStorage.getItem("sewait_theme_picker_dismissed");
-        if (!dismissed) {
-            const timer = setTimeout(() => setIsOpen(true), 1500);
-            return () => clearTimeout(timer);
-        } else {
-            setShowGear(true);
-        }
-    }, []);
+        const checkConsent = () => {
+            const consent = localStorage.getItem("sewait_cookie_consent");
+            const dismissed = sessionStorage.getItem("sewait_theme_picker_dismissed");
+
+            if (consent && !dismissed && !isOpen && !showGear) {
+                const timer = setTimeout(() => setIsOpen(true), 1500);
+                return () => clearTimeout(timer);
+            } else if (dismissed) {
+                setShowGear(true);
+            }
+        };
+
+        checkConsent();
+
+        // Listen for storage changes (for same-tab reactivity)
+        const interval = setInterval(checkConsent, 1000);
+        window.addEventListener('storage', checkConsent);
+
+        return () => {
+            clearInterval(interval);
+            window.removeEventListener('storage', checkConsent);
+        };
+    }, [isOpen, showGear]);
 
     const handleDismiss = () => {
         setIsOpen(false);
@@ -86,14 +101,14 @@ export default function ThemePickerPopup() {
                                 key={option.value}
                                 onClick={() => handleSelect(option.value)}
                                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 group ${heroTheme === option.value
-                                        ? "bg-slate-100 shadow-sm"
-                                        : "hover:bg-slate-50"
+                                    ? "bg-slate-100 shadow-sm"
+                                    : "hover:bg-slate-50"
                                     }`}
                             >
                                 <div
                                     className={`w-8 h-8 rounded-full ${option.color} shadow-md transition-all duration-300 ${heroTheme === option.value
-                                            ? `ring-2 ${option.ring} ring-offset-2 scale-110`
-                                            : "group-hover:scale-110"
+                                        ? `ring-2 ${option.ring} ring-offset-2 scale-110`
+                                        : "group-hover:scale-110"
                                         }`}
                                 />
                                 <div className="flex-1 text-left">

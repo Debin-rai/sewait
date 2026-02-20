@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Chatbot({ id }: { id?: string }) {
+    const pathname = usePathname();
+
     useEffect(() => {
         if (!id) return;
 
@@ -29,6 +32,17 @@ export default function Chatbot({ id }: { id?: string }) {
             }
         };
     }, [id]);
+
+    useEffect(() => {
+        const Tawk_API = (window as any).Tawk_API;
+        if (Tawk_API && typeof Tawk_API.hideWidget === 'function') {
+            if (pathname === '/sewa-ai') {
+                Tawk_API.hideWidget();
+            } else {
+                Tawk_API.showWidget();
+            }
+        }
+    }, [pathname]);
 
     return null;
 }
