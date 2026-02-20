@@ -135,6 +135,15 @@ model NepseData { // Legacy model support
   updatedAt     DateTime @updatedAt
 }
 
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique // e.g., 'FOREX_USD_NPR'
+  value     String           // e.g., '133.50'
+  group     String   @default("GENERAL") // e.g. 'FOREX', 'UTILITIES'
+  updatedBy String?
+  updatedAt DateTime @updatedAt
+}
+
 // --- 4. Ads & Analytics ---
 
 model Advertisement {

@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import FadeIn from "@/components/animations/FadeIn";
 import NepaliDate from "nepali-date-converter";
 import AdSlot from "@/components/ads/AdSlot";
+import UtilitiesSection from "@/components/utilities/UtilitiesSection";
+import UtilityArticles from "@/components/utilities/UtilityArticles";
 
 export default function CalendarClient() {
     const { language } = useLanguage();
@@ -339,6 +341,10 @@ export default function CalendarClient() {
                         </FadeIn>
                     </div>
                 </div>
+
+                {/* Utilities Section */}
+                <UtilitiesSection />
+                <UtilityArticles />
 
                 {/* Trivia Section */}
                 <FadeIn direction="up" delay={0.4}>

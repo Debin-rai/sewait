@@ -5,14 +5,14 @@ import Link from "next/link";
 
 const modules = [
     {
-        name: "News Snippets",
+        name: "Utility Rates & Settings",
         type: "Manual",
-        description: "Manage latest highlights, breaking news, and scrolling tickers for the home feed.",
+        description: "Configure Forex rates, constants, and instructional copy for the Nepali utility converters.",
         lastUpdated: "10 mins ago",
-        icon: "newspaper",
+        icon: "settings_suggest",
         image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBi70vFfrpmcdxbYYuLllu0WkBA0chrDwnLNqLgEB_Xu3WuHiWKEIYZHGJTlottZnnCyotXn6kiFMso2DwMfgrjkLkSouaYzh_3Id411q4SDEYPiGDsgAOKiI1JYRN0TuVkJDpnnv3lE3a2vMY56sCFUrvxg3iGo6eWqxhSiLkKKk70F_fpZcgKnXjMZXT7lfnX1N_xfO24IYNt7VMSgLzj7oQiuxEyS0q8YiBodTt5L8EIlasz6JT74ZcfAqYhi7VGlfEChmQBCKQ",
         typeColor: "bg-emerald-100 text-emerald-700",
-        href: "/sewait-portal-99/content/news"
+        href: "/sewait-portal-99/content/utilities"
     },
     {
         name: "Calendar Events",
@@ -35,15 +35,15 @@ const modules = [
         href: "/sewait-portal-99/rates"
     },
     {
-        name: "NEPSE Data",
-        type: "Live Feed",
-        description: "Stock market data feed management. Monitor and fix syncing issues from exchange.",
-        lastUpdated: "Synced 1 min ago",
-        icon: "query_stats",
+        name: "Utility Converters",
+        type: "Calculators",
+        description: "Configure Forex rates, constants, and instructional copy for the Nepali utility converters (Date, Area, Currency).",
+        lastUpdated: "Just now",
+        icon: "calculate",
         image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBV7vneZeS5yXmNVIROV0uSl6WiJIxeu-icT3Avpy-uCJso5ryWh_YsczqlSkjiMUKFAn0HF1p93O2paC0lBn-bkgqgdQPmokv-JkIUbNxqsiWme8B4mt-whvynK8xs-o6mAgWOlXWLle3QYew1zJML6dlO8mHzVGY3uCqi3GFNdaJ4T6EZwfN1bTBFX5fj_361yKZyr2YRK-Ox4hhhoHTSpmkJJtr8NpL9YejCIYh1L9NuWrLcQlk5lP_W5J5CjY6vzT-XHQSPqic",
-        typeColor: "bg-emerald-100 text-emerald-700",
+        typeColor: "bg-indigo-100 text-indigo-700",
         isLive: true,
-        href: "/sewait-portal-99/content/nepse"
+        href: "/sewait-portal-99/content/utilities"
     }
 ];
 
