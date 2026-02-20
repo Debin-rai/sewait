@@ -8,9 +8,9 @@ export default function FluidCursor() {
     const pathname = usePathname();
 
     useEffect(() => {
-        // Exclude admin routes and mobile/touch devices
+        // Exclude admin routes
         const isAdmin = pathname?.startsWith('/sewait-portal-99');
-        if (isAdmin || (typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0))) {
+        if (isAdmin) {
             return;
         }
 
