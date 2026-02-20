@@ -11,7 +11,7 @@ const themeOptions: { value: HeroTheme; label: string; color: string; ring: stri
 ];
 
 export default function ThemePickerPopup() {
-    const { heroTheme, setHeroTheme } = useHeroTheme();
+    const { heroTheme, setHeroTheme, showCursor, setShowCursor } = useHeroTheme();
     const [isOpen, setIsOpen] = useState(false);
     const [showGear, setShowGear] = useState(false);
 
@@ -127,9 +127,34 @@ export default function ThemePickerPopup() {
                         ))}
                     </div>
 
+                    {/* Cursor Toggle */}
+                    <div className="mt-8 pt-6 border-t border-slate-100">
+                        <div className="flex items-center justify-between mb-4">
+                            <div>
+                                <h4 className="text-[11px] font-black text-slate-800 tracking-tight">ANIMATIONS</h4>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Smoothness</p>
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={() => setShowCursor(!showCursor)}
+                            className="w-full flex items-center justify-between bg-slate-50/50 hover:bg-slate-100/50 p-3 rounded-xl transition-all duration-300 group"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${showCursor ? 'bg-primary/10 text-primary' : 'bg-slate-200 text-slate-400'}`}>
+                                    <span className="material-symbols-outlined text-lg">gesture</span>
+                                </div>
+                                <span className={`text-sm font-bold transition-colors ${showCursor ? 'text-slate-800' : 'text-slate-500'}`}>Cursor Ribbon</span>
+                            </div>
+                            <div className={`w-10 h-6 rounded-full p-1 transition-all duration-500 relative ${showCursor ? 'bg-primary' : 'bg-slate-300'}`}>
+                                <div className={`w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${showCursor ? 'translate-x-4' : 'translate-x-0'}`} />
+                            </div>
+                        </button>
+                    </div>
+
                     {/* Info */}
-                    <p className="text-[9px] text-slate-400 text-center mt-5 font-medium leading-relaxed">
-                        Changes only the hero section.<br />Your choice is saved automatically.
+                    <p className="text-[9px] text-slate-400 text-center mt-6 font-medium leading-relaxed">
+                        Customize your browsing experience.<br />Settings are saved automatically.
                     </p>
                 </div>
             </div>

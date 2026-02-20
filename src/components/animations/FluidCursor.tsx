@@ -2,15 +2,17 @@
 
 import React, { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { useHeroTheme } from '@/context/ThemeContext';
 import { Renderer, Camera, Vec2, Vec3, Polyline, Color, Transform } from 'ogl';
 
 export default function FluidCursor() {
     const pathname = usePathname();
+    const { showCursor } = useHeroTheme();
 
     useEffect(() => {
-        // Exclude admin routes
+        // Exclude admin routes or if cursor is disabled
         const isAdmin = pathname?.startsWith('/sewait-portal-99');
-        if (isAdmin) {
+        if (isAdmin || !showCursor) {
             return;
         }
 
@@ -43,8 +45,10 @@ export default function FluidCursor() {
                 vec2 normal = vec2(-tangent.y, tangent.x);
                 normal /= aspect;
 
-                // Taper the line: thick at head (uv.y=0), thin at tail (uv.y=1)
-                normal *= mix(1.0, 0.1, pow(uv.y, 2.0));
+                // Taper the line: sharp at tip (uv.y=0), wider in middle, thin at tail (uv.y=1)
+                float taper = smoothstep(0.0, 0.1, uv.y); // Start thin
+                taper *= mix(1.0, 0.2, pow(uv.y, 2.0)); // Fade out at tail
+                normal *= taper;
 
                 // When the points are on top of each other, shrink the line to avoid artifacts.
                 float dist = length(nextScreen - prevScreen);
@@ -184,7 +188,7 @@ export default function FluidCursor() {
                 gl.canvas.parentElement.removeChild(gl.canvas);
             }
         };
-    }, [pathname]);
+    }, [pathname, showCursor]);
 
     return null;
 }
