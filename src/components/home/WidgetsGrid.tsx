@@ -160,6 +160,7 @@ export default function WidgetsGrid() {
 function WeatherWidget() {
     const [weather, setWeather] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     const fetchWeather = async (lat?: number, lon?: number) => {
         try {
@@ -168,9 +169,17 @@ function WeatherWidget() {
                 : `/api/weather`;
             const res = await fetch(url);
             const data = await res.json();
-            if (!data.error) setWeather(data);
+
+            if (data.error) {
+                setError(data.error);
+                setWeather(null);
+            } else {
+                setWeather(data);
+                setError(null);
+            }
         } catch (err) {
             console.error("Weather fetch failed", err);
+            setError("Connection Failed");
         } finally {
             setLoading(false);
         }
@@ -240,8 +249,8 @@ function WeatherWidget() {
                 </>
             ) : (
                 <div className="p-4 bg-red-50 rounded-xl text-center">
-                    <p className="text-xs font-bold text-red-500">API Key Missing</p>
-                    <p className="text-[9px] text-red-400 mt-1">Configure in Admin Settings</p>
+                    <p className="text-xs font-bold text-red-500">{error || "Weather Unavailable"}</p>
+                    <p className="text-[9px] text-red-400 mt-1">Check API Key / Subscription</p>
                 </div>
             )}
         </Link>
