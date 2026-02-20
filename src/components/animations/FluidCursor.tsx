@@ -29,9 +29,9 @@ export default function FluidCursor() {
 
         const scene = new Transform();
 
-        // Mouse tracking with inertia
         const mouse = new Vec3();
         const targetMouse = new Vec3();
+        let initialized = false;
 
         const resolution = { value: new Vec2() };
 
@@ -74,13 +74,13 @@ export default function FluidCursor() {
                     vec2 diff = n - p;
                     float len = length(diff);
                     
-                    // Safety check to avoid precision errors (NaN / Black spots)
+                    vec2 dir;
                     if (len < 0.0001) {
-                        gl_Position = vec4(position.xy, 0.0, 1.0);
-                        return;
+                        dir = vec2(1.0, 0.0);
+                    } else {
+                        dir = diff / len;
                     }
 
-                    vec2 dir = diff / len;
                     vec2 normal = vec2(-dir.y, dir.x);
                     
                     normal /= aspect;
@@ -116,6 +116,11 @@ export default function FluidCursor() {
                 (e.clientY / window.innerHeight) * -2 + 1,
                 0
             );
+
+            if (!initialized) {
+                points.forEach(p => p.copy(targetMouse));
+                initialized = true;
+            }
         };
 
         window.addEventListener('mousemove', handleMouseMove, false);
@@ -123,6 +128,8 @@ export default function FluidCursor() {
         let request: number;
         function update(t: number) {
             request = requestAnimationFrame(update);
+
+            if (!initialized) return;
 
             // Smoothly move points with differentiated damping for 'flowing' effect
             for (let i = points.length - 1; i >= 0; i--) {
