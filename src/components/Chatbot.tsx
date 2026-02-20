@@ -1,13 +1,49 @@
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 export default function Chatbot({ id }: { id?: string }) {
     const pathname = usePathname();
+    const [shouldLoad, setShouldLoad] = useState(false);
 
+    // 1. Wait for user interaction or 7s timeout to load the widget
     useEffect(() => {
         if (!id) return;
+
+        const loadTawk = () => {
+            if (shouldLoad) return;
+            setShouldLoad(true);
+
+            // Cleanup listeners once triggered
+            window.removeEventListener('scroll', loadTawk);
+            window.removeEventListener('mousemove', loadTawk);
+            window.removeEventListener('touchstart', loadTawk);
+            window.removeEventListener('keydown', loadTawk);
+        };
+
+        // Add typical interaction listeners
+        window.addEventListener('scroll', loadTawk, { passive: true, once: true });
+        window.addEventListener('mousemove', loadTawk, { passive: true, once: true });
+        window.addEventListener('touchstart', loadTawk, { passive: true, once: true });
+        window.addEventListener('keydown', loadTawk, { passive: true, once: true });
+
+        // Fallback load after 7 seconds if user is completely idle,
+        // sufficient to bypass Googlebot's initial rendering window.
+        const timeoutId = setTimeout(loadTawk, 7000);
+
+        return () => {
+            clearTimeout(timeoutId);
+            window.removeEventListener('scroll', loadTawk);
+            window.removeEventListener('mousemove', loadTawk);
+            window.removeEventListener('touchstart', loadTawk);
+            window.removeEventListener('keydown', loadTawk);
+        };
+    }, [id, shouldLoad]);
+
+    // 2. Inject script when shouldLoad is true
+    useEffect(() => {
+        if (!shouldLoad || !id) return;
 
         // Tawk.to Script Injection
         (window as any).Tawk_API = (window as any).Tawk_API || {};
@@ -24,7 +60,7 @@ export default function Chatbot({ id }: { id?: string }) {
                 mobile: {
                     position: 'br',
                     xOffset: '10px',
-                    yOffset: '85px' // Shifting up above bottom nav (increased to 85px to be safe)
+                    yOffset: '85px' // Shifting up above bottom nav
                 }
             }
         };
@@ -41,14 +77,14 @@ export default function Chatbot({ id }: { id?: string }) {
             }
         })();
 
-
         return () => {
             if (s1 && s1.parentNode) {
                 s1.parentNode.removeChild(s1);
             }
         };
-    }, [id]);
+    }, [shouldLoad, id]);
 
+    // 3. Page navigation visibility logic
     useEffect(() => {
         const Tawk_API = (window as any).Tawk_API;
         if (Tawk_API && typeof Tawk_API.hideWidget === 'function') {
