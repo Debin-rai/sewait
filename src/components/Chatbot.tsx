@@ -13,6 +13,20 @@ export default function Chatbot({ id }: { id?: string }) {
         (window as any).Tawk_API = (window as any).Tawk_API || {};
         (window as any).Tawk_LoadStart = new Date();
 
+        // Custom styling to avoid overlapping with MobileBottomNav
+        (window as any).Tawk_API.customStyle = {
+            visibility: {
+                desktop: {
+                    xOffset: '20px',
+                    yOffset: '20px'
+                },
+                mobile: {
+                    xOffset: '10px',
+                    yOffset: '85px' // Shifting up above bottom nav (increased to 85px to be safe)
+                }
+            }
+        };
+
         let s1: HTMLScriptElement;
         (function () {
             s1 = document.createElement("script");
@@ -25,19 +39,6 @@ export default function Chatbot({ id }: { id?: string }) {
             }
         })();
 
-        // Custom styling to avoid overlapping with MobileBottomNav
-        (window as any).Tawk_API.customStyle = {
-            visibility: {
-                desktop: {
-                    xOffset: '20px',
-                    yOffset: '20px'
-                },
-                mobile: {
-                    xOffset: '10px',
-                    yOffset: '75px' // Shifting up above bottom nav
-                }
-            }
-        };
 
         return () => {
             if (s1 && s1.parentNode) {
