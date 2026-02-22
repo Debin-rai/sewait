@@ -10,8 +10,10 @@ export default function FluidCursor() {
     const { showCursor } = useHeroTheme();
 
     useEffect(() => {
-        // Detect bots/crawlers to save resources and avoid WebGL stalls in Search Console
-        const isBot = /bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent);
+        // Extensive bot/crawler detection to save resources and avoid WebGL stalls in Search Console
+        const isBot = /bot|googlebot|crawler|spider|robot|crawling|lighthouse|headless|chrome-lighthouse/i.test(navigator.userAgent) ||
+            navigator.webdriver ||
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         // Exclude admin routes, bots, or if cursor is disabled
         const isAdmin = pathname?.startsWith('/sewait-portal-99');
