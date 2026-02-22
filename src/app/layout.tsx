@@ -132,6 +132,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "SewaIT",
+              "alternateName": ["Sewa IT"],
+              "url": "https://sewait.up.railway.app"
+            })
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
               "@type": "Organization",
               "name": "SewaIT",
               "url": "https://sewait.up.railway.app",
