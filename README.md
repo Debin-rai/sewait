@@ -6,7 +6,7 @@ SewaIT is a modern digital utility platform founded by Debin Rai, designed to si
 ## 🚀 Features
 
 -   **Government Services**: Easy access to guides and links for Passport, License, PAN, and more.
--   **Financial Data**: Real-time NEPSE (Stock Market) data, Gold/Silver rates, and Currency Exchange rates.
+-   **Financial Data**: Real-time Gold/Silver rates and essential market indicators.
 -   **Utilities**: Nepali Calendar (Bikram Sambat), Kalimati Vegetable Prices, and Weather updates.
 -   **Modern Tech Stack**: Built with Next.js 16, TailwindCSS, and Prisma for a fast, responsive experience.
 

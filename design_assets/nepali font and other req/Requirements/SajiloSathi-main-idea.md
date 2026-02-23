@@ -7,7 +7,7 @@
 **Type:** Utility-first daily web app
 
 **Purpose:** Provide essential Nepali daily tools and local information
-for users, including calendar, weather, gold/NEPSE rates, reminders,
+for users, including calendar, weather, gold rates, reminders,
 festivals, and government documents making guide .
 
 **Target Users:** Nepali students, professionals, and general users who
@@ -60,7 +60,7 @@ administrative pages.
 
 -   **Success / Trend Up:** #10b981 (Green)
 
-    -   Used for positive market trends (Gold/NEPSE gains).
+    -   Used for positive market trends (Gold gains).
 
 -   **Danger / Trend Down:** #ef4444 (Red)
 
@@ -93,11 +93,9 @@ Weather Display local weather based on user location High
 
 Gold & Silver Daily gold & silver rates in Nepal High
 
-NEPSE Show stock market index & top gainers/losers High
-
 Daily Reminders Allow users to set reminders for personal tasks Medium
 
-Notifications Optional push notifications for festivals, gold/NEPSE
+Notifications Optional push notifications for festivals, gold
 alerts Medium
 
 2.  **Admin Panel Features**
@@ -109,8 +107,7 @@ alerts Medium
 
   --------------------------------------------------------------------------------
 
-Content Management Add/Edit/Delete: Guide, festivals, gold/silver rates,
-NEPSE data High
+Content Management Add/Edit/Delete: Guide, festivals, gold/silver rates High
 
 Bulk Upload Upload CSV/JSON files for multiple updates Medium
 
@@ -135,14 +132,12 @@ Guide snippets
 | **Gold & Silver** Daily      | > Gold price, silver price, rise/fall |
 | rates                        | > compared to yesterday               |
 +------------------------------+---------------------------------------+
-| **NEPSE** Stock market info  | > NEPSE index, top gainers/losers     |
-+------------------------------+---------------------------------------+
 | **Snippets** Display guides  | > Guides for governments              |
 +------------------------------+---------------------------------------+
 | **Admin Panel** Manage       | > Login, add/edit/delete guides,      |
-| content                      | > festivals, gold/NEPSE rates         |
+| content                      | > festivals, gold rates               |
 |                              |                                       |
-| **Total Pages:** 7           |                                       |
+| **Total Pages:** 6           |                                       |
 +------------------------------+---------------------------------------+
 
 **Technical Requirements**
@@ -320,7 +315,7 @@ For each page, do the following:
     > SewaIT\</title\> **b) Meta Description:**
 
 -   Example: \<meta name=\"description\" content=\"Check today's Nepali
-    > date, festivals, weather, gold/silver rates, and NEPSE updates on
+    > date, festivals, weather, and gold/silver rates on
     > SewaIT.\"\>
 
 c)  **Header Tags (H1, H2, H3):**
@@ -351,9 +346,7 @@ e)  **Structured Data (Schema.org):**
 
     -   "सुन चााँदी िूल्य" → gold silver price
 
-    -   "NEPSE आज" → NEPSE today
-
--   Add **unique descriptions** for each page, don't just copy from
+    -   Add **unique descriptions** for each page, don't just copy from
     other sites.
 
 **Internal Linking**
@@ -395,7 +388,7 @@ e)  **Structured Data (Schema.org):**
 
 2.  Optimize **titles, meta, headers, URLs** with Nepali keywords
 
-3.  Add **structured data** for, events, gold/NEPSE
+3.  Add **structured data** for, events, gold
 
 4.  Create **sitemap.xml** and submit to Google Search Console
 
@@ -447,17 +440,9 @@ and comprehensive**.
 
 -   Option to show price trend (up/down arrow)
 
-**e) NEPSE Management**
-
--   Add/update NEPSE index & top gainers/losers manually or via API
-
--   Set auto-update schedule if API used
-
--   Option to hide/show NEPSE page temporarily
-
 **g) User / App Settings (Optional for Phase 1)**
 
--   Toggle features ON/OFF (weather, NEPSE, gold/silver, calendar)
+-   Toggle features ON/OFF (weather, gold/silver, calendar)
 
 -   Set app-wide announcements (display on landing page)
 
@@ -513,8 +498,8 @@ and comprehensive**.
 
 -   This is how many apps start
 
-✔ Legal\
-✔ Accurate\
+✔ Legal
+✔ Accurate
 ✔ Trustworthy
 
 **Option B: Open-source Nepali Date Libraries**
@@ -629,21 +614,7 @@ Later:
 
 -   Paid API (Phase 2 or 3)
 
-**5️⃣ NEPSE Data**
-
-**Phase 1 (Reality check)**
-
--   ❌ No fully free, reliable API
-
--   ✔ Manual daily update OR delayed data
-
-Do:
-
 -   Show:
-
-    -   NEPSE index
-
-    -   Top gainers/losers
 
 -   Updated once daily by admin
 
@@ -685,8 +656,6 @@ Most users:
   Weather              Free API                                   Free
 
   Gold/Silver          Manual update                              Free
-
-  NEPSE                Manual update                              Free
 
   Guild                Manual                                     Free
   --------------------------------------------------------------------------
@@ -741,7 +710,7 @@ frontend/
 
 │ ├── api/
 
-│ │ └── index.ts \# Calls backend APIs
+│ │ └── index.ts # Calls backend APIs
 
 │ │
 
@@ -767,8 +736,6 @@ frontend/
 
 │ │ ├── Gold.tsx
 
-│ │ ├── Nepse.tsx
-
 │ │ └── Sarkari Guide.tsx
 
 │ │
@@ -785,7 +752,7 @@ frontend/
 
 └── package.json
 
-🚫 **No Nepali dates, events, prices here**\
+🚫 **No Nepali dates, events, prices here**
 Frontend only **fetches data**.
 
 **🔹 BACKEND (WHERE YOUR DATA LIVES)**
@@ -830,8 +797,6 @@ backend/
 
 │ │ ├── gold.py
 
-│ │ ├── nepse.py
-
 │ │ └── models.py
 
 │ │
@@ -864,49 +829,39 @@ backend/
 
 calendar_date
 
-\- bs_year
+- bs_year
 
-\- bs_month
+- bs_month
 
-\- bs_day
+- bs_day
 
-\- ad_date
+- ad_date
 
-\- weekday
+- weekday
 
 **🎉 Festivals & Holidays**
 
 festival
 
-\- name
+- name
 
-\- bs_date
+- bs_date
 
-\- type
+- type
 
-\- description
+- description
 
-\- is_public_holiday
+- is_public_holiday
 
 **🪙 Gold & Silver**
 
 metal_price
 
-\- type (gold/silver)
+- type (gold/silver)
 
-\- price
+- price
 
-\- date
-
-**📈 NEPSE**
-
-nepse_data
-
-\- index_value
-
-\- change
-
-\- date
+- date
 
 **🔹 ADMIN PANEL (VERY IMPORTANT)**
 
@@ -920,12 +875,10 @@ Admin panel is where **YOU enter data**.
 
 ├── Update Gold/Silver (daily)
 
-├── Update NEPSE (daily)
-
 ├── Sarkari Guide
 
-✔ No public access\
-✔ Login protected\
+✔ No public access
+✔ Login protected
 ✔ Data verified before publish
 
 **🔹 What Goes in assets Folder? (ONLY THIS)**
@@ -940,13 +893,13 @@ assets/
 
 └── fonts/
 
-❌ No JSON data\
-❌ No calendar files\
+❌ No JSON data
+❌ No calendar files
 ❌ No prices
 
 **🔐 Security Truth (Important)**
 
-Anyone can view **HTML/CSS/JS** in browser.\
+Anyone can view **HTML/CSS/JS** in browser.
 **Security does NOT come from hiding frontend code.**
 
 Security comes from:
@@ -983,8 +936,6 @@ You're thinking right by choosing backend-heavy logic.
   Weather           Location-based local weather                High
 
   Gold & Silver     Daily Nepal bullion rates                   High
-
-  NEPSE             Market index + top gainers/losers           High
 
   Reminders         Festival & personal reminders               Medium
   ----------------------------------------------------------------------------
@@ -1043,8 +994,6 @@ You're thinking right by choosing backend-heavy logic.
 
 -   Update Gold/Silver rates
 
--   Update NEPSE index
-
 -   Bulk upload (CSV/JSON)
 
 **4.3 System Controls**
@@ -1071,8 +1020,6 @@ You're thinking right by choosing backend-heavy logic.
   Weather           /weather           Local forecast
 
   Gold & Silver     /gold              Bullion prices
-
-  NEPSE             /nepse             Stock index
 
   Admin Panel       /admin             Content management
   ------------------------------------------------------------------------
@@ -1129,8 +1076,6 @@ You're thinking right by choosing backend-heavy logic.
   Weather          OpenWeather / WeatherAPI                         Free
 
   Gold/Silver      Nepal Gold & Silver Dealers (manual)             Free
-
-  NEPSE            Manual daily update                              Free
   ------------------------------------------------------------------------
 
 **9. SEO Strategy**

@@ -2,17 +2,17 @@ import { Metadata } from "next";
 import GuidesClient from "./GuidesClient";
 
 export const metadata: Metadata = {
-    title: "Sarkari Guides Nepal | Official Citizenship, Passport, License Info | SewaIT",
-    description: "Step-by-step guides for Nepal government services: Citizenship, Passport, Driving License, PAN Card, and more. Simplified for everyone.",
-    keywords: ["Sarkari Guides", "Nepali Citizenship", "Passport Nepal", "Driving License Nepal", "Sarkari Sewa", "Public Service Guides"],
+    title: "Sarkari Guides Nepal | Official Citizenship, Passport, & License Info | SewaIT",
+    description: "Step-by-step simplified guides for Nepal government services: Citizenship, Passport (E-Passport), Driving License, PAN Card, and more. Navigate official processes easily with SewaIT.",
+    keywords: ["Sarkari Guides", "Nepali Citizenship Guide", "Passport Nepal Renewal", "Driving License Nepal Process", "Sarkari Sewa", "Public Service Guides Nepal", "SewaIT Guides"],
 };
 
 export default function GuidesPage() {
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
-        'name': 'Sarkari Guides',
-        'description': 'Collection of official government service guides for Nepal.',
+        'name': 'Sarkari Guides - Nepal Government Services',
+        'description': 'A comprehensive collection of simplified, step-by-step official government service guides for citizens of Nepal.',
         'hasPart': [
             {
                 '@type': 'HowTo',

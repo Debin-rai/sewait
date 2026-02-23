@@ -17,9 +17,6 @@ const PLACEMENT_CATEGORIES = {
         { id: "CALENDAR_TOP", name: "Top Banner", size: "1200x200", ratio: "6/1", aspect: 6 },
         { id: "CALENDAR_SIDEBAR", name: "Sidebar Widget", size: "400x400", ratio: "1/1", aspect: 1 }
     ],
-    "NEPSE": [
-        { id: "NEPSE_TOP", name: "Top Info Bar", size: "1200x150", ratio: "8/1", aspect: 8 }
-    ],
     "GOLD_SILVER": [
         { id: "GOLD_HEADER", name: "Header Banner", size: "1200x300", ratio: "4/1", aspect: 4 }
     ],
@@ -254,7 +251,6 @@ export default function LaunchAdPage() {
                                     >
                                         <option value="HOME">Main Home Screen</option>
                                         <option value="CALENDAR">Nepali Patro (Calendar)</option>
-                                        <option value="NEPSE">Stock Market (NEPSE)</option>
                                         <option value="GOLD_SILVER">Bullion Rates (Gold/Silver)</option>
                                         <option value="SERVICES">Government Portal</option>
                                         <option value="WEATHER">Live Weather</option>

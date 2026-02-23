@@ -1,5 +1,0 @@
-User-agent: *
-Disallow: /sewait-portal-99
-Disallow: /api/admin
-
-Sitemap: https://sewait.up.railway.app/sitemap.xml

@@ -2,9 +2,9 @@ import { Metadata } from "next";
 import CalendarClient from "./CalendarClient";
 
 export const metadata: Metadata = {
-    title: "नेपाली पात्रो २०८१ | चाडपर्व र तिथि | SewaIT",
-    description: "आजको नेपाली मिति, तिथि, र दशैं तिहार जस्ता आउँदै गरेका चाडपर्वहरू हेर्नुहोस्। SewaIT को सही नेपाली पात्रो २०८०-२०८१।",
-    keywords: ["Nepali Calendar 2081", "आजको मिती", "Today Nepali Date", "Tithi Today", "Nepali Festivals", "नेपाली पात्रो"],
+    title: "नेपाली पात्रो २०८१ | आजको मिति, तिथि र चाडपर्व | SewaIT",
+    description: "आजको नेपाली मिति (BS), तिथि, र दशैं, तिहार जस्ता आउँदै गरेका महत्वपूर्ण चाडपर्वहरू हेर्नुहोस्। SewaIT को आधिकारिक र सही नेपाली पात्रो २०८०-२०८१।",
+    keywords: ["Nepali Calendar 2081", "आजको मिती", "Today Nepali Date", "Tithi Today", "Nepali Festivals", "नेपाली पात्रो", "SewaIT Calendar"],
 };
 
 export default function CalendarPage() {
@@ -12,10 +12,10 @@ export default function CalendarPage() {
         {
             '@context': 'https://schema.org',
             '@type': 'SoftwareApplication',
-            'name': 'Nepali Calendar 2081',
+            'name': 'Nepali Calendar 2081 - SewaIT',
             'operatingSystem': 'Any',
             'applicationCategory': 'UtilityApplication',
-            'description': 'Live Nepali Calendar with Tithi, festivals, and today\'s date in BS.',
+            'description': 'Live Nepali Calendar (Bikram Sambat) with Tithi, government holidays, festivals, and today\'s date in BS and AD.',
             'creator': {
                 '@type': 'Organization',
                 'name': 'SewaIT'

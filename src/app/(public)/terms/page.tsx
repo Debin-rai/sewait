@@ -23,7 +23,7 @@ export default function TermsPage() {
                                 Informational Purposes
                             </h2>
                             <p className="text-sm leading-relaxed opacity-90 font-medium">
-                                Market data for Gold, Silver, and NEPSE is provided for informational use; while we update these daily to ensure accuracy, we recommend verifying rates with official associations before major transactions.
+                                Market data for Gold and Silver is provided for informational use; while we update these daily to ensure accuracy, we recommend verifying rates with official associations before major transactions.
                             </p>
                         </section>
 

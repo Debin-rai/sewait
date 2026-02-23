@@ -13,9 +13,6 @@ const PLACEMENT_CATEGORIES = {
         { id: "CALENDAR_TOP", name: "Top Banner", size: "1200x200" },
         { id: "CALENDAR_SIDEBAR", name: "Sidebar Widget", size: "400x400" }
     ],
-    "NEPSE": [
-        { id: "NEPSE_TOP", name: "Top Info Bar", size: "1200x150" }
-    ],
     "GOLD_SILVER": [
         { id: "GOLD_HEADER", name: "Header Banner", size: "1200x300" }
     ],

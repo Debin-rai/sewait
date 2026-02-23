@@ -6,7 +6,6 @@ import FadeIn from "@/components/animations/FadeIn";
 
 const initialNews = [
     { id: 1, title: "Public holiday announced for tomorrow", category: "Holiday", date: "2026-02-18", status: "Active" },
-    { id: 2, title: "NEPSE hits record high of 2500 points", category: "Economy", date: "2026-02-17", status: "Active" },
     { id: 3, title: "New traffic rules in Kathmandu Valley", category: "Update", date: "2026-02-16", status: "Draft" },
 ];
 
@@ -19,7 +18,7 @@ export default function NewsSnippetsPage() {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <Link 
+                        <Link
                             href="/sewait-portal-99/content"
                             className="text-primary text-xs font-bold flex items-center gap-1 hover:underline mb-2"
                         >
@@ -54,9 +53,8 @@ export default function NewsSnippetsPage() {
                                     <td className="px-6 py-4 text-xs font-medium text-slate-500">{item.category}</td>
                                     <td className="px-6 py-4 text-xs font-medium text-slate-500">{item.date}</td>
                                     <td className="px-6 py-4">
-                                        <span className={`inline-flex px-2 py-1 rounded-md text-[10px] font-bold uppercase ${
-                                            item.status === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'
-                                        }`}>
+                                        <span className={`inline-flex px-2 py-1 rounded-md text-[10px] font-bold uppercase ${item.status === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'
+                                            }`}>
                                             {item.status}
                                         </span>
                                     </td>
