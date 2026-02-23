@@ -1,16 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useLanguage } from '@/context/LanguageContext';
+import { useTheme, THEMES } from '@/context/ThemeContext';
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemePicker from "./ThemePicker";
 
 export default function Header() {
     const pathname = usePathname();
-    const router = useRouter();
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { language } = useLanguage();
+    const { theme } = useTheme();
+    const [scrolled, setScrolled] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [results, setResults] = useState<any[]>([]);
     const [isSearching, setIsSearching] = useState(false);
@@ -110,7 +112,9 @@ export default function Header() {
                                 className="w-full h-full object-contain"
                             />
                         </div>
-                        <h1 className="text-xl font-bold tracking-tight text-slate-800 transition-colors duration-300 group-hover:text-slate-900">Sewa<span className="text-primary">IT</span></h1>
+                        <h1 className="text-xl font-bold tracking-tight text-slate-800 transition-colors duration-300 group-hover:text-slate-900">
+                            Sewa<span style={{ color: THEMES[theme].primary }}>IT</span>
+                        </h1>
                     </Link>
                     {/* Desktop Navigation */}
                     <nav className="hidden lg:flex items-center gap-1">
@@ -121,9 +125,10 @@ export default function Header() {
                                     key={link.href}
                                     href={link.href}
                                     className={`px-3 py-1.5 text-sm font-semibold rounded-lg transition-all duration-300 relative ${isActive
-                                        ? "text-primary font-bold nav-link-active"
+                                        ? "font-bold nav-link-active"
                                         : "text-slate-600 hover:text-primary hover:bg-primary/5 nav-link-hover"
                                         }`}
+                                    style={isActive ? { color: THEMES[theme].primary } : {}}
                                 >
                                     {link.label}
                                     {(link as any).isNew && (
@@ -177,7 +182,10 @@ export default function Header() {
                         />
                         <div className="absolute right-1 flex items-center gap-1">
                             {isSearching && (
-                                <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin mr-1"></div>
+                                <div
+                                    className="w-3 h-3 border-2 border-t-transparent rounded-full animate-spin mr-1"
+                                    style={{ borderColor: THEMES[theme].primary, borderTopColor: 'transparent' }}
+                                ></div>
                             )}
                             <button
                                 onClick={() => {
@@ -186,7 +194,8 @@ export default function Header() {
                                         setResults([]);
                                     }
                                 }}
-                                className="bg-primary text-white text-[9px] font-bold px-3 py-1.5 rounded-lg hover:bg-primary-light transition-all duration-300 hover:shadow-md active:scale-95"
+                                className="text-white text-[9px] font-bold px-3 py-1.5 rounded-lg transition-all duration-300 hover:shadow-md active:scale-95"
+                                style={{ backgroundColor: THEMES[theme].primary }}
                             >
                                 GO
                             </button>
@@ -206,7 +215,10 @@ export default function Header() {
                                             }}
                                             className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg transition-colors group"
                                         >
-                                            <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-primary group-hover:bg-primary/10 transition-colors">
+                                            <div
+                                                className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center transition-colors group-hover:bg-opacity-10"
+                                                style={{ color: THEMES[theme].primary, '--hover-bg': `${THEMES[theme].primary}10` } as any}
+                                            >
                                                 <span className="material-symbols-outlined text-lg">{res.icon}</span>
                                             </div>
                                             <div className="flex flex-col min-w-0">
@@ -227,7 +239,14 @@ export default function Header() {
                             <div className="flex items-center gap-3">
                                 {user ? (
                                     <div className="hidden sm:flex items-center gap-3 bg-slate-50 border border-slate-100 px-3 py-1.5 rounded-xl">
-                                        <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary border border-primary/20">
+                                        <div
+                                            className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold border transition-colors"
+                                            style={{
+                                                color: THEMES[theme].primary,
+                                                backgroundColor: `${THEMES[theme].primary}10`,
+                                                borderColor: `${THEMES[theme].primary}20`
+                                            }}
+                                        >
                                             {user.name?.[0] || user.email[0].toUpperCase()}
                                         </div>
                                         <div className="flex flex-col">
@@ -239,8 +258,14 @@ export default function Header() {
                                     </div>
                                 ) : (
                                     <div className="hidden sm:flex items-center gap-2">
-                                        <Link href="/login" className="text-xs font-bold text-slate-600 hover:text-primary px-2">Log In</Link>
-                                        <Link href="/register" className="text-xs font-bold bg-primary text-white px-4 py-2 rounded-lg shadow-sm hover:bg-primary/90 transition-all">Sign Up</Link>
+                                        <Link href="/login" className="text-xs font-bold text-slate-600 px-2 transition-colors nav-link-hover" style={{ '--hover-color': THEMES[theme].primary } as any}>Log In</Link>
+                                        <Link
+                                            href="/register"
+                                            className="text-white text-xs font-bold px-4 py-2 rounded-lg shadow-sm transition-all hover:opacity-90"
+                                            style={{ backgroundColor: THEMES[theme].primary }}
+                                        >
+                                            Sign Up
+                                        </Link>
                                     </div>
                                 )}
                             </div>

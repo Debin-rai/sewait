@@ -1,8 +1,8 @@
-"use client";
-
 import Link from "next/link";
+import { useTheme, THEMES } from "@/context/ThemeContext";
 
 export default function Footer() {
+    const { theme } = useTheme();
     return (
         <footer className="bg-white border-t border-slate-200 mt-20 py-12">
             <div className="container mx-auto px-4 lg:px-10">
@@ -17,16 +17,27 @@ export default function Footer() {
                                     className="w-full h-full object-contain"
                                 />
                             </div>
-                            <span className="text-xl font-bold">Sewa<span className="text-primary">IT</span></span>
+                            <span className="text-xl font-bold">Sewa<span style={{ color: THEMES[theme].primary }}>IT</span></span>
                         </div>
                         <p className="text-slate-600 text-xs leading-relaxed mb-6">
                             Our goal is to simplify citizens&apos; lives by bringing Nepal Government&apos;s digital services to one place.
                         </p>
                         <div className="flex gap-4">
-                            <Link href="#" className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-primary transition-colors hover:text-white group">
+                            <Link
+                                href="#"
+                                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center transition-colors group"
+                                style={{ "--hover-bg": THEMES[theme].primary } as any}
+                            >
+                                <style jsx>{`
+                                    .group:hover { background-color: var(--hover-bg); }
+                                `}</style>
                                 <span className="material-symbols-outlined text-sm text-slate-500 group-hover:text-white">public</span>
                             </Link>
-                            <Link href="mailto:contact@sewait.com" className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-primary transition-colors hover:text-white group">
+                            <Link
+                                href="mailto:contact@sewait.com"
+                                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center transition-colors group"
+                                style={{ "--hover-bg": THEMES[theme].primary } as any}
+                            >
                                 <span className="material-symbols-outlined text-sm text-slate-500 group-hover:text-white">mail</span>
                             </Link>
                         </div>
@@ -36,10 +47,10 @@ export default function Footer() {
                     <div>
                         <h4 className="text-slate-900 font-bold text-sm mb-6">Important Services</h4>
                         <ul className="space-y-4 text-xs text-slate-600">
-                            <li><Link className="hover:text-primary transition-colors" href="#">Passport Service</Link></li>
-                            <li><Link className="hover:text-primary transition-colors" href="#">Driving License</Link></li>
-                            <li><Link className="hover:text-primary transition-colors" href="#">PAN Number</Link></li>
-                            <li><Link className="hover:text-primary transition-colors" href="#">Land Revenue & Tax</Link></li>
+                            <li><Link className="hover:opacity-80 transition-colors" style={{ color: THEMES[theme].primary }} href="#">Passport Service</Link></li>
+                            <li><Link className="hover:opacity-80 transition-colors" style={{ color: THEMES[theme].primary }} href="#">Driving License</Link></li>
+                            <li><Link className="hover:opacity-80 transition-colors" style={{ color: THEMES[theme].primary }} href="#">PAN Number</Link></li>
+                            <li><Link className="hover:opacity-80 transition-colors" style={{ color: THEMES[theme].primary }} href="#">Land Revenue & Tax</Link></li>
                         </ul>
                     </div>
 
@@ -47,11 +58,11 @@ export default function Footer() {
                     <div>
                         <h4 className="text-slate-900 font-bold text-sm mb-6">About Us</h4>
                         <ul className="space-y-4 text-xs text-slate-600">
-                            <li><Link className="hover:text-primary transition-colors" href="/about">About Us</Link></li>
-                            <li><Link className="hover:text-primary transition-colors" href="/mission">Our Mission</Link></li>
-                            <li><Link className="hover:text-primary transition-colors" href="/contact">Contact Us</Link></li>
-                            <li><Link className="hover:text-primary transition-colors" href="/privacy">Privacy Policy</Link></li>
-                            <li><Link className="hover:text-primary transition-colors" href="/terms">Terms of Service</Link></li>
+                            <li><Link className="hover:opacity-70 transition-colors" href="/about">About Us</Link></li>
+                            <li><Link className="hover:opacity-70 transition-colors" href="/mission">Our Mission</Link></li>
+                            <li><Link className="hover:opacity-70 transition-colors" href="/contact">Contact Us</Link></li>
+                            <li><Link className="hover:opacity-70 transition-colors" href="/privacy">Privacy Policy</Link></li>
+                            <li><Link className="hover:opacity-70 transition-colors" href="/terms">Terms of Service</Link></li>
                         </ul>
                     </div>
 
@@ -67,11 +78,15 @@ export default function Footer() {
                                 name="email"
                                 type="email"
                                 placeholder="your@email.com"
-                                className="bg-slate-50 border border-slate-200 rounded-lg text-xs px-4 py-2 flex-1 focus:ring-1 focus:ring-primary focus:border-primary outline-none"
+                                className="bg-slate-50 border border-slate-200 rounded-lg text-xs px-4 py-2 flex-1 outline-none transition-all focus:ring-1"
+                                style={{ "--ring-color": THEMES[theme].primary, borderColor: 'var(--slate-200)' } as any}
                                 aria-label="Email address for notifications"
                                 autoComplete="email"
                             />
-                            <button className="bg-primary text-white text-[10px] font-bold px-4 py-2 rounded-lg hover:bg-primary-light transition-colors">
+                            <button
+                                className="text-white text-[10px] font-bold px-4 py-2 rounded-lg hover:opacity-90 transition-colors"
+                                style={{ backgroundColor: THEMES[theme].primary }}
+                            >
                                 Subscribe
                             </button>
                         </div>

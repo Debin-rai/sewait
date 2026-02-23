@@ -36,7 +36,7 @@ export default function DocMarquee() {
     const displayItems = [...items, ...items, ...items];
 
     return (
-        <div className="relative w-full bg-white/5 backdrop-blur-md border-y border-white/10 py-3 overflow-hidden">
+        <div className="relative w-full bg-black/10 backdrop-blur-sm border-y border-white/5 py-3 overflow-hidden">
             <div className="flex w-full overflow-hidden">
                 <div
                     className="flex whitespace-nowrap animate-marquee gap-8 md:gap-16 items-center"

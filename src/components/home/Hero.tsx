@@ -77,7 +77,8 @@ export default function Hero() {
                             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-8 md:mt-10">
                                 <button
                                     onClick={() => document.getElementById('doc-generator')?.scrollIntoView({ behavior: 'smooth' })}
-                                    className="bg-white text-primary px-8 md:px-10 py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg shadow-2xl hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all flex items-center gap-3 group"
+                                    className="bg-white px-8 md:px-10 py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg shadow-2xl hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all flex items-center gap-3 group"
+                                    style={{ color: THEMES[theme].primary }}
                                 >
                                     <span className="material-symbols-outlined text-2xl group-hover:rotate-12 transition-transform">auto_fix_high</span>
                                     Sarkari AI Assistant

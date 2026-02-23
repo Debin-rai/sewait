@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { Download, Share, PlusSquare, X } from "lucide-react";
+import { useTheme, THEMES } from "@/context/ThemeContext";
 
 export default function PwaPrompt() {
+    const { theme } = useTheme();
     const [show, setShow] = useState(false);
     const [isIOS, setIsIOS] = useState(false);
     const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -81,7 +83,10 @@ export default function PwaPrompt() {
                 </button>
 
                 <div className="flex items-center gap-5 mb-6">
-                    <div className="size-16 rounded-[1.5rem] bg-gradient-to-br from-primary to-primary-dark p-0.5 shadow-xl shadow-primary/20">
+                    <div
+                        className="size-16 rounded-[1.5rem] p-0.5 shadow-xl"
+                        style={{ background: THEMES[theme].gradient, boxShadow: `0 20px 25px -5px ${THEMES[theme].primary}33` }}
+                    >
                         <div className="w-full h-full bg-white dark:bg-slate-900 rounded-[1.4rem] flex items-center justify-center overflow-hidden">
                             <img
                                 src="/web-app-manifest-192x192.png"
@@ -104,7 +109,8 @@ export default function PwaPrompt() {
                         <button
                             onClick={handleInstall}
                             disabled={!deferredPrompt}
-                            className="w-full bg-primary hover:bg-primary-dark text-white font-black py-4 rounded-2xl transition-all active:scale-95 flex items-center justify-center gap-3 shadow-lg shadow-primary/30 disabled:opacity-50"
+                            className="w-full text-white font-black py-4 rounded-2xl transition-all active:scale-95 flex items-center justify-center gap-3 shadow-lg disabled:opacity-50"
+                            style={{ backgroundColor: THEMES[theme].primary, boxShadow: `0 10px 15px -3px ${THEMES[theme].primary}4d` }}
                         >
                             <Download size={18} strokeWidth={3} />
                             INSTALL APP
@@ -115,16 +121,16 @@ export default function PwaPrompt() {
                         <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">How to Install on iOS</p>
                         <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 space-y-3">
                             <div className="flex items-center gap-3">
-                                <div className="size-8 rounded-lg bg-white dark:bg-slate-700 shadow-sm flex items-center justify-center text-primary">
+                                <div className="size-8 rounded-lg bg-white dark:bg-slate-700 shadow-sm flex items-center justify-center" style={{ color: THEMES[theme].primary }}>
                                     <Share size={16} />
                                 </div>
-                                <p className="text-xs font-bold text-slate-700 dark:text-slate-200">1. Tap the <span className="text-primary italic">Share</span> button below</p>
+                                <p className="text-xs font-bold text-slate-700 dark:text-slate-200">1. Tap the <span className="italic" style={{ color: THEMES[theme].primary }}>Share</span> button below</p>
                             </div>
                             <div className="flex items-center gap-3">
-                                <div className="size-8 rounded-lg bg-white dark:bg-slate-700 shadow-sm flex items-center justify-center text-primary">
+                                <div className="size-8 rounded-lg bg-white dark:bg-slate-700 shadow-sm flex items-center justify-center" style={{ color: THEMES[theme].primary }}>
                                     <PlusSquare size={16} />
                                 </div>
-                                <p className="text-xs font-bold text-slate-700 dark:text-slate-200">2. Select <span className="text-primary italic">"Add to Home Screen"</span></p>
+                                <p className="text-xs font-bold text-slate-700 dark:text-slate-200">2. Select <span className="italic" style={{ color: THEMES[theme].primary }}>"Add to Home Screen"</span></p>
                             </div>
                         </div>
                     </div>

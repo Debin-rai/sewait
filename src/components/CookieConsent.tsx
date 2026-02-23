@@ -3,8 +3,10 @@
 import { useState, useEffect } from "react";
 import { Cookie, X, ChevronRight, Check, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import { useTheme, THEMES } from "@/context/ThemeContext";
 
 export default function CookieConsent() {
+    const { theme } = useTheme();
     const [show, setShow] = useState(false);
     const [isManaging, setIsManaging] = useState(false);
 
@@ -35,7 +37,7 @@ export default function CookieConsent() {
                 {!isManaging ? (
                     <div className="flex flex-col md:flex-row items-center gap-8">
                         <div className="size-20 rounded-[2rem] bg-slate-50 dark:bg-slate-800 flex items-center justify-center shrink-0 shadow-inner">
-                            <ShieldCheck className="text-primary size-10" />
+                            <ShieldCheck className="size-10" style={{ color: THEMES[theme].primary }} />
                         </div>
 
                         <div className="flex-1 text-center md:text-left">
@@ -50,8 +52,12 @@ export default function CookieConsent() {
                         <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
                             <button
                                 onClick={() => setIsManaging(true)}
-                                className="w-full sm:w-auto px-6 py-4 text-xs font-black uppercase tracking-widest text-slate-500 hover:text-primary transition-colors"
+                                className="w-full sm:w-auto px-6 py-4 text-xs font-black uppercase tracking-widest text-slate-500 transition-colors"
+                                style={{ "--hover-color": THEMES[theme].primary } as any}
                             >
+                                <style jsx>{`
+                                    button:hover { color: var(--hover-color); }
+                                `}</style>
                                 Settings
                             </button>
                             <button
@@ -66,7 +72,7 @@ export default function CookieConsent() {
                     <div className="space-y-8">
                         <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-6">
                             <div className="flex items-center gap-4">
-                                <button onClick={() => setIsManaging(false)} className="size-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
+                                <button onClick={() => setIsManaging(false)} className="size-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:opacity-80 transition-colors" style={{ color: THEMES[theme].primary }}>
                                     <ChevronRight className="rotate-180 size-5" />
                                 </button>
                                 <div>
@@ -88,10 +94,10 @@ export default function CookieConsent() {
                                 <h5 className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-1">Essential Core</h5>
                                 <p className="text-[11px] text-slate-500 leading-relaxed font-medium">Necessary for secure access, location-based weather fetching, and anti-spam measures.</p>
                             </div>
-                            <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border-2 border-primary/20 relative">
+                            <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border-2 relative" style={{ borderColor: `${THEMES[theme].primary}33` }}>
                                 <div className="flex items-center justify-between mb-3">
-                                    <span className="text-sm font-black text-primary uppercase tracking-wider">Enhanced</span>
-                                    <div className="size-5 rounded-full bg-primary flex items-center justify-center">
+                                    <span className="text-sm font-black uppercase tracking-wider" style={{ color: THEMES[theme].primary }}>Enhanced</span>
+                                    <div className="size-5 rounded-full flex items-center justify-center" style={{ backgroundColor: THEMES[theme].primary }}>
                                         <Check className="text-white size-3" strokeWidth={4} />
                                     </div>
                                 </div>
@@ -101,7 +107,7 @@ export default function CookieConsent() {
                         </div>
 
                         <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-2">
-                            <Link href="/cookie-policy" className="text-xs font-black text-primary hover:underline uppercase tracking-widest">Read Transparency Policy</Link>
+                            <Link href="/cookie-policy" className="text-xs font-black hover:underline uppercase tracking-widest" style={{ color: THEMES[theme].primary }}>Read Transparency Policy</Link>
                             <div className="flex gap-4 w-full sm:w-auto">
                                 <button
                                     onClick={handleAcceptEssential}
@@ -111,7 +117,8 @@ export default function CookieConsent() {
                                 </button>
                                 <button
                                     onClick={handleAcceptAll}
-                                    className="flex-1 sm:flex-none px-10 py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+                                    className="flex-1 sm:flex-none px-10 py-4 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl transition-all hover:scale-[1.02] active:scale-95"
+                                    style={{ backgroundColor: THEMES[theme].primary, boxShadow: `0 20px 25px -5px ${THEMES[theme].primary}33` }}
                                 >
                                     Confirm My Choice
                                 </button>

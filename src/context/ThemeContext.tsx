@@ -11,26 +11,34 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const THEMES: Record<ThemeType, { name: string; gradient: string; primary: string }> = {
+export const THEMES: Record<ThemeType, { name: string; gradient: string; primary: string; secondary: string; text: string }> = {
     default: {
         name: "Default Blue",
-        gradient: "linear-gradient(135deg, #1F3A5F 0%, #274C77 100%)",
-        primary: "#1F3A5F",
+        gradient: "linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #3b82f6 100%)",
+        primary: "#1e40af",
+        secondary: "#3b82f6",
+        text: "text-[#1e40af]",
     },
     red: {
         name: "Premium Red",
-        gradient: "linear-gradient(135deg, #7F1D1D 0%, #991B1B 100%)",
-        primary: "#7F1D1D",
+        gradient: "linear-gradient(135deg, #450a0a 0%, #7f1d1d 50%, #991b1b 100%)",
+        primary: "#7f1d1d",
+        secondary: "#ef4444",
+        text: "text-[#7f1d1d]",
     },
     green: {
         name: "Emerald Green",
-        gradient: "linear-gradient(135deg, #064E3B 0%, #065F46 100%)",
-        primary: "#064E3B",
+        gradient: "linear-gradient(135deg, #022c22 0%, #064e3b 50%, #065f46 100%)",
+        primary: "#064e3b",
+        secondary: "#10b981",
+        text: "text-[#064e3b]",
     },
     pink: {
         name: "Royal Pink",
-        gradient: "linear-gradient(135deg, #701A75 0%, #86198F 100%)",
-        primary: "#701A75",
+        gradient: "linear-gradient(135deg, #4a044e 0%, #701a75 50%, #86198f 100%)",
+        primary: "#701a75",
+        secondary: "#d946ef",
+        text: "text-[#701a75]",
     },
 };
 
