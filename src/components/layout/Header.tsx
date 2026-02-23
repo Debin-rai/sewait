@@ -20,6 +20,7 @@ export default function Header() {
     const [placeholderIndex, setPlaceholderIndex] = useState(0);
     const [user, setUser] = useState<any>(null);
     const [authChecked, setAuthChecked] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     // Auth Check
