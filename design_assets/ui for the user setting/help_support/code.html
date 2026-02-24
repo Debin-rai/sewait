@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1a355b",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#13181f",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Support - Sewa IT</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined">laptop_mac</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-primary dark:text-slate-100">Sewa IT</h1>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">manage_accounts</span>
+<span class="text-sm font-medium">Account Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">shield</span>
+<span class="text-sm font-medium">Security</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="text-sm font-medium">Notifications</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary dark:bg-primary/20 dark:text-slate-100 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-sm font-medium">Support</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 p-2">
+<div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+<img alt="User Profile" data-alt="Profile avatar of a technical support user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCQt6d8sO0O3RqyXT7XXO5OzYpQ_RHrCg-REly7wHL5qVCjsWNqCUaNUpIJGRersUcvB7AmflVBvfQVKwonjPrRBdv1J3uDVdh2d4rGvUoVvWiaJNMMNj3YpjUuWH5sWlq3MCSJJYtVhBLngQXupC8fKgXEjOg7i3VRn7is8guC9SW2QxdOcMGPF9NbiRicQwQAukyAyJWLKhLLZvbDUQQ62GXnaNzJXCHBU3zH0KiRyBbBsAwIovq3Xuc7ZHqx_wN1LG-rBHfWYE"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold truncate">Alex Johnson</p>
+<p class="text-xs text-slate-500 truncate">Pro Account</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto">
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-10">
+<h2 class="text-lg font-semibold">Support Center</h2>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">flag</span>
+                    Report an issue
+                </button>
+</div>
+</header>
+<div class="max-w-5xl mx-auto p-8">
+<!-- Hero Section -->
+<div class="mb-12">
+<h1 class="text-4xl font-black tracking-tight text-slate-900 dark:text-slate-100 mb-4">How can we help you today?</h1>
+<p class="text-slate-500 dark:text-slate-400 text-lg">Search our knowledge base or contact our support team directly for immediate assistance.</p>
+</div>
+<!-- How it works Section -->
+<section class="mb-12">
+<h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">menu_book</span>
+                    How it works
+                </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:shadow-md transition-shadow cursor-pointer">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">rocket_launch</span>
+</div>
+<div class="flex-1">
+<p class="font-semibold">Getting Started Guide</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">Learn the basics of using Sewa IT</p>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:shadow-md transition-shadow cursor-pointer">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">build</span>
+</div>
+<div class="flex-1">
+<p class="font-semibold">Troubleshooting Tips</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">Common solutions for technical issues</p>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:shadow-md transition-shadow cursor-pointer">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div class="flex-1">
+<p class="font-semibold">Billing &amp; Subscriptions</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">Manage your payments and invoices</p>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:shadow-md transition-shadow cursor-pointer">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">verified_user</span>
+</div>
+<div class="flex-1">
+<p class="font-semibold">Security Best Practices</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">Keep your assets safe and secure</p>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Contact Support Section -->
+<section>
+<h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">contact_support</span>
+                    Contact Support
+                </h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- WhatsApp Card -->
+<div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 rounded-xl flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-green-600 text-3xl">chat</span>
+</div>
+<h4 class="font-bold mb-2">WhatsApp Support</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Chat with our technical team in real-time for urgent queries.</p>
+<button class="w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2">
+                            Chat on WhatsApp
+                        </button>
+</div>
+<!-- Email Card -->
+<div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 rounded-xl flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">mail</span>
+</div>
+<h4 class="font-bold mb-2">Email Support</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Typical response time: Within 24 hours for detailed inquiries.</p>
+<button class="w-full py-3 px-4 bg-primary hover:opacity-90 text-white font-semibold rounded-lg transition-colors">
+                            Send Email
+                        </button>
+</div>
+<!-- Report Issue Card -->
+<div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 rounded-xl flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-red-600 text-3xl">bug_report</span>
+</div>
+<h4 class="font-bold mb-2">Report an Issue</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Found a bug? Let us know so we can fix it immediately.</p>
+<button class="w-full py-3 px-4 border-2 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 font-semibold rounded-lg transition-colors">
+                            Submit Report
+                        </button>
+</div>
+</div>
+</section>
+<!-- FAQ Quick Link -->
+<div class="mt-12 p-8 bg-primary rounded-2xl text-white flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden relative">
+<div class="relative z-10">
+<h3 class="text-2xl font-bold mb-2">Looking for quick answers?</h3>
+<p class="text-primary-100/80">Browse our comprehensive FAQ library for instant solutions.</p>
+</div>
+<button class="relative z-10 px-8 py-3 bg-white text-primary font-bold rounded-lg hover:bg-slate-100 transition-colors whitespace-nowrap">
+                    Browse FAQs
+                </button>
+<div class="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

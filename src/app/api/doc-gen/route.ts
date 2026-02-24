@@ -73,7 +73,7 @@ export async function POST(request: Request) {
                 type,
                 details,
                 content,
-                userId: user.id
+                userId: session.user.id
             }
         });
 
