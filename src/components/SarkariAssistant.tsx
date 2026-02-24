@@ -49,6 +49,11 @@ export default function SarkariAssistant() {
 
             const data = await res.json();
 
+            if (res.status === 401) {
+                setMessages(prev => [...prev, { role: "assistant", content: "कृपया सेवा प्रयोग गर्न लगइन गर्नुहोस्।" }]);
+                return;
+            }
+
             if (data.message) {
                 setMessages(prev => [...prev, { role: "assistant", content: data.message.content }]);
                 if (data.sessionId) setSessionId(data.sessionId);

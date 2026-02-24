@@ -5,9 +5,9 @@ import Link from "next/link";
 
 const modules = [
     {
-        name: "Utility Rates & Settings",
+        name: "Utility Settings",
         type: "Manual",
-        description: "Configure Forex rates, constants, and instructional copy for the Nepali utility converters.",
+        description: "Configure constants and instructional copy for the Nepali utility converters (Date, Area).",
         lastUpdated: "10 mins ago",
         icon: "settings_suggest",
         image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBi70vFfrpmcdxbYYuLllu0WkBA0chrDwnLNqLgEB_Xu3WuHiWKEIYZHGJTlottZnnCyotXn6kiFMso2DwMfgrjkLkSouaYzh_3Id411q4SDEYPiGDsgAOKiI1JYRN0TuVkJDpnnv3lE3a2vMY56sCFUrvxg3iGo6eWqxhSiLkKKk70F_fpZcgKnXjMZXT7lfnX1N_xfO24IYNt7VMSgLzj7oQiuxEyS0q8YiBodTt5L8EIlasz6JT74ZcfAqYhi7VGlfEChmQBCKQ",
@@ -23,23 +23,11 @@ const modules = [
         image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBsV8p9mwOgqMUgUuSWjKXrN7hZq_KZkI8_A9z3M1pD3TxMuEkVCCsJ3tU_8GET87mlZioxxS1QAmJI5aADZRyR8Oj8edwgNX1SQ-XueCeg6sLAs-rk8mByuRpPPR0s1eq6dyvgNf6aKt_5I-WqWXObspgPwZzw7oWoYs4-xcNeC4ZLvPJy7gf_czi3TmJHE70D_6QEi_8T6tkezG2Bnr89lIw9HV2nQVpiQ42M6uCzzTXQ9Gu1uqv5Pt--RPlu_XeI5YvVXO2uLHI",
         typeColor: "bg-primary/10 text-primary",
         href: "/sewait-portal-99/calendar"
-    },
-    {
-        name: "Utility Converters",
-        type: "Calculators",
-        description: "Configure Forex rates, constants, and instructional copy for the Nepali utility converters (Date, Area, Currency).",
-        lastUpdated: "Just now",
-        icon: "calculate",
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBV7vneZeS5yXmNVIROV0uSl6WiJIxeu-icT3Avpy-uCJso5ryWh_YsczqlSkjiMUKFAn0HF1p93O2paC0lBn-bkgqgdQPmokv-JkIUbNxqsiWme8B4mt-whvynK8xs-o6mAgWOlXWLle3QYew1zJML6dlO8mHzVGY3uCqi3GFNdaJ4T6EZwfN1bTBFX5fj_361yKZyr2YRK-Ox4hhhoHTSpmkJJtr8NpL9YejCIYh1L9NuWrLcQlk5lP_W5J5CjY6vzT-XHQSPqic",
-        typeColor: "bg-indigo-100 text-indigo-700",
-        isLive: true,
-        href: "/sewait-portal-99/content/utilities"
     }
 ];
 
 const healthData = [
     { name: "Nepal News API", type: "External JSON", latency: "240ms", status: "Healthy" },
-    { name: "Foreign Exchange", type: "NRB Scraper", latency: "1.2s", status: "Degraded" },
     { name: "Weather Feed", type: "OpenWeather", latency: "310ms", status: "Healthy" }
 ];
 
@@ -99,14 +87,6 @@ export default function ContentDirectoryPage() {
                                 <span className={`inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold ${mod.typeColor} uppercase`}>{mod.type}</span>
                             </div>
                             <p className="text-slate-500 text-sm mb-6 leading-relaxed min-h-[40px]">{mod.description}</p>
-                            <div className="flex items-center gap-2 mb-4">
-                                {mod.isLive ? (
-                                    <span className="material-symbols-outlined text-emerald-500 text-sm">check_circle</span>
-                                ) : (
-                                    <span className="material-symbols-outlined text-slate-400 text-sm">schedule</span>
-                                )}
-                                <span className={`text-xs ${mod.isLive ? 'text-emerald-600 font-bold' : 'text-slate-400 font-medium'}`}>{mod.lastUpdated}</span>
-                            </div>
                             <div className="flex gap-2">
                                 <Link href={mod.href} className="flex-1 bg-primary text-white py-2 px-4 rounded-lg font-bold text-sm hover:bg-primary/90 transition-colors text-center">Edit Content</Link>
                                 <button className="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
@@ -141,7 +121,7 @@ export default function ContentDirectoryPage() {
                                     <td className="px-6 py-4 font-semibold text-sm">
                                         <div className="flex items-center gap-2">
                                             <span className="material-symbols-outlined text-slate-400 text-lg">
-                                                {row.name.includes("News") ? "feed" : row.name.includes("Exchange") ? "database" : "cloud_sync"}
+                                                {row.name.includes("News") ? "feed" : "cloud_sync"}
                                             </span>
                                             {row.name}
                                         </div>

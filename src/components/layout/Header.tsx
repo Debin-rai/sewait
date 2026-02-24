@@ -21,7 +21,9 @@ export default function Header() {
     const [user, setUser] = useState<any>(null);
     const [authChecked, setAuthChecked] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const profileDropdownRef = useRef<HTMLDivElement>(null);
 
     // Auth Check
     useEffect(() => {
@@ -41,13 +43,22 @@ export default function Header() {
         checkAuth();
     }, []);
 
+    const handleLogout = async () => {
+        try {
+            await fetch("/api/auth/logout", { method: "POST" });
+            window.location.href = "/";
+        } catch (err) {
+            console.error("Logout failed:", err);
+        }
+    };
+
     // Animated Placeholder Logic
     const placeholders = [
         "Search services...",
         "guide passport",
         "guide pan card",
         "Sarkari AI Assistant",
-        "Nepali Calendar 2081",
+        "Nepali Calendar 2082",
         "Official Documents",
         "Debin Rai"
     ];
@@ -57,7 +68,7 @@ export default function Header() {
             setPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
         }, 3500);
         return () => clearInterval(interval);
-    }, []);
+    }, [placeholders.length]);
 
     // Real-time Search Logic
     useEffect(() => {
@@ -80,13 +91,16 @@ export default function Header() {
 
         const timer = setTimeout(fetchResults, 300);
         return () => clearTimeout(timer);
-    }, [searchQuery]);
+    }, [searchQuery, router]);
 
     // Click Outside listener
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
                 setResults([]);
+            }
+            if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
+                setProfileDropdownOpen(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -238,26 +252,74 @@ export default function Header() {
 
                         {/* User Profile Section */}
                         {authChecked && (
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 relative" ref={profileDropdownRef}>
                                 {user ? (
-                                    <div className="hidden sm:flex items-center gap-3 bg-slate-50 border border-slate-100 px-3 py-1.5 rounded-xl">
-                                        <div
-                                            className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold border transition-colors"
-                                            style={{
-                                                color: THEMES[theme].primary,
-                                                backgroundColor: `${THEMES[theme].primary}10`,
-                                                borderColor: `${THEMES[theme].primary}20`
-                                            }}
+                                    <>
+                                        <button 
+                                            onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                                            className="flex items-center gap-3 bg-slate-50 border border-slate-100 px-3 py-1.5 rounded-xl hover:bg-slate-100 transition-all active:scale-95"
                                         >
-                                            {user.name?.[0] || user.email[0].toUpperCase()}
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <span className="text-[10px] font-black text-slate-800 leading-none">{user.name || user.email.split('@')[0]}</span>
-                                            <span className={`text-[8px] font-bold uppercase tracking-tight leading-none mt-0.5 ${user.subscriptionStatus === 'PREMIUM' ? 'text-amber-600' : 'text-slate-400'}`}>
-                                                {user.subscriptionStatus === 'PREMIUM' ? 'PRO' : 'Free'}
-                                            </span>
-                                        </div>
-                                    </div>
+                                            <div
+                                                className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold border transition-colors"
+                                                style={{
+                                                    color: THEMES[theme].primary,
+                                                    backgroundColor: `${THEMES[theme].primary}10`,
+                                                    borderColor: `${THEMES[theme].primary}20`
+                                                }}
+                                            >
+                                                {user.name?.[0] || user.email[0].toUpperCase()}
+                                            </div>
+                                            <div className="flex flex-col text-left hidden sm:flex">
+                                                <span className="text-[10px] font-black text-slate-800 leading-none">{user.name || user.email.split('@')[0]}</span>
+                                                <span className={`text-[8px] font-bold uppercase tracking-tight leading-none mt-0.5 ${user.subscriptionStatus === 'PREMIUM' ? 'text-amber-600' : 'text-slate-400'}`}>
+                                                    {user.subscriptionStatus === 'PREMIUM' ? 'PRO' : 'Free'}
+                                                </span>
+                                            </div>
+                                            <span className={`material-symbols-outlined text-sm text-slate-400 transition-transform duration-300 ${profileDropdownOpen ? 'rotate-180' : ''}`}>expand_more</span>
+                                        </button>
+
+                                        {/* Dropdown Menu */}
+                                        <AnimatePresence>
+                                            {profileDropdownOpen && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                    className="absolute right-0 top-full mt-2 w-56 bg-white border border-slate-100 rounded-2xl shadow-2xl z-[70] overflow-hidden p-2"
+                                                >
+                                                    <div className="px-4 py-3 border-b border-slate-50 mb-1">
+                                                        <p className="text-xs font-bold text-slate-900">{user.name || 'User'}</p>
+                                                        <p className="text-[10px] text-slate-500 truncate">{user.email}</p>
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <Link 
+                                                            href="/settings" 
+                                                            onClick={() => setProfileDropdownOpen(false)}
+                                                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-all"
+                                                        >
+                                                            <span className="material-symbols-outlined text-[20px]">manage_accounts</span>
+                                                            <span className="text-sm font-semibold">Profile Settings</span>
+                                                        </Link>
+                                                        <Link 
+                                                            href="/premium" 
+                                                            onClick={() => setProfileDropdownOpen(false)}
+                                                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-all"
+                                                        >
+                                                            <span className="material-symbols-outlined text-[20px]">workspace_premium</span>
+                                                            <span className="text-sm font-semibold">Subscription</span>
+                                                        </Link>
+                                                        <button 
+                                                            onClick={handleLogout}
+                                                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-500 hover:bg-red-50 transition-all"
+                                                        >
+                                                            <span className="material-symbols-outlined text-[20px]">logout</span>
+                                                            <span className="text-sm font-semibold">Sign Out</span>
+                                                        </button>
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </>
                                 ) : (
                                     <div className="hidden sm:flex items-center gap-2">
                                         <Link href="/login" className="text-xs font-bold text-slate-600 px-2 transition-colors nav-link-hover" style={{ '--hover-color': THEMES[theme].primary } as any}>Log In</Link>

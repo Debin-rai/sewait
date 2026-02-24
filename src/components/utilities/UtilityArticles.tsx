@@ -69,7 +69,7 @@ export default function UtilityArticles() {
                             <div>
                                 <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Variable Months</h4>
                                 <p className="text-sm text-slate-700 dark:text-slate-300">
-                                    Unlike the fixed days in Gregorian months, Nepali months can range from <strong>29 to 32 days</strong>. The exact length is determined yearly by astrological calculations of the sun's position.
+                                    Unlike the fixed days in Gregorian months, Nepali months can range from <strong>29 to 32 days</strong>. The exact length is determined yearly by astrological calculations of the sun&apos;s position.
                                 </p>
                             </div>
                         </div>

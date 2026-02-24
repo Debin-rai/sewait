@@ -1,69 +1,114 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FadeIn from "@/components/animations/FadeIn";
+import { useTheme, THEMES } from "@/context/ThemeContext";
 
 export default function PremiumPage() {
+    const { theme } = useTheme();
     const [transactionId, setTransactionId] = useState("");
+    const [selectedPlanId, setSelectedPlanId] = useState<string>("PRO");
     const [submitting, setSubmitting] = useState(false);
     const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [user, setUser] = useState<any>(null);
+
+    useEffect(() => {
+        fetch("/api/auth/me")
+            .then(res => res.json())
+            .then(data => {
+                if (data.authenticated) {
+                    setUser(data.user);
+                }
+            });
+    }, []);
 
     const plans = [
         {
-            name: "Basic",
-            price: "Free",
+            id: "FREE",
+            name: "Free Citizen",
+            price: "Rs. 0",
             period: "Forever",
             features: [
-                "Nepali Calendar & Events",
-                "Public Document Templates",
-                "Basic AI Chat Help",
-                "Community Access"
+                "3 AI Units per day",
+                "Nepali Calendar & Tithi",
+                "Standard Gov Guides",
+                "Basic AI Support",
+                "Ad-supported"
             ],
-            button: "Current Plan",
-            current: true,
+            button: "Default Plan",
+            current: !user || user.plan === "FREE",
         },
         {
-            name: "Premium Pro",
+            id: "PRO",
+            name: "Monthly Pro",
             price: "Rs. 400",
             period: "per month",
             features: [
-                "Full AI Document Generation",
-                "Draft Formal Letters (Nibedan)",
-                "Passport/License Assistance",
-                "Priority Support",
-                "No Ads"
+                "120 AI Units per month",
+                "Ad-free Experience",
+                "Document History & Saving",
+                "1 AI Revision per doc",
+                "Priority Assistance"
             ],
             button: "Upgrade to Pro",
             premium: true,
-            highlight: "Best Value"
+            highlight: "Most Popular",
+            current: user?.plan === "PRO",
         },
         {
-            name: "Yearly Saver",
+            id: "BUSINESS",
+            name: "Business / Yearly",
             price: "Rs. 3600",
             period: "per year",
             features: [
-                "All Pro Features",
-                "2 Months Free Savings",
-                "Premium Support Line",
-                "Early Access to Features",
-                "Dedicated Assistant"
+                "800 AI Units per year",
+                "Bulk Document Drafting",
+                "Priority Processing Queue",
+                "Dedicated Account Support",
+                "Premium Formatting"
             ],
-            button: "Get Yearly",
-            premium: true
+            button: "Get Business Plan",
+            premium: true,
+            current: user?.plan === "BUSINESS",
         }
     ];
 
     const handleVerify = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!transactionId || submitting) return;
+        if (!user) {
+            alert("Please sign in to upgrade your account.");
+            return;
+        }
 
         setSubmitting(true);
-        // This would call your manual verification API
-        setTimeout(() => {
+        setErrorMessage("");
+        
+        try {
+            const res = await fetch("/api/premium/verify", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    transactionId, 
+                    planRequested: selectedPlanId 
+                }),
+            });
+            const data = await res.json();
+            
+            if (res.ok) {
+                setStatus("success");
+                setTransactionId("");
+            } else {
+                setStatus("error");
+                setErrorMessage(data.error || "Failed to submit request.");
+            }
+        } catch (err) {
+            setStatus("error");
+            setErrorMessage("Connection error. Please try again.");
+        } finally {
             setSubmitting(false);
-            setStatus("success");
-            setTransactionId("");
-        }, 1500);
+        }
     };
 
     return (
@@ -71,53 +116,68 @@ export default function PremiumPage() {
             <div className="container mx-auto px-6">
                 <header className="text-center mb-16 max-w-2xl mx-auto">
                     <FadeIn>
-                        <h1 className="text-4xl md:text-5xl font-black text-primary mb-4">
-                            Go Pro. Get <span className="text-accent-amber">Serious.</span>
+                        <h1 className="text-4xl md:text-6xl font-black mb-4 tracking-tight" style={{ color: THEMES[theme].primary }}>
+                            Upgrade to <span className="text-accent-amber">Premium</span>
                         </h1>
-                        <p className="text-slate-600 font-medium">
-                            Starting at just Rs. 13 per day—less than a cup of tea ☕.
-                            Professional documents, faster results.
+                        <p className="text-slate-600 font-medium text-lg">
+                            Empowering your digital life with unlimited potential. 
+                            Choose the plan that fits your professional needs.
                         </p>
                     </FadeIn>
                 </header>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24 max-w-7xl mx-auto">
                     {plans.map((plan, i) => (
                         <FadeIn key={i} delay={i * 0.1}>
                             <div className={`
-                                h-full p-8 rounded-3xl border bg-white relative flex flex-col
-                                ${plan.premium ? 'border-primary shadow-xl shadow-primary/5' : 'border-slate-100 shadow-sm'}
-                            `}>
+                                h-full p-10 rounded-[2.5rem] border bg-white relative flex flex-col transition-all duration-500 hover:shadow-2xl
+                                ${plan.premium ? 'border-primary/20 shadow-xl shadow-primary/5' : 'border-slate-100 shadow-sm'}
+                                ${plan.current ? 'ring-4 ring-offset-4' : ''}
+                                ${!plan.current && selectedPlanId === plan.id ? 'ring-2 ring-primary ring-offset-2' : ''}
+                            `} style={{ 
+                                borderColor: plan.premium ? `${THEMES[theme].primary}30` : undefined,
+                                ringColor: THEMES[theme].primary
+                            } as any}>
                                 {plan.highlight && (
-                                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent-amber text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-tighter">
+                                    <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent-amber text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
                                         {plan.highlight}
                                     </span>
                                 )}
 
-                                <div className="mb-8">
-                                    <h3 className="text-lg font-bold text-slate-900 mb-2">{plan.name}</h3>
+                                <div className="mb-10">
+                                    <h3 className="text-xl font-black text-slate-900 mb-2">{plan.name}</h3>
                                     <div className="flex items-baseline gap-1">
-                                        <span className="text-3xl font-black text-primary">{plan.price}</span>
-                                        <span className="text-sm font-medium text-slate-400">{plan.period}</span>
+                                        <span className="text-4xl font-black" style={{ color: THEMES[theme].primary }}>{plan.price}</span>
+                                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{plan.period}</span>
                                     </div>
                                 </div>
 
-                                <ul className="space-y-4 mb-10 flex-1">
+                                <ul className="space-y-5 mb-12 flex-1">
                                     {plan.features.map((feat, j) => (
-                                        <li key={j} className="flex items-start gap-3 text-sm font-medium text-slate-600">
-                                            <span className="material-symbols-outlined text-green-500 text-lg">check_circle</span>
+                                        <li key={j} className="flex items-start gap-3 text-sm font-bold text-slate-600">
+                                            <span className="material-symbols-outlined text-green-500 text-xl">check_circle</span>
                                             {feat}
                                         </li>
                                     ))}
                                 </ul>
 
-                                <button className={`
-                                    w-full py-4 rounded-xl font-bold transition-all
-                                    ${plan.current
-                                        ? 'bg-slate-100 text-slate-400 cursor-default'
-                                        : 'bg-primary text-white hover:bg-slate-800 hover:shadow-lg active:scale-95 shadow-md shadow-primary/10'}
-                                `}>
-                                    {plan.button}
+                                <button 
+                                    onClick={() => !plan.current && setSelectedPlanId(plan.id)}
+                                    disabled={plan.current}
+                                    className={`
+                                        w-full py-5 rounded-2xl font-black uppercase text-xs tracking-widest transition-all
+                                        ${plan.current
+                                            ? 'bg-slate-100 text-slate-400 cursor-default'
+                                            : selectedPlanId === plan.id 
+                                                ? 'bg-primary text-white scale-[1.02] shadow-2xl' 
+                                                : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}
+                                    `}
+                                    style={{ 
+                                        backgroundColor: plan.current ? undefined : (selectedPlanId === plan.id ? THEMES[theme].primary : undefined),
+                                        boxShadow: (selectedPlanId === plan.id && !plan.current) ? `0 20px 25px -5px ${THEMES[theme].primary}20` : undefined
+                                    }}
+                                >
+                                    {plan.current ? 'Your Active Plan' : (selectedPlanId === plan.id ? 'Plan Selected' : 'Select Plan')}
                                 </button>
                             </div>
                         </FadeIn>
@@ -126,61 +186,91 @@ export default function PremiumPage() {
 
                 {/* Manual Payment Verification Section */}
                 <FadeIn delay={0.4}>
-                    <div className="max-w-4xl mx-auto bg-white rounded-[40px] shadow-2xl shadow-primary/5 border border-slate-100 overflow-hidden">
+                    <div id="verify-form" className="max-w-5xl mx-auto bg-white rounded-[3rem] shadow-2xl border border-slate-100 overflow-hidden">
                         <div className="grid grid-cols-1 md:grid-cols-2">
                             {/* QR Codes Side */}
-                            <div className="p-8 md:p-12 border-b md:border-b-0 md:border-r border-slate-100 bg-slate-50/50">
-                                <h2 className="text-xl font-bold text-primary mb-6">How to Renew / Upgrade</h2>
-                                <div className="space-y-8">
-                                    <div className="flex gap-4 items-center">
-                                        <div className="w-20 h-20 bg-white p-2 rounded-xl shadow-sm border border-slate-100 flex items-center justify-center font-bold text-primary">eSewa QR</div>
+                            <div className="p-10 md:p-16 border-b md:border-b-0 md:border-r border-slate-100 bg-slate-50/50">
+                                <h2 className="text-2xl font-black mb-8 tracking-tight" style={{ color: THEMES[theme].primary }}>How to Upgrade</h2>
+                                <div className="space-y-10">
+                                    <div className="flex gap-6 items-center">
+                                        <div className="size-24 bg-white p-3 rounded-2xl shadow-lg border border-slate-100 flex items-center justify-center font-black text-xs text-center" style={{ color: THEMES[theme].primary }}>
+                                            eSewa <br/> MERCHANT QR
+                                        </div>
                                         <div>
-                                            <p className="text-sm font-bold text-slate-800">1. Scan eSewa QR</p>
-                                            <p className="text-xs text-slate-500">Scan and pay the amount for your plan.</p>
+                                            <p className="text-base font-bold text-slate-800">1. Scan & Pay</p>
+                                            <p className="text-sm text-slate-500 font-medium">Use eSewa or Khalti to pay the exact plan amount to our official merchant account.</p>
                                         </div>
                                     </div>
-                                    <div className="flex gap-4 items-center">
-                                        <div className="w-20 h-20 bg-white p-2 rounded-xl shadow-sm border border-slate-100 flex items-center justify-center font-bold text-[#612d91]">Khalti QR</div>
+                                    <div className="flex gap-6 items-center">
+                                        <div className="size-24 bg-white p-3 rounded-2xl shadow-lg border border-slate-100 flex items-center justify-center font-black text-xs text-center text-[#612d91]">
+                                            Khalti <br/> MERCHANT QR
+                                        </div>
                                         <div>
-                                            <p className="text-sm font-bold text-slate-800">2. Scan Khalti QR</p>
-                                            <p className="text-xs text-slate-500">Alternatively use Khalti for the same.</p>
+                                            <p className="text-base font-bold text-slate-800">2. Submit Reference</p>
+                                            <p className="text-sm text-slate-500 font-medium">Copy the Transaction ID from your payment receipt and paste it here.</p>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="mt-10 p-4 bg-amber-50 rounded-2xl border border-amber-100">
-                                    <p className="text-xs text-amber-700 font-medium">
-                                        <strong>Note:</strong> Since we are focus on privacy and low-friction, we use manual verification. Your account will be upgraded within 2-4 hours of submitting the transaction ID.
+                                <div className="mt-12 p-6 bg-blue-50/50 rounded-2xl border border-blue-100/50">
+                                    <p className="text-xs text-blue-700 font-bold leading-relaxed">
+                                        <span className="material-symbols-outlined text-sm align-middle mr-1">info</span>
+                                        <strong>TRUST & PRIVACY:</strong> We use manual verification to keep our platform low-friction and secure. Your account will be upgraded within 2-4 hours.
                                     </p>
                                 </div>
                             </div>
 
                             {/* Verification Form */}
-                            <div className="p-8 md:p-12">
-                                <h2 className="text-xl font-bold text-primary mb-6">Verify Payment</h2>
-                                <form onSubmit={handleVerify} className="space-y-6">
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">Transaction ID</label>
+                            <div className="p-10 md:p-16 flex flex-col justify-center">
+                                <h2 className="text-2xl font-black mb-8 tracking-tight" style={{ color: THEMES[theme].primary }}>Verify Payment</h2>
+                                <form onSubmit={handleVerify} className="space-y-8">
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pl-1">Selected Plan</label>
+                                        <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 font-bold text-slate-700 flex justify-between items-center">
+                                            <span>{plans.find(p => p.id === selectedPlanId)?.name}</span>
+                                            <span style={{ color: THEMES[theme].primary }}>{plans.find(p => p.id === selectedPlanId)?.price}</span>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pl-1">Transaction / Reference ID</label>
                                         <input
                                             type="text"
                                             value={transactionId}
                                             onChange={(e) => setTransactionId(e.target.value)}
-                                            placeholder="Enter eSewa/Khalti Transaction ID"
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 text-sm font-medium focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                                            placeholder="e.g. 5X89AB22"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-5 text-base font-bold focus:ring-4 focus:ring-primary/5 outline-none transition-all"
+                                            style={{ "--ring-color": THEMES[theme].primary } as any}
                                             required
                                         />
                                     </div>
                                     <button
                                         type="submit"
                                         disabled={submitting}
-                                        className="w-full bg-accent-amber text-white py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-amber-600 transition-all shadow-lg shadow-amber-500/20 disabled:opacity-50"
+                                        className="w-full text-white py-5 rounded-2xl font-black uppercase text-xs tracking-widest transition-all shadow-xl active:scale-95 disabled:opacity-50"
+                                        style={{ 
+                                            backgroundColor: THEMES[theme].primary,
+                                            boxShadow: `0 20px 25px -5px ${THEMES[theme].primary}20`
+                                        }}
                                     >
-                                        {submitting ? "Verifying..." : "Submit for Verification"}
+                                        {submitting ? "Processing Request..." : "Verify & Upgrade Now"}
                                     </button>
 
                                     {status === "success" && (
-                                        <div className="flex items-center gap-3 p-4 bg-green-50 text-green-700 rounded-2xl border border-green-100">
-                                            <span className="material-symbols-outlined">check_circle</span>
-                                            <p className="text-xs font-bold font-display">Verification submitted! We'll upgrade your account shortly.</p>
+                                        <div className="flex items-center gap-4 p-6 bg-emerald-50 text-emerald-700 rounded-3xl border border-emerald-100 animate-in zoom-in-95">
+                                            <span className="material-symbols-outlined text-2xl">verified</span>
+                                            <div>
+                                                <p className="text-sm font-black uppercase tracking-tight">Request Submitted</p>
+                                                <p className="text-xs font-medium opacity-80">Our team is verifying your payment. You will receive a notification shortly.</p>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {status === "error" && (
+                                        <div className="flex items-center gap-4 p-6 bg-red-50 text-red-700 rounded-3xl border border-red-100 animate-in zoom-in-95">
+                                            <span className="material-symbols-outlined text-2xl">error</span>
+                                            <div>
+                                                <p className="text-sm font-black uppercase tracking-tight">Submission Error</p>
+                                                <p className="text-xs font-medium opacity-80">{errorMessage}</p>
+                                            </div>
                                         </div>
                                     )}
                                 </form>

@@ -17,13 +17,16 @@ export default function Hero() {
 
     useEffect(() => {
         setMounted(true);
+    }, []);
+
+    useEffect(() => {
         setNepaliDate(getCurrentNepaliDate());
         const timer = setInterval(() => setNepaliDate(getCurrentNepaliDate()), 60000);
         return () => clearInterval(timer);
     }, []);
 
     useEffect(() => {
-        if (theme !== prevTheme) {
+        if (mounted && theme !== prevTheme) {
             setIsAnimating(true);
             const timer = setTimeout(() => {
                 setPrevTheme(theme);
@@ -31,7 +34,7 @@ export default function Hero() {
             }, 600); // Matches CSS animation duration
             return () => clearTimeout(timer);
         }
-    }, [theme, prevTheme]);
+    }, [theme, prevTheme, mounted]);
 
     return (
         <section className="relative overflow-hidden">

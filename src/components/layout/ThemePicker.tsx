@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useTheme, THEMES, ThemeType } from "@/context/ThemeContext";
+import { useTheme, ThemeType } from "@/context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function ThemePicker() {

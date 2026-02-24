@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -12,11 +12,25 @@ const mukta = Mukta({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  themeColor: "#1a355b",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://sewait.up.railway.app"),
-  title: "SewaIT – Nepali Calendar, Gold Rates & Official Guides",
-  description: "SewaIT Founder Debin C. Rai: Your all-in-one Nepali utility hub. Features include Live Nepali Calendar with Tithi, Daily Gold/Silver rates, accurate Weather updates, Sewa AI assistant, and comprehensive official Government Service Guides.",
-  keywords: ["SewaIT", "Debin C. Rai", "SewaIT Founder", "Nepali Calendar", "Sarkari Guides", "Gold Price Nepal", "today's date", "tithi", "Nepal government services", "आजको मिती", "सुन चाँदी मूल्य", "Sewa AI", "Nepal AI"],
+  title: {
+    default: "SewaIT – Nepali Calendar, Official Guides & Digital Utilities",
+    template: "%s | SewaIT"
+  },
+  description: "SewaIT by Debin C. Rai: The ultimate Digital Nepal hub. Featuring a live Nepali Calendar with Tithi, government service guides (Passport, License, PAN), weather updates, and the Sewa AI assistant.",
+  keywords: [
+    "SewaIT", "Debin C. Rai", "SewaIT Founder", "Nepali Calendar 2081", "Nepali Patro", 
+    "Sarkari Guides", "Nepal government services", "Passport Nepal", "Driving License Nepal", 
+    "PAN registration Nepal", "आजको मिती", "नेपाली पात्रो", "Sewa AI", "Sarkari AI", "Nepal AI Assistant"
+  ],
   authors: [{ name: "Debin C. Rai", url: "https://sewait.up.railway.app" }],
   creator: "Debin C. Rai",
   publisher: "SewaIT",
@@ -32,8 +46,8 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: "SewaIT – Nepali Calendar, Gold Rates & Official Guides",
-    description: "SewaIT Founder Debin C. Rai: Your all-in-one Nepali utility hub. Features include Live Nepali Calendar with Tithi, Daily Gold/Silver rates, accurate Weather updates, Sewa AI assistant, and comprehensive official Government Service Guides.",
+    title: "SewaIT – Nepali Calendar & Official Guides",
+    description: "SewaIT by Debin C. Rai: Access Nepali Calendar, Tithi, Government Service Guides, and AI Assistance in one unified platform.",
     url: "https://sewait.up.railway.app",
     siteName: "SewaIT",
     locale: "ne_NP",
@@ -42,15 +56,15 @@ export const metadata: Metadata = {
         url: "/web-app-manifest-512x512.png",
         width: 512,
         height: 512,
-        alt: "SewaIT Logo",
+        alt: "SewaIT - Simplifying Digital Nepal",
       },
     ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SewaIT – Nepali Calendar, Gold Rates & Official Guides",
-    description: "SewaIT Founder Debin C. Rai: Your all-in-one Nepali utility hub. Features include Live Nepali Calendar with Tithi, Daily Gold/Silver rates, accurate Weather updates, Sewa AI assistant, and comprehensive official Government Service Guides.",
+    title: "SewaIT – Nepali Calendar & Official Guides",
+    description: "Your all-in-one Nepali utility hub. Live Calendar, Government Guides, and Sewa AI Assistant.",
     creator: "@SewaIT",
     images: ["/web-app-manifest-512x512.png"],
   },
@@ -73,12 +87,6 @@ export const metadata: Metadata = {
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
-    },
-  },
-  verification: {
-    google: "dp_oL0KNsg0OGz0oNnciIxqsjzUw_QsFVzmTywxd8NU",
-    other: {
-      "p:domain_verify": ["a6c38a52a848545cb91e45f102f55d46"],
     },
   },
 };
@@ -113,6 +121,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <meta name="google-site-verification" content="dp_oL0KNsg0OGz0oNnciIxqsjzUw_QsFVzmTywxd8NU" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
+        {/* Canonical Link */}
+        <link rel="canonical" href="https://sewait.up.railway.app" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -161,34 +171,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                   "@type": "Service",
                   "name": "Nepali Calendar",
                   "url": "https://sewait.up.railway.app/calendar"
-                },
-                {
-                  "@type": "Service",
-                  "name": "Gold & Silver Daily",
-                  "url": "https://sewait.up.railway.app/gold-silver"
                 }
               ]
-            })
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Person",
-              "name": "Debin C. Rai",
-              "url": "https://sewait.up.railway.app",
-              "jobTitle": "SewaIT Founder",
-              "sameAs": [
-                "https://github.com/Debin-rai",
-                "https://twitter.com/SewaIT",
-                "https://facebook.com/SewaIT"
-              ],
-              "worksFor": {
-                "@type": "Organization",
-                "name": "SewaIT"
-              }
             })
           }}
         />
@@ -198,7 +182,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       >
         <SmoothScroll>
           <ClientLayout>
+            <Header />
             {children}
+            <Footer />
             <AnalyticsTracker />
             <Chatbot id={chatbotId} />
             <PwaPrompt />

@@ -1,59 +1,71 @@
 "use client";
 
-import React from "react";
-
-const users = [
-    {
-        id: "#USR-8821",
-        name: "Rohan Adhikari",
-        email: "rohan@sewait.com",
-        role: "Admin",
-        status: "Active",
-        lastLogin: "Oct 24, 2023 · 09:15 AM",
-        avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuDLu6SnQ6Xj045RYGG0iYG1DF_040G5N1KL7Q7L5fWh6L4Mcvy5fvr5MX0U4M0gjCJG2zbQl27A_tVntTVe77WTWc8Yr5ruBBH7I-MvbMG41XnHaEnyRH7HMU7VvxwulkRDEaqMp3WhNURTJ3USLImOObeSaoOHiH-YDpSdwPRLpUrQ850SF5wssnoj-UW0NfstmCV4t_fKixB2o_0ZDqXYM8GN-yRC7Et5AYKWPu1w14Ihw245I1bIj1hypb0WKtehzxK_8S5bzcI"
-    },
-    {
-        id: "#USR-9102",
-        name: "Sita Sharma",
-        email: "sita@sewait.com",
-        role: "Moderator",
-        status: "Active",
-        lastLogin: "Oct 23, 2023 · 04:30 PM",
-        avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuB_aVyDrxVaYtzsQ9Qyb1eR5Yi-mldozn_9alXdTvvWetSOOQy1FZ_k6sy4ZqZGi3iDbnTEnvd-KSMLQub0Z6a3QAxAftQ-_-97aclEhPUsGc6gf0BBlsZERJberjFtWDYb2dcfRexHp-dXNeiAoGOUS-Cs4deIQgKwXUj7wy2VJUujBYCIeK2es3P8fUqW1o0Mg178Mi1kd89fsAkt__Lv4YgJSm1HNOdhiV8U-4Haarbts_RzmBdN2X6KYW9rp9OyrcPOdxY7I_g"
-    },
-    {
-        id: "#USR-7732",
-        name: "Ramesh KC",
-        email: "ramesh@sewait.com",
-        role: "Moderator",
-        status: "Inactive",
-        lastLogin: "Sep 12, 2023 · 11:20 AM",
-        avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuDk3GPnushz91f-KSSuIepJ6BEmfhX2ZG5wvbqlK2KaXxgrEkD-gUfCDFvH27ETJiBZxxXg3CG74K4JE5hNR-rARrOBDz3VHXqbOCmuEWtDn6UVFfZX5Ox1cK7rxGsSxrx1F0rsCstD6r6SnIrE8vZa6JGlMH7qKjG0AMUdyj3WnodWWW4YTU8P8Ouw94DzDVuqPPYLm0O7v3bWgoJBwxSjhisUkE9_ly-exwROSTCYAZL6afVFqI0Zwn-IOHPRFOBwGoYYnPrTiY0"
-    },
-    {
-        id: "#USR-6621",
-        name: "Binita Rai",
-        email: "binita@sewait.com",
-        role: "Admin",
-        status: "Active",
-        lastLogin: "Oct 24, 2023 · 08:45 AM",
-        avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuCRYqUXZrsuEJasdAIHkhqsnsdjFk4ka13fZ94GkF2-0fFOnwWTU5iFAPc6g5vGR35KVLZaome6mPIihvnk2bzGEe3ptKM8Rh8jr5EF4QUda1eWelbIZb-ebsLPNvrhK7419kxSizyIU89S7I-b8oQfXhHHtvHYu9kkqPU5HK3OenJtF_GT_U4KHEiqNoB6NOJSNrGrzAIE_GKxZonDVF4l41tphme8EgoJD0luf5JY4XCmuz4r6k0V4wpMLrnRNAZ1-oHAIw-17Q8"
-    }
-];
+import React, { useState, useEffect } from "react";
+import { useTheme, THEMES } from "@/context/ThemeContext";
 
 export default function UserManagementPage() {
+    const { theme } = useTheme();
+    const [users, setUsers] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [updating, setUpdating] = useState<string | null>(null);
+
+    const fetchUsers = async () => {
+        try {
+            const res = await fetch("/api/sewait-portal-99/users");
+            const data = await res.json();
+            if (Array.isArray(data)) setUsers(data);
+        } catch (error) {
+            console.error("Failed to fetch users", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchUsers();
+    }, []);
+
+    const handleUpdateUser = async (userId: string, updates: any) => {
+        setUpdating(userId);
+        try {
+            const res = await fetch("/api/sewait-portal-99/users", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId, ...updates }),
+            });
+            if (res.ok) {
+                await fetchUsers();
+            } else {
+                alert("Failed to update user");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error updating user");
+        } finally {
+            setUpdating(null);
+        }
+    };
+
+    const stats = {
+        total: users.length,
+        pro: users.filter(u => u.plan === 'PRO').length,
+        business: users.filter(u => u.plan === 'BUSINESS').length,
+        active: users.filter(u => u.status === 'ACTIVE').length,
+    };
+
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
             {/* Page Action Bar */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Admin User Management</h2>
-                    <p className="text-slate-500 text-sm mt-1">Manage administrative roles and system access for your team.</p>
+                    <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Intelligence User Management</h2>
+                    <p className="text-slate-500 text-sm mt-1">Manage user plans, AI unit limits, and account lifecycle.</p>
                 </div>
-                <button className="inline-flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg font-semibold text-sm hover:bg-primary/90 transition-all shadow-lg shadow-primary/20">
-                    <span className="material-symbols-outlined text-[20px]">person_add</span>
-                    Add New User
-                </button>
+                <div className="flex items-center gap-3">
+                    <button onClick={fetchUsers} className="p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-500 hover:text-primary transition-all">
+                        <span className={`material-symbols-outlined ${loading ? 'animate-spin' : ''}`}>refresh</span>
+                    </button>
+                </div>
             </div>
 
             {/* Table Card */}
@@ -62,46 +74,95 @@ export default function UserManagementPage() {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
-                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">User Details</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Role</th>
+                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">User Identity</th>
+                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Plan & Subscription</th>
+                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">AI Units (Used/Limit)</th>
                                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Last Login</th>
                                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
-                            {users.map((user) => (
+                            {loading ? (
+                                <tr>
+                                    <td colSpan={5} className="px-6 py-20 text-center text-slate-400 font-bold uppercase tracking-widest animate-pulse">
+                                        Synchronizing user registry...
+                                    </td>
+                                </tr>
+                            ) : users.length === 0 ? (
+                                <tr>
+                                    <td colSpan={5} className="px-6 py-20 text-center text-slate-400 italic">
+                                        No users found in the system.
+                                    </td>
+                                </tr>
+                            ) : users.map((user) => (
                                 <tr key={user.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group text-slate-900 dark:text-slate-100">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-4">
-                                            <img className="size-10 rounded-full object-cover border-2 border-slate-200 dark:border-slate-700" src={user.avatar} alt={user.name} />
+                                            <div className="size-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold border border-primary/10">
+                                                {user.name?.[0] || user.email[0].toUpperCase()}
+                                            </div>
                                             <div>
-                                                <p className="text-sm font-bold">{user.name}</p>
-                                                <p className="text-xs text-slate-500">{user.email}</p>
+                                                <p className="text-sm font-bold">{user.name || 'Anonymous'}</p>
+                                                <p className="text-[10px] text-slate-500 font-medium uppercase tracking-tighter">{user.email}</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className={`px-3 py-1 ${user.role === 'Admin' ? 'bg-primary/10 text-primary' : 'bg-amber-100 text-amber-700'} text-xs font-bold rounded-full uppercase tracking-tighter`}>
-                                            {user.role}
-                                        </span>
+                                        <select 
+                                            value={user.plan}
+                                            onChange={(e) => handleUpdateUser(user.id, { plan: e.target.value })}
+                                            disabled={updating === user.id}
+                                            className={`bg-transparent text-xs font-bold px-3 py-1.5 rounded-lg border focus:ring-2 focus:ring-primary/20 outline-none transition-all ${
+                                                user.plan === 'PRO' ? 'border-amber-200 text-amber-700 bg-amber-50' : 
+                                                user.plan === 'BUSINESS' ? 'border-indigo-200 text-indigo-700 bg-indigo-50' : 
+                                                'border-slate-200 text-slate-600'
+                                            }`}
+                                        >
+                                            <option value="FREE">FREE CITIZEN</option>
+                                            <option value="PRO">MONTHLY PRO</option>
+                                            <option value="BUSINESS">BUSINESS/YEARLY</option>
+                                        </select>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <div className="flex items-center gap-2">
-                                            <span className={`size-2 rounded-full ${user.status === 'Active' ? 'bg-green-500' : 'bg-slate-300'}`}></span>
-                                            <span className={`text-sm font-medium ${user.status === 'Active' ? 'text-green-700' : 'text-slate-500'}`}>{user.status}</span>
+                                        <div className="flex flex-col gap-1.5">
+                                            <div className="flex justify-between items-center w-32">
+                                                <span className="text-[10px] font-black text-slate-400">{user.aiUnitsUsedThisMonth} / {user.aiUnitsLimit}</span>
+                                                <span className="text-[10px] font-bold text-primary">{Math.round((user.aiUnitsUsedThisMonth / user.aiUnitsLimit) * 100)}%</span>
+                                            </div>
+                                            <div className="w-32 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                                <div 
+                                                    className="h-full bg-primary transition-all duration-500" 
+                                                    style={{ width: `${(user.aiUnitsUsedThisMonth / user.aiUnitsLimit) * 100}%` }}
+                                                />
+                                            </div>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <p className="text-sm text-slate-500">{user.lastLogin}</p>
+                                        <button 
+                                            onClick={() => handleUpdateUser(user.id, { status: user.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE' })}
+                                            disabled={updating === user.id}
+                                            className={`flex items-center gap-2 px-3 py-1 rounded-full transition-all ${
+                                                user.status === 'ACTIVE' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'
+                                            }`}
+                                        >
+                                            <span className={`size-1.5 rounded-full ${user.status === 'ACTIVE' ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`}></span>
+                                            <span className="text-[10px] font-black uppercase tracking-widest">{user.status}</span>
+                                        </button>
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <button className="p-2 text-slate-400 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg" title="Edit User">
-                                                <span className="material-symbols-outlined text-[20px]">edit</span>
+                                            <button 
+                                                onClick={() => {
+                                                    const limit = prompt("Enter new AI Unit limit:", user.aiUnitsLimit);
+                                                    if (limit !== null) handleUpdateUser(user.id, { aiUnitsLimit: limit });
+                                                }}
+                                                className="p-2 text-slate-400 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg" 
+                                                title="Adjust Limits"
+                                            >
+                                                <span className="material-symbols-outlined text-[20px]">tune</span>
                                             </button>
-                                            <button className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg" title="Remove User">
-                                                <span className="material-symbols-outlined text-[20px]">delete</span>
+                                            <button className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg" title="Delete Account">
+                                                <span className="material-symbols-outlined text-[20px]">delete_forever</span>
                                             </button>
                                         </div>
                                     </td>
@@ -110,50 +171,44 @@ export default function UserManagementPage() {
                         </tbody>
                     </table>
                 </div>
-                {/* Pagination */}
-                <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50/30 dark:bg-slate-800/20">
-                    <p className="text-sm text-slate-500">Showing <span className="font-bold text-slate-900 dark:text-white">1</span> to <span className="font-bold text-slate-900 dark:text-white">4</span> of <span className="font-bold text-slate-900 dark:text-white">12</span> entries</p>
-                    <div className="flex items-center gap-1">
-                        <button className="size-9 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30" disabled>
-                            <span className="material-symbols-outlined">chevron_left</span>
-                        </button>
-                        <button className="size-9 flex items-center justify-center rounded-lg bg-primary text-white text-sm font-bold">1</button>
-                        <button className="size-9 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-medium text-slate-900 dark:text-white">2</button>
-                        <button className="size-9 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-medium text-slate-900 dark:text-white">3</button>
-                        <button className="size-9 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
-                            <span className="material-symbols-outlined">chevron_right</span>
-                        </button>
-                    </div>
-                </div>
             </div>
 
             {/* Statistics Bar */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
                     <div className="size-12 rounded-lg bg-primary/5 text-primary flex items-center justify-center">
-                        <span className="material-symbols-outlined">supervisor_account</span>
+                        <span className="material-symbols-outlined">group</span>
                     </div>
                     <div>
-                        <p className="text-xs font-bold text-slate-500 uppercase tracking-wider leading-none">Total Admins</p>
-                        <p className="text-2xl font-black text-slate-900 dark:text-white mt-1">12</p>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Total Registry</p>
+                        <p className="text-2xl font-black text-slate-900 dark:text-white mt-1">{stats.total}</p>
                     </div>
                 </div>
                 <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
                     <div className="size-12 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 flex items-center justify-center">
-                        <span className="material-symbols-outlined">how_to_reg</span>
+                        <span className="material-symbols-outlined">verified_user</span>
                     </div>
                     <div>
-                        <p className="text-xs font-bold text-slate-500 uppercase tracking-wider leading-none">Active Now</p>
-                        <p className="text-2xl font-black text-slate-900 dark:text-white mt-1">8</p>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Verified Active</p>
+                        <p className="text-2xl font-black text-slate-900 dark:text-white mt-1">{stats.active}</p>
                     </div>
                 </div>
-                <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
+                <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4 border-l-4 border-l-amber-400">
                     <div className="size-12 rounded-lg bg-amber-50 dark:bg-amber-900/20 text-amber-600 flex items-center justify-center">
-                        <span className="material-symbols-outlined">person_pin</span>
+                        <span className="material-symbols-outlined">workspace_premium</span>
                     </div>
                     <div>
-                        <p className="text-xs font-bold text-slate-500 uppercase tracking-wider leading-none">Moderators</p>
-                        <p className="text-2xl font-black text-slate-900 dark:text-white mt-1">4</p>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Pro Subscribers</p>
+                        <p className="text-2xl font-black text-slate-900 dark:text-white mt-1">{stats.pro}</p>
+                    </div>
+                </div>
+                <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4 border-l-4 border-l-indigo-400">
+                    <div className="size-12 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 flex items-center justify-center">
+                        <span className="material-symbols-outlined">business_center</span>
+                    </div>
+                    <div>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Business Users</p>
+                        <p className="text-2xl font-black text-slate-900 dark:text-white mt-1">{stats.business}</p>
                     </div>
                 </div>
             </div>

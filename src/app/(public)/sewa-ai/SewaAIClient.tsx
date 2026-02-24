@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import FadeIn from "@/components/animations/FadeIn";
 import StreamingText from "@/components/animations/StreamingText";
 import Link from "next/link";
-import { Menu, X, Plus, History, ArrowLeft, Send, Mic, Paperclip, Share2, Bot, User } from "lucide-react";
+import { Menu, X, Plus, History, ArrowLeft, Send, Mic, Paperclip, Share2, Bot, User, FileText, Calendar, Cloud } from "lucide-react";
 
 interface Message {
     role: "user" | "assistant";
@@ -42,7 +42,7 @@ export default function SewaAIClient() {
             setMessages([
                 {
                     role: "assistant",
-                    content: "Namaste! I'm Sewa AI, your personal guide to everything Nepali. I can help you with gold rates, public service guides, weather updates, or even explain complex government procedures.\n\nHow can I assist you today?",
+                    content: "Namaste! I'm Sewa AI, your personal guide to everything Nepali. I can help you with government service guides, weather updates, or even explain complex government procedures.\n\nHow can I assist you today?",
                     timestamp: new Date(),
                     isNew: true
                 },
@@ -93,6 +93,27 @@ export default function SewaAIClient() {
             });
 
             const data = await res.json();
+            
+            if (res.status === 401) {
+                setMessages((prev) => [...prev, {
+                    role: "assistant",
+                    content: "Please sign in to use Sewa AI. Free accounts get 3 units/day.",
+                    timestamp: new Date(),
+                    isNew: true
+                }]);
+                return;
+            }
+
+            if (res.status === 403) {
+                setMessages((prev) => [...prev, {
+                    role: "assistant",
+                    content: data.error || "Daily limit reached.",
+                    timestamp: new Date(),
+                    isNew: true
+                }]);
+                return;
+            }
+
             if (data.error) throw new Error(data.error);
 
             if (data.sessionId && !sessionId) {
@@ -148,7 +169,7 @@ export default function SewaAIClient() {
     const clearChat = () => {
         const initialMessage: Message = {
             role: "assistant",
-            content: "Namaste! I'm Sewa AI, your personal guide to everything Nepali. I can help you with gold rates, public service guides, weather updates, or even explain complex government procedures.\n\nHow can I assist you today?",
+            content: "Namaste! I'm Sewa AI, your personal guide to everything Nepali. I can help you with government service guides, weather updates, or even explain complex government procedures.\n\nHow can I assist you today?",
             timestamp: new Date(),
             isNew: true
         };
@@ -159,10 +180,9 @@ export default function SewaAIClient() {
     };
 
     const quickActions = [
-        { label: "Check Gold Rates", icon: <History className="size-4" /> },
-        { label: "Today's Tithi", icon: <Bot className="size-4" /> },
-        { label: "Passport Guide", icon: <Plus className="size-4" /> },
-        { label: "Weather Update", icon: <Send className="size-4" /> },
+        { label: "Passport Guide", icon: <FileText className="size-4" /> },
+        { label: "Today's Tithi", icon: <Calendar className="size-4" /> },
+        { label: "Weather Update", icon: <Cloud className="size-4" /> },
     ];
 
     return (

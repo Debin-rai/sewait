@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 export default function AreaConverter() {
     // Nepali inputs
@@ -8,10 +8,6 @@ export default function AreaConverter() {
     const [aana, setAana] = useState<number | "">("");
     const [paisa, setPaisa] = useState<number | "">("");
     const [daam, setDaam] = useState<number | "">("");
-
-    // Metric/Imperial inputs
-    const [sqFt, setSqFt] = useState<number | "">("");
-    const [sqM, setSqM] = useState<number | "">("");
 
     // Constants
     const SQ_FT_PER_ROPANI = 5476;
@@ -25,27 +21,10 @@ export default function AreaConverter() {
 
     const SQ_METER_FACTOR = 0.092903;
 
-    // Convert from Nepali units to others
-    const calculateFromNepali = (r: number, a: number, p: number, d: number) => {
-        const totalSqFt = (r * SQ_FT_PER_ROPANI) + (a * SQ_FT_PER_AANA) + (p * SQ_FT_PER_PAISA) + (d * SQ_FT_PER_DAAM);
-        setSqFt(parseFloat(totalSqFt.toFixed(2)));
-        setSqM(parseFloat((totalSqFt * SQ_METER_FACTOR).toFixed(2)));
-    };
-
-    // Auto-calculate on Nepali Input Change
-    useEffect(() => {
-        if (ropani !== "" || aana !== "" || paisa !== "" || daam !== "") {
-            calculateFromNepali(
-                Number(ropani) || 0,
-                Number(aana) || 0,
-                Number(paisa) || 0,
-                Number(daam) || 0
-            );
-        } else {
-            setSqFt("");
-            setSqM("");
-        }
-    }, [ropani, aana, paisa, daam]);
+    // Derived conversion
+    const totalSqFtRaw = (Number(ropani) * SQ_FT_PER_ROPANI) + (Number(aana) * SQ_FT_PER_AANA) + (Number(paisa) * SQ_FT_PER_PAISA) + (Number(daam) * SQ_FT_PER_DAAM);
+    const sqFt = totalSqFtRaw > 0 ? parseFloat(totalSqFtRaw.toFixed(2)) : 0;
+    const sqM = totalSqFtRaw > 0 ? parseFloat((totalSqFtRaw * SQ_METER_FACTOR).toFixed(2)) : 0;
 
     return (
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
@@ -114,13 +93,13 @@ export default function AreaConverter() {
                     <div>
                         <p className="text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">Equivalent Square Feet</p>
                         <p className="text-2xl font-black text-slate-900 dark:text-white">
-                            {sqFt !== "" ? sqFt.toLocaleString() : "0"} <span className="text-sm font-medium text-slate-400">sq.ft</span>
+                            {sqFt !== 0 ? sqFt.toLocaleString() : "0"} <span className="text-sm font-medium text-slate-400">sq.ft</span>
                         </p>
                     </div>
                     <div>
                         <p className="text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">Equivalent Square Meters</p>
                         <p className="text-2xl font-black text-slate-900 dark:text-white">
-                            {sqM !== "" ? sqM.toLocaleString() : "0"} <span className="text-sm font-medium text-slate-400">sq.m</span>
+                            {sqM !== 0 ? sqM.toLocaleString() : "0"} <span className="text-sm font-medium text-slate-400">sq.m</span>
                         </p>
                     </div>
                 </div>

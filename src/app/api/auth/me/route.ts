@@ -7,7 +7,7 @@ export async function GET() {
         const session = await getSession();
 
         if (!session || !session.user) {
-            return NextResponse.json({ authenticated: false }, { status: 401 });
+            return NextResponse.json({ authenticated: false });
         }
 
         const user = await prisma.user.findUnique({
@@ -17,13 +17,19 @@ export async function GET() {
                 email: true,
                 name: true,
                 role: true,
+                plan: true,
                 subscriptionStatus: true,
                 subscriptionExpiry: true,
+                aiUnitsUsedThisMonth: true,
+                aiUnitsLimit: true,
+                dailyUnitsUsed: true,
+                lastRequestAt: true,
+                lastResetDate: true,
             }
         });
 
         if (!user) {
-            return NextResponse.json({ authenticated: false }, { status: 401 });
+            return NextResponse.json({ authenticated: false });
         }
 
         return NextResponse.json({ authenticated: true, user });

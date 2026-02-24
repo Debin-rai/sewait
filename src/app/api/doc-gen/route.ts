@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { checkAndIncrementAIUnits } from "@/lib/aiUnits";
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
@@ -20,26 +21,13 @@ export async function POST(request: Request) {
 
         const { type, details } = await request.json();
 
-        // Fetch user from DB to verify subscription
-        const user = await prisma.user.findUnique({
-            where: { id: session.user.id }
-        });
-
-        if (!user) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 });
-        }
-
-        // --- Subscription Gating ---
-        if (user.subscriptionStatus !== "PREMIUM") {
-            const docCount = await prisma.savedDocument.count({
-                where: { userId: user.id }
-            });
-            if (docCount >= 1) {
-                return NextResponse.json({
-                    error: "Limit reached",
-                    message: "Free users can only generate 1 document. Please upgrade to Premium for unlimited access."
-                }, { status: 403 });
-            }
+        // 1. Usage Gating
+        const usage = await checkAndIncrementAIUnits(session.user.id);
+        if (!usage.allowed) {
+            return NextResponse.json({ 
+                error: "Limit reached", 
+                message: usage.error 
+            }, { status: 403 });
         }
 
         const systemPrompt = `

@@ -13,11 +13,16 @@ export default function WidgetsGrid() {
 
     useEffect(() => {
         setMounted(true);
-        fetch("/api/public/config")
-            .then(res => res.json())
-            .then(data => setConfig(data))
-            .catch(err => console.error("Config fetch failed", err));
     }, []);
+
+    useEffect(() => {
+        if (mounted) {
+            fetch("/api/public/config")
+                .then(res => res.json())
+                .then(data => setConfig(data))
+                .catch(err => console.error("Config fetch failed", err));
+        }
+    }, [mounted]);
 
     const isVisible = (key: string) => !mounted || config[key] !== 'false';
 
@@ -110,7 +115,7 @@ export default function WidgetsGrid() {
 
                         <div className="mb-6">
                             <p className="text-xs text-slate-500 font-medium leading-relaxed">
-                                Professional Nepali document assistant. I'll help you write:
+                                Professional Nepali document assistant. I&apos;ll help you write:
                             </p>
                         </div>
 

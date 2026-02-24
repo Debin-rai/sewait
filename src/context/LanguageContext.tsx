@@ -9,7 +9,6 @@ type Translations = {
         home: string;
         calendar: string;
         weather: string;
-        rates: string;
         sewaAi: string;
         services: string;
         searchPlaceholder: string;
@@ -38,12 +37,6 @@ type Translations = {
             upcomingFestival: string;
             festivalName: string;
             festivalDays: string;
-        };
-        market: {
-            title: string;
-            gold24: string;
-            silver: string;
-            source: string;
         };
         sewaAi: {
             title: string;
@@ -97,7 +90,6 @@ const translations: Record<Language, Translations> = {
             home: "Home",
             calendar: "Calendar",
             weather: "Weather",
-            rates: "Gold & Silver",
             sewaAi: "Sewa AI",
             services: "Gov. Services",
             searchPlaceholder: "Search government services or info...",
@@ -131,12 +123,6 @@ const translations: Record<Language, Translations> = {
                 upcomingFestival: "Upcoming Festival",
                 festivalName: "Dashain (Ghatasthapana)",
                 festivalDays: "5 days left • Ashoj 28",
-            },
-            market: {
-                title: "Market Price",
-                gold24: "Gold (24 Carat) / Tola",
-                silver: "Silver / Tola",
-                source: "Source: Nepal Gold & Silver Merchants Federation",
             },
             sewaAi: {
                 title: "Sewa AI Sumamry",
@@ -216,7 +202,6 @@ const translations: Record<Language, Translations> = {
             home: "गृहपृष्ठ",
             calendar: "पात्रो",
             weather: "मौसम",
-            rates: "सुनचाँदी",
             sewaAi: "सेवा AI",
             services: "सरकारी सेवा",
             searchPlaceholder: "सरकारी सेवा वा जानकारी खोज्नुहोस्...",
@@ -250,12 +235,6 @@ const translations: Record<Language, Translations> = {
                 upcomingFestival: "आगामी पर्व",
                 festivalName: "दशैं (घटस्थापना)",
                 festivalDays: "५ दिन बाँकी • असोज २८",
-            },
-            market: {
-                title: "बजार भाउ",
-                gold24: "सुन (२४ क्यारेट) / तोला",
-                silver: "चाँदी / तोला",
-                source: "स्रोत: नेपाल सुनचाँदी व्यवसायी महासंघ",
             },
             sewaAi: {
                 title: "सेवा AI सारांश",

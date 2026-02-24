@@ -20,12 +20,23 @@ model User {
   failedAttempts     Int           @default(0)
   lockoutUntil       DateTime?
   lastLogin          DateTime?
+  
+  // Subscription & AI Units
+  plan               String        @default("FREE") // FREE, PRO, BUSINESS
   subscriptionStatus String        @default("FREE") // FREE, PREMIUM, EXPIRED
   subscriptionExpiry DateTime?
+  
+  aiUnitsUsedThisMonth Int         @default(0)
+  aiUnitsLimit         Int         @default(3)
+  dailyUnitsUsed       Int         @default(0)
+  lastRequestAt        DateTime?
+  lastResetDate        DateTime      @default(now())
+
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
   auditLogs          AuditLog[]
   savedDocuments     SavedDocument[]
+  paymentVerifications PaymentVerification[]
 }
 
 model SystemConfig {
@@ -94,9 +105,9 @@ model Guide {
 
 model SiteSetting {
   id        String   @id @default(cuid())
-  key       String   @unique // e.g., 'FOREX_USD_NPR'
-  value     String           // e.g., '133.50'
-  group     String   @default("GENERAL") // e.g. 'FOREX', 'UTILITIES'
+  key       String   @unique // e.g., 'SITE_TITLE'
+  value     String           // e.g., 'SewaIT'
+  group     String   @default("GENERAL") // e.g. 'SOCIAL', 'UTILITIES'
   updatedBy String?
   updatedAt DateTime @updatedAt
 }
@@ -196,6 +207,19 @@ model SavedDocument {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model PaymentVerification {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactionId String   @unique
+  planRequested String   // PRO, BUSINESS
+  status        String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@index([userId])
 }

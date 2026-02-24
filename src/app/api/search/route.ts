@@ -22,8 +22,8 @@ export async function GET(request: Request) {
             },
             {
                 id: 'feat-calendar',
-                title: 'Nepali Calendar 2081',
-                description: 'Check today\'s date, tithi, and festivals.',
+                title: 'Nepali Calendar 2082',
+                description: 'Check today&apos;s date, tithi, and festivals.',
                 url: '/calendar',
                 category: 'Feature',
                 icon: 'calendar_month'

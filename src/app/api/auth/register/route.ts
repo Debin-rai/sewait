@@ -37,7 +37,9 @@ export async function POST(request: Request) {
                 name: name || null,
                 role: "USER",
                 status: "ACTIVE",
+                plan: "FREE",
                 subscriptionStatus: "FREE",
+                aiUnitsLimit: 3,
             },
         });
 
