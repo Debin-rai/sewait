@@ -12,7 +12,9 @@ datasource db {
 model User {
   id             String      @id @default(cuid())
   email          String      @unique
-  password       String
+  password       String?     // Optional for Social logins
+  firebaseUid    String?     @unique // Optional if not a Firebase user
+  provider       String      @default("CREDENTIALS") // GOOGLE, GITHUB, CREDENTIALS
   name           String?
   role           String      @default("USER") // SUPER_ADMIN, MODERATOR, USER
   status         String      @default("ACTIVE") // ACTIVE, INACTIVE

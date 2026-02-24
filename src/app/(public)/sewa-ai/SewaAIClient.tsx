@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import FadeIn from "@/components/animations/FadeIn";
 import StreamingText from "@/components/animations/StreamingText";
 import Link from "next/link";
-import { Menu, X, Plus, History, ArrowLeft, Send, Mic, Paperclip, Share2, Bot, User, FileText, Calendar, Cloud } from "lucide-react";
+import { Menu, X, Plus, History, ArrowLeft, Send, Mic, Paperclip, Share2, Bot, User, FileText, Calendar, Cloud, PenTool, Layout } from "lucide-react";
+import DocumentGenerator from "@/components/docs/DocumentGenerator";
 
 interface Message {
     role: "user" | "assistant";
@@ -20,6 +22,9 @@ export default function SewaAIClient() {
     const [sessionId, setSessionId] = useState<string | null>(null);
     const [chatHistory, setChatHistory] = useState<{ id: string, title: string, createdAt: string }[]>([]);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+    const searchParams = useSearchParams();
+    const paramView = searchParams.get('view');
+    const [view, setView] = useState<'chat' | 'docs'>((paramView === 'docs') ? 'docs' : 'chat');
     const scrollRef = useRef<HTMLDivElement>(null);
 
     const fetchHistory = async () => {
@@ -93,7 +98,7 @@ export default function SewaAIClient() {
             });
 
             const data = await res.json();
-            
+
             if (res.status === 401) {
                 setMessages((prev) => [...prev, {
                     role: "assistant",
@@ -199,11 +204,28 @@ export default function SewaAIClient() {
 
                 <button
                     onClick={clearChat}
-                    className="w-full bg-primary hover:bg-primary-dark text-white font-black py-4 px-6 rounded-2xl flex items-center justify-center gap-3 mb-8 transition-all shadow-xl shadow-primary/20 active:scale-95"
+                    className="w-full bg-primary hover:bg-primary-dark text-white font-black py-4 px-6 rounded-2xl flex items-center justify-center gap-3 mb-4 transition-all shadow-xl shadow-primary/20 active:scale-95"
                 >
                     <Plus className="size-5" strokeWidth={3} />
                     NEW CHAT
                 </button>
+
+                <div className="space-y-2 mb-8">
+                    <button
+                        onClick={() => { setView('chat'); setIsHistoryOpen(false); }}
+                        className={`w-full flex items-center gap-4 p-4 rounded-2xl transition-all text-left ${view === 'chat' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:bg-white dark:hover:bg-slate-800'}`}
+                    >
+                        <Bot className="size-5" />
+                        <span className="text-sm font-bold">Smart AI Chat</span>
+                    </button>
+                    <button
+                        onClick={() => { setView('docs'); setIsHistoryOpen(false); }}
+                        className={`w-full flex items-center gap-4 p-4 rounded-2xl transition-all text-left ${view === 'docs' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:bg-white dark:hover:bg-slate-800'}`}
+                    >
+                        <FileText className="size-5" />
+                        <span className="text-sm font-bold">Document Maker</span>
+                    </button>
+                </div>
 
                 <div className="flex-1 overflow-y-auto space-y-8 no-scrollbar">
                     <div>
@@ -252,11 +274,28 @@ export default function SewaAIClient() {
 
                         <button
                             onClick={clearChat}
-                            className="w-full bg-primary text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 mb-8 shadow-lg shadow-primary/20"
+                            className="w-full bg-primary text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 mb-4 shadow-lg shadow-primary/20"
                         >
                             <Plus size={20} strokeWidth={3} />
                             NEW CHAT
                         </button>
+
+                        <div className="grid grid-cols-2 gap-2 mb-8">
+                            <button
+                                onClick={() => { setView('chat'); setIsHistoryOpen(false); }}
+                                className={`flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 transition-all ${view === 'chat' ? 'border-primary bg-primary/5 text-primary' : 'border-slate-100 dark:border-slate-800 text-slate-400'}`}
+                            >
+                                <Bot size={24} />
+                                <span className="text-[10px] font-black uppercase">Chat</span>
+                            </button>
+                            <button
+                                onClick={() => { setView('docs'); setIsHistoryOpen(false); }}
+                                className={`flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 transition-all ${view === 'docs' ? 'border-primary bg-primary/5 text-primary' : 'border-slate-100 dark:border-slate-800 text-slate-400'}`}
+                            >
+                                <FileText size={24} />
+                                <span className="text-[10px] font-black uppercase">Docs</span>
+                            </button>
+                        </div>
 
                         <div className="space-y-4 overflow-y-auto max-h-[calc(100vh-250px)] no-scrollbar">
                             {chatHistory.map((item) => (
@@ -319,108 +358,124 @@ export default function SewaAIClient() {
                     </div>
                 </header>
 
-                {/* Messages Container */}
-                <div
-                    ref={scrollRef}
-                    className="flex-1 overflow-y-auto px-4 pt-8 md:px-10 space-y-8 scroll-smooth pb-52 touch-pan-y"
-                >
-                    {messages.map((m, i) => (
-                        <FadeIn key={i} delay={0} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-                            <div className={`flex gap-4 max-w-[92%] md:max-w-[80%] ${m.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
-                                <div className={`size-10 md:size-12 rounded-[1.2rem] flex items-center justify-center flex-shrink-0 shadow-lg ${m.role === "user" ? "bg-primary text-white shadow-primary/20" : "bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-primary shadow-slate-200/50 dark:shadow-none"
-                                    }`}>
-                                    {m.role === "user" ? <User size={20} strokeWidth={2.5} /> : <Bot size={20} strokeWidth={2.5} />}
-                                </div>
-                                <div className="flex flex-col">
-                                    <div className={`p-5 rounded-[1.8rem] text-[15px] leading-relaxed relative ${m.role === "user"
-                                        ? "bg-primary text-white font-bold rounded-tr-none shadow-xl shadow-primary/20"
-                                        : "bg-slate-50 dark:bg-slate-800/80 text-slate-800 dark:text-slate-100 font-bold rounded-tl-none border border-slate-100/50 dark:border-slate-700/50"
-                                        }`}>
-                                        {m.role === "assistant" && m.isNew ? (
-                                            <StreamingText text={m.content} speed={10} />
-                                        ) : (
-                                            m.content
-                                        )}
+                {view === 'chat' ? (
+                    <>
+                        {/* Messages Container */}
+                        <div
+                            ref={scrollRef}
+                            className="flex-1 overflow-y-auto px-4 pt-8 md:px-10 space-y-8 scroll-smooth pb-52 touch-pan-y"
+                        >
+                            {messages.map((m, i) => (
+                                <FadeIn key={i} delay={0} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                                    <div className={`flex gap-4 max-w-[92%] md:max-w-[80%] ${m.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
+                                        <div className={`size-10 md:size-12 rounded-[1.2rem] flex items-center justify-center flex-shrink-0 shadow-lg ${m.role === "user" ? "bg-primary text-white shadow-primary/20" : "bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-primary shadow-slate-200/50 dark:shadow-none"
+                                            }`}>
+                                            {m.role === "user" ? <User size={20} strokeWidth={2.5} /> : <Bot size={20} strokeWidth={2.5} />}
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <div className={`p-5 rounded-[1.8rem] text-[15px] leading-relaxed relative ${m.role === "user"
+                                                ? "bg-primary text-white font-bold rounded-tr-none shadow-xl shadow-primary/20"
+                                                : "bg-slate-50 dark:bg-slate-800/80 text-slate-800 dark:text-slate-100 font-bold rounded-tl-none border border-slate-100/50 dark:border-slate-700/50"
+                                                }`}>
+                                                {m.role === "assistant" && m.isNew ? (
+                                                    <StreamingText text={m.content} speed={10} />
+                                                ) : (
+                                                    m.content
+                                                )}
+                                            </div>
+                                            <span className={`text-[9px] font-black mt-2 uppercase tracking-widest ${m.role === "user" ? "text-right mr-2 text-primary" : "text-left ml-2 text-slate-400"}`}>
+                                                {m.role === "user" ? "YOU" : "SEWA AI"} • {m.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <span className={`text-[9px] font-black mt-2 uppercase tracking-widest ${m.role === "user" ? "text-right mr-2 text-primary" : "text-left ml-2 text-slate-400"}`}>
-                                        {m.role === "user" ? "YOU" : "SEWA AI"} • {m.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                    </span>
+                                </FadeIn>
+                            ))}
+                            {isLoading && (
+                                <div className="flex justify-start">
+                                    <div className="flex gap-4">
+                                        <div className="size-10 md:size-12 rounded-[1.2rem] bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-primary flex items-center justify-center shadow-lg shadow-slate-200/50">
+                                            <Bot className="animate-bounce size-5" />
+                                        </div>
+                                        <div className="bg-slate-50 dark:bg-slate-800 p-5 rounded-2xl flex gap-1.5 items-center">
+                                            <div className="size-1.5 bg-primary/40 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                                            <div className="size-1.5 bg-primary/40 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                                            <div className="size-1.5 bg-primary/40 rounded-full animate-bounce" />
+                                        </div>
+                                    </div>
                                 </div>
+                            )}
+                        </div>
+
+                        {/* Sticky Input Bar */}
+                        <div className="absolute bottom-0 left-0 right-0 p-4 pb-8 md:p-8 md:pb-12 bg-gradient-to-t from-white dark:from-slate-950 via-white/95 dark:via-slate-950/95 via-40% to-transparent z-10">
+                            <div className="max-w-4xl mx-auto space-y-6">
+                                {/* Quick Actions - Only show if conversation hasn't really started */}
+                                {messages.length <= 1 && (
+                                    <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar px-1">
+                                        {quickActions.map((action, i) => (
+                                            <button
+                                                key={i}
+                                                onClick={() => handleSend(action.label)}
+                                                className="flex items-center gap-2.5 px-5 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-[11px] font-black text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary dark:hover:text-primary transition-all whitespace-nowrap shadow-sm active:scale-95"
+                                            >
+                                                <div className="text-primary">{action.icon}</div>
+                                                {action.label.toUpperCase()}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {/* Refined Input Bar */}
+                                <div className="flex items-end gap-3 glass-morphism-dark">
+                                    <div className="flex-1 group relative flex items-center">
+                                        <div className="absolute left-4 size-10 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 group-focus-within:text-primary transition-colors cursor-pointer hover:bg-slate-200">
+                                            <Paperclip size={18} />
+                                        </div>
+                                        <textarea
+                                            rows={1}
+                                            value={input}
+                                            onChange={(e) => setInput(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter" && !e.shiftKey) {
+                                                    e.preventDefault();
+                                                    handleSend();
+                                                }
+                                            }}
+                                            placeholder="Type your message..."
+                                            className="w-full bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-[2rem] pl-16 pr-14 py-4 text-[15px] font-bold focus:ring-4 focus:ring-primary/5 focus:border-primary/50 outline-none transition-all resize-none shadow-sm dark:text-white"
+                                        />
+                                        <button className="absolute right-4 text-slate-400 hover:text-primary transition-colors">
+                                            <Mic size={22} />
+                                        </button>
+                                    </div>
+                                    <button
+                                        onClick={() => handleSend()}
+                                        disabled={!input.trim() || isLoading}
+                                        className="size-14 bg-primary text-white rounded-[1.6rem] flex items-center justify-center hover:bg-primary-dark transition-all shadow-xl shadow-primary/30 disabled:opacity-40 disabled:shadow-none active:scale-90"
+                                    >
+                                        <Send size={24} strokeWidth={2.5} />
+                                    </button>
+                                </div>
+
+                                <p className="text-[10px] text-center font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">
+                                    Sewa AI can make mistakes • Created by <span className="text-slate-600 dark:text-slate-400">Debin C. Rai</span>
+                                </p>
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    <div className="flex-1 overflow-y-auto p-4 md:p-10 no-scrollbar pb-20">
+                        <FadeIn>
+                            <div className="max-w-4xl mx-auto">
+                                <div className="mb-10 text-center">
+                                    <h1 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tighter mb-2">Sarkari Document Maker</h1>
+                                    <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">Professional Government Drafts in Seconds</p>
+                                </div>
+                                <DocumentGenerator />
                             </div>
                         </FadeIn>
-                    ))}
-                    {isLoading && (
-                        <div className="flex justify-start">
-                            <div className="flex gap-4">
-                                <div className="size-10 md:size-12 rounded-[1.2rem] bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-primary flex items-center justify-center shadow-lg shadow-slate-200/50">
-                                    <Bot className="animate-bounce size-5" />
-                                </div>
-                                <div className="bg-slate-50 dark:bg-slate-800 p-5 rounded-2xl flex gap-1.5 items-center">
-                                    <div className="size-1.5 bg-primary/40 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                                    <div className="size-1.5 bg-primary/40 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                                    <div className="size-1.5 bg-primary/40 rounded-full animate-bounce" />
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                {/* Sticky Input Bar */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 pb-8 md:p-8 md:pb-12 bg-gradient-to-t from-white dark:from-slate-950 via-white/95 dark:via-slate-950/95 via-40% to-transparent z-10">
-                    <div className="max-w-4xl mx-auto space-y-6">
-                        {/* Quick Actions - Only show if conversation hasn't really started */}
-                        {messages.length <= 1 && (
-                            <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar px-1">
-                                {quickActions.map((action, i) => (
-                                    <button
-                                        key={i}
-                                        onClick={() => handleSend(action.label)}
-                                        className="flex items-center gap-2.5 px-5 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-[11px] font-black text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary dark:hover:text-primary transition-all whitespace-nowrap shadow-sm active:scale-95"
-                                    >
-                                        <div className="text-primary">{action.icon}</div>
-                                        {action.label.toUpperCase()}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
-
-                        {/* Refined Input Bar */}
-                        <div className="flex items-end gap-3 glass-morphism-dark">
-                            <div className="flex-1 group relative flex items-center">
-                                <div className="absolute left-4 size-10 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 group-focus-within:text-primary transition-colors cursor-pointer hover:bg-slate-200">
-                                    <Paperclip size={18} />
-                                </div>
-                                <textarea
-                                    rows={1}
-                                    value={input}
-                                    onChange={(e) => setInput(e.target.value)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter" && !e.shiftKey) {
-                                            e.preventDefault();
-                                            handleSend();
-                                        }
-                                    }}
-                                    placeholder="Type your message..."
-                                    className="w-full bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-[2rem] pl-16 pr-14 py-4 text-[15px] font-bold focus:ring-4 focus:ring-primary/5 focus:border-primary/50 outline-none transition-all resize-none shadow-sm dark:text-white"
-                                />
-                                <button className="absolute right-4 text-slate-400 hover:text-primary transition-colors">
-                                    <Mic size={22} />
-                                </button>
-                            </div>
-                            <button
-                                onClick={() => handleSend()}
-                                disabled={!input.trim() || isLoading}
-                                className="size-14 bg-primary text-white rounded-[1.6rem] flex items-center justify-center hover:bg-primary-dark transition-all shadow-xl shadow-primary/30 disabled:opacity-40 disabled:shadow-none active:scale-90"
-                            >
-                                <Send size={24} strokeWidth={2.5} />
-                            </button>
-                        </div>
-
-                        <p className="text-[10px] text-center font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">
-                            Sewa AI can make mistakes • Created by <span className="text-slate-600 dark:text-slate-400">Debin C. Rai</span>
-                        </p>
                     </div>
-                </div>
+                )}
             </main>
         </div>
     );

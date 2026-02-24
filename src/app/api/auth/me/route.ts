@@ -25,6 +25,8 @@ export async function GET() {
                 dailyUnitsUsed: true,
                 lastRequestAt: true,
                 lastResetDate: true,
+                provider: true,
+                firebaseUid: true,
             }
         });
 

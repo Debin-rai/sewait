@@ -1,0 +1,71 @@
+[debug] [2026-02-24T12:36:26.945Z] ----------------------------------------------------------------------
+[debug] [2026-02-24T12:36:26.957Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\hp\AppData\Local\npm-cache\_npx\ba4f1959e38407b5\node_modules\firebase-tools\lib\bin\firebase.js init dataconnect --project demo-no-project
+[debug] [2026-02-24T12:36:26.958Z] CLI Version:   15.7.0
+[debug] [2026-02-24T12:36:26.962Z] Platform:      win32
+[debug] [2026-02-24T12:36:26.962Z] Node Version:  v20.20.0
+[debug] [2026-02-24T12:36:26.962Z] Time:          Tue Feb 24 2026 18:21:26 GMT+0545 (Nepal Time)
+[debug] [2026-02-24T12:36:26.964Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-02-24T12:36:27.193Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\hp\dev\sajilosathi
+
+[debug] [2026-02-24T12:36:34.538Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2026-02-24T12:36:34.539Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[info] Skipping Firebase project setup because a demo project is provided
+[info] 
+=== Dataconnect Setup
+[info] +  dataconnect: Detected existing apps . (web), design_assets\ogl-master (web) 
+[debug] [2026-02-24T12:44:40.576Z] ----------------------------------------------------------------------
+[debug] [2026-02-24T12:44:40.642Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\hp\AppData\Local\npm-cache\_npx\ba4f1959e38407b5\node_modules\firebase-tools\lib\bin\firebase.js init dataconnect --project my-messenger-app-128a6
+[debug] [2026-02-24T12:44:40.673Z] CLI Version:   15.7.0
+[debug] [2026-02-24T12:44:40.674Z] Platform:      win32
+[debug] [2026-02-24T12:44:40.674Z] Node Version:  v20.20.0
+[debug] [2026-02-24T12:44:40.674Z] Time:          Tue Feb 24 2026 18:29:40 GMT+0545 (Nepal Time)
+[debug] [2026-02-24T12:44:40.674Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\hp\dev\sajilosathi
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2026-02-24T12:45:29.800Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-02-24T12:45:29.801Z] > authorizing via signed-in user (sajilosathi6@gmail.com)
+[debug] [2026-02-24T12:45:29.802Z] Checked if tokens are valid: true, expires at: 1771940194468
+[debug] [2026-02-24T12:45:29.803Z] Checked if tokens are valid: true, expires at: 1771940194468
+[debug] [2026-02-24T12:45:29.811Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/my-messenger-app-128a6 [none]
+[debug] [2026-02-24T12:45:30.555Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/my-messenger-app-128a6 403
+[debug] [2026-02-24T12:45:30.555Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/my-messenger-app-128a6 {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2026-02-24T12:45:30.557Z] Request to https://firebase.googleapis.com/v1beta1/projects/my-messenger-app-128a6 had HTTP Error: 403, The caller does not have permission
+[debug] [2026-02-24T12:45:30.559Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/my-messenger-app-128a6 had HTTP Error: 403, The caller does not have permission
+    at responseToError (C:\Users\hp\AppData\Local\npm-cache\_npx\ba4f1959e38407b5\node_modules\firebase-tools\lib\responseToError.js:53:12)
+    at RetryOperation._fn (C:\Users\hp\AppData\Local\npm-cache\_npx\ba4f1959e38407b5\node_modules\firebase-tools\lib\apiv2.js:330:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to get Firebase project my-messenger-app-128a6. Please make sure the project exists and your account has permission to access it.

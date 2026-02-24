@@ -5,9 +5,11 @@ import { getCurrentNepaliDate } from "@/lib/nepaliDate";
 import FadeIn from "@/components/animations/FadeIn";
 import DocMarquee from "./DocMarquee";
 import { useTheme, THEMES } from "@/context/ThemeContext";
+import { useRouter } from "next/navigation";
 
 export default function Hero() {
     const { theme } = useTheme();
+    const router = useRouter();
     const [nepaliDate, setNepaliDate] = useState<any>(null);
     const [mounted, setMounted] = useState(false);
 
@@ -79,7 +81,7 @@ export default function Hero() {
                             </p>
                             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-8 md:mt-10">
                                 <button
-                                    onClick={() => document.getElementById('doc-generator')?.scrollIntoView({ behavior: 'smooth' })}
+                                    onClick={() => router.push('/sewa-ai')}
                                     className="bg-white px-8 md:px-10 py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg shadow-2xl hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all flex items-center gap-3 group"
                                     style={{ color: THEMES[theme].primary }}
                                 >
