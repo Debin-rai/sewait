@@ -133,45 +133,9 @@ model Advertisement {
   updatedAt   DateTime @updatedAt
 }
 
-model DailyAnalytic {
-  id        String   @id @default(cuid())
-  path      String
-  date      DateTime @default(now()) // Stored as midnight for the day
-  hits      Int      @default(1)
-  
-  @@unique([path, date])
-}
 
-model VisitorAnalytic {
-  id        String   @id @default(cuid())
-  path      String
-  country   String?
-  device    String?  // MOBILE, DESKTOP
-  hits      Int      @default(1)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
 
-model SystemLog {
-  id        String   @id @default(cuid())
-  action    String
-  admin     String
-  details   String?
-  ip        String?
-  createdAt DateTime @default(now())
-}
 
-model PageAnalytic {
-  id           String   @id @default(cuid())
-  pageUrl      String
-  visitorHash  String   // MD5 of IP + Date for uniqueness
-  country      String?
-  date         DateTime @default(now()) // Midnight of the visit date
-  createdAt    DateTime @default(now())
-
-  @@unique([pageUrl, visitorHash, date])
-  @@index([date])
-}
 
 // --- 5. Sewa AI Chat System ---
 

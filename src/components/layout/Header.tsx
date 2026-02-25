@@ -269,10 +269,8 @@ export default function Header() {
                                                 {user.name?.[0] || user.email[0].toUpperCase()}
                                             </div>
                                             <div className="flex flex-col text-left hidden sm:flex">
-                                                <span className="text-[10px] font-black text-slate-800 leading-none">{user.name || user.email.split('@')[0]}</span>
-                                                <span className={`text-[8px] font-bold uppercase tracking-tight leading-none mt-0.5 ${user.subscriptionStatus === 'PREMIUM' ? 'text-amber-600' : 'text-slate-400'}`}>
-                                                    {user.subscriptionStatus === 'PREMIUM' ? 'PRO' : 'Free'}
-                                                </span>
+                                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter leading-none">Welcome back,</span>
+                                                <span className="text-[11px] font-black text-slate-800 leading-none mt-1">{user.name || user.email.split('@')[0]}</span>
                                             </div>
                                             <span className={`material-symbols-outlined text-sm text-slate-400 transition-transform duration-300 ${profileDropdownOpen ? 'rotate-180' : ''}`}>expand_more</span>
                                         </button>
@@ -390,6 +388,61 @@ export default function Header() {
                                 </Link>
                             );
                         })}
+
+                        <div className="pt-4 mt-6 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                            {authChecked && (
+                                user ? (
+                                    <>
+                                        <div className="px-4 py-2 mb-2 flex items-center gap-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
+                                            <div
+                                                className="size-10 rounded-full flex items-center justify-center text-xs font-bold border"
+                                                style={{ color: THEMES[theme].primary, backgroundColor: `${THEMES[theme].primary}10`, borderColor: `${THEMES[theme].primary}20` }}
+                                            >
+                                                {user.name?.[0] || user.email[0].toUpperCase()}
+                                            </div>
+                                            <div className="flex flex-col min-w-0">
+                                                <p className="text-sm font-bold text-slate-800 dark:text-white truncate">{user.name || 'User'}</p>
+                                                <p className="text-[10px] text-slate-500 uppercase font-black">{user.subscriptionStatus} Account</p>
+                                            </div>
+                                        </div>
+                                        <Link
+                                            href="/settings"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-700 hover:bg-slate-100 font-semibold"
+                                        >
+                                            <span className="material-symbols-outlined text-[22px]">manage_accounts</span>
+                                            <span>Profile Settings</span>
+                                        </Link>
+                                        <button
+                                            onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
+                                            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-500 hover:bg-red-50 font-semibold text-left"
+                                        >
+                                            <span className="material-symbols-outlined text-[22px]">logout</span>
+                                            <span>Sign Out</span>
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Link
+                                            href="/login"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-700 hover:bg-slate-100 font-semibold"
+                                        >
+                                            <span className="material-symbols-outlined text-[22px]">login</span>
+                                            <span>Log In</span>
+                                        </Link>
+                                        <Link
+                                            href="/register"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary text-white font-bold shadow-lg shadow-primary/20"
+                                        >
+                                            <span className="material-symbols-outlined text-[22px]">person_add</span>
+                                            <span>Sign Up</span>
+                                        </Link>
+                                    </>
+                                )
+                            )}
+                        </div>
                     </nav>
 
                     {/* Mobile Search */}

@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { encrypt } from "@/lib/auth";
 import { cookies } from "next/headers";
 
-const SESSION_DURATION = 30 * 60 * 1000; // 30 minutes
+const SESSION_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 export async function POST(req: NextRequest) {
     try {

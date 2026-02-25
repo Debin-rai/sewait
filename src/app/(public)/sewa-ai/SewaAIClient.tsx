@@ -110,9 +110,13 @@ export default function SewaAIClient() {
             }
 
             if (res.status === 403) {
+                const unlockText = data.unlockDate
+                    ? `\n\nYour account will be unlocked on: **${new Date(data.unlockDate).toLocaleDateString()} at ${new Date(data.unlockDate).toLocaleTimeString()}**.`
+                    : "";
+
                 setMessages((prev) => [...prev, {
                     role: "assistant",
-                    content: data.error || "Daily limit reached.",
+                    content: `${data.error || "Free plan units finished."}${unlockText}\n\nTo continue using Sewa AI without waiting, please [Upgrade to Premium](/premium).`,
                     timestamp: new Date(),
                     isNew: true
                 }]);

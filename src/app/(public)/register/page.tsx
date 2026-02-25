@@ -17,6 +17,17 @@ export default function RegisterPage() {
     const [success, setSuccess] = useState(false);
     const router = useRouter();
 
+    // Redirect if already logged in
+    useState(() => {
+        fetch("/api/auth/me")
+            .then(res => res.json())
+            .then(data => {
+                if (data.authenticated) {
+                    router.push("/");
+                }
+            });
+    });
+
     const handleGoogleSignIn = async () => {
         setIsGoogleLoading(true);
         setError("");
@@ -45,7 +56,7 @@ export default function RegisterPage() {
             if (res.ok) {
                 setSuccess(true);
                 setTimeout(() => {
-                    router.push("/sewa-ai");
+                    router.push("/");
                     router.refresh();
                 }, 1000);
             } else {
@@ -86,7 +97,7 @@ export default function RegisterPage() {
             if (res.ok) {
                 setSuccess(true);
                 setTimeout(() => {
-                    router.push("/sewa-ai");
+                    router.push("/");
                     router.refresh();
                 }, 1500);
             } else {

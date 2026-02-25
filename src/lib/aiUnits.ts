@@ -9,21 +9,36 @@ export async function checkAndIncrementAIUnits(userId: string) {
 
     const now = new Date();
     const lastReset = new Date(user.lastResetDate);
-    
-    // Check for daily reset
-    const isSameDay = now.toDateString() === lastReset.toDateString();
-    let currentDailyUsed = isSameDay ? user.dailyUnitsUsed : 0;
-    
-    // Define limits based on plan
-    let dailyLimit = 3; // FREE: 3 units/day
-    if (user.plan === "PRO") dailyLimit = 10; // PRO: 120/month (allowing ~10/day for flexibility)
-    if (user.plan === "BUSINESS") dailyLimit = 50;
 
-    if (currentDailyUsed >= dailyLimit) {
-        return { 
-            allowed: false, 
-            error: `Daily AI Unit limit reached (${dailyLimit} units). Upgrade your plan for higher limits.`,
-            limit: dailyLimit
+    // Define limits based on plan
+    let dailyLimit = 3; // Units per cycle
+    let cycleDays = 1; // Default to daily
+
+    if (user.plan === "FREE") {
+        cycleDays = 7;
+        dailyLimit = 3; // 3 units every 7 days
+    } else if (user.plan === "PRO") {
+        dailyLimit = 10; // ~10/day
+    } else if (user.plan === "BUSINESS") {
+        dailyLimit = 50;
+    }
+
+    const diffTime = now.getTime() - lastReset.getTime();
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+    const isNewCycle = diffDays >= cycleDays;
+
+    let currentUsage = isNewCycle ? 0 : user.dailyUnitsUsed;
+
+    if (currentUsage >= dailyLimit) {
+        const unlockDate = new Date(lastReset.getTime() + (cycleDays * 24 * 60 * 60 * 1000));
+        return {
+            allowed: false,
+            error: user.plan === "FREE"
+                ? `Free plan units finished. Chatbot will unlock in ${Math.ceil(cycleDays - diffDays)} days.`
+                : `Daily AI Unit limit reached (${dailyLimit} units). Upgrade your plan for higher limits.`,
+            limit: dailyLimit,
+            unlockDate: unlockDate.toISOString(),
+            plan: user.plan
         };
     }
 
@@ -31,12 +46,12 @@ export async function checkAndIncrementAIUnits(userId: string) {
     await prisma.user.update({
         where: { id: userId },
         data: {
-            dailyUnitsUsed: currentDailyUsed + 1,
+            dailyUnitsUsed: currentUsage + 1,
             aiUnitsUsedThisMonth: { increment: 1 },
             lastRequestAt: now,
-            lastResetDate: now // Update to now to track latest activity
+            lastResetDate: isNewCycle ? now : undefined // Only reset the anchor if it's a new cycle
         }
     });
 
-    return { allowed: true, remaining: dailyLimit - (currentDailyUsed + 1) };
+    return { allowed: true, remaining: dailyLimit - (currentUsage + 1) };
 }

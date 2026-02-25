@@ -132,17 +132,20 @@ export default function DocumentGenerator() {
             {/* Error Message */}
             {errorMessage && (
                 <FadeIn>
-                    <div className="mb-6 p-4 bg-orange-50 border border-orange-100 rounded-2xl text-orange-700 text-sm font-medium flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-3">
-                            <span className="material-symbols-outlined text-lg">info</span>
-                            <p>{errorMessage}</p>
+                    <div className="mb-6 p-6 bg-amber-50 border-2 border-amber-100 rounded-[2rem] text-amber-900 text-sm font-bold flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl shadow-amber-200/20">
+                        <div className="flex items-center gap-4 text-center md:text-left">
+                            <div className="size-12 bg-amber-500 text-white rounded-2xl flex items-center justify-center shrink-0">
+                                <span className="material-symbols-outlined text-2xl">info</span>
+                            </div>
+                            <p className="leading-relaxed">{errorMessage}</p>
                         </div>
-                        {errorMessage.includes("login") && (
-                            <Link href="/login" className="bg-orange-500 text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-orange-600 transition-all">Go to Login</Link>
-                        )}
-                        {errorMessage.includes("Limit reached") && (
-                            <Link href="/premium" className="bg-primary text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-primary/90 transition-all">Upgrade Now</Link>
-                        )}
+                        <div className="flex items-center gap-3 w-full md:w-auto">
+                            {errorMessage.includes("login") ? (
+                                <Link href="/login" className="flex-1 md:flex-none text-center bg-amber-500 text-white px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-amber-600 transition-all">Go to Login</Link>
+                            ) : errorMessage.toLowerCase().includes("reached") || errorMessage.toLowerCase().includes("finished") ? (
+                                <Link href="/premium" className="flex-1 md:flex-none text-center bg-primary text-white px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-primary/90 transition-all shadow-lg shadow-primary/20">Upgrade Now</Link>
+                            ) : null}
+                        </div>
                     </div>
                 </FadeIn>
             )}

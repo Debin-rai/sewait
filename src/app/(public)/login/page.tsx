@@ -15,6 +15,17 @@ export default function LoginPage() {
     const [error, setError] = useState("");
     const router = useRouter();
 
+    // Redirect if already logged in
+    useState(() => {
+        fetch("/api/auth/me")
+            .then(res => res.json())
+            .then(data => {
+                if (data.authenticated) {
+                    router.push("/");
+                }
+            });
+    });
+
     const handleGoogleSignIn = async () => {
         setIsGoogleLoading(true);
         setError("");
@@ -41,7 +52,7 @@ export default function LoginPage() {
             const data = await res.json();
 
             if (res.ok) {
-                router.push("/sewa-ai");
+                router.push("/");
                 router.refresh();
             } else {
                 const combinedError = data.details ? `${data.error}: ${data.details}` : (data.error || "Authentication failed.");
@@ -79,7 +90,7 @@ export default function LoginPage() {
             const data = await res.json();
 
             if (res.ok) {
-                router.push("/sewa-ai");
+                router.push("/");
                 router.refresh();
             } else {
                 setError(data.error || "Login failed. Please check your credentials.");
