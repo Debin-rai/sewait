@@ -10,11 +10,16 @@ export async function POST(req: NextRequest) {
     try {
         const { idToken } = await req.json();
 
-        if (!idToken || !adminAuth) {
+        if (!adminAuth) {
+            console.error("❌ Firebase Admin NOT initialized. Check FIREBASE_SERVICE_ACCOUNT_KEY.");
             return NextResponse.json(
-                { error: "Invalid request or Firebase Admin not initialized" },
-                { status: 400 }
+                { error: "Server Configuration Error", details: "Firebase Admin is not initialized on the server." },
+                { status: 500 }
             );
+        }
+
+        if (!idToken) {
+            return NextResponse.json({ error: "Missing ID Token" }, { status: 400 });
         }
 
         // Verify CSRF
@@ -117,9 +122,14 @@ export async function POST(req: NextRequest) {
             },
         });
     } catch (error: any) {
-        console.error("Firebase API Auth Error:", error);
+        console.error("❌ Firebase API Auth Error:", error);
         return NextResponse.json(
-            { error: "Authentication failed", details: error.message },
+            {
+                error: "Authentication failed",
+                details: error.message,
+                code: error.code || "unknown_error",
+                stack: process.env.NODE_ENV === "development" ? error.stack : undefined
+            },
             { status: 500 }
         );
     }

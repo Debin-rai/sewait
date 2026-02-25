@@ -44,7 +44,8 @@ export default function LoginPage() {
                 router.push("/sewa-ai");
                 router.refresh();
             } else {
-                setError(data.error || data.details || "Firebase authentication failed.");
+                const combinedError = data.details ? `${data.error}: ${data.details}` : (data.error || "Authentication failed.");
+                setError(combinedError);
             }
         } catch (err: any) {
             console.error("Google Sign-In Error:", err);
