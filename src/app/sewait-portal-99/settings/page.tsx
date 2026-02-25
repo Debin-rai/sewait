@@ -127,7 +127,7 @@ export default function AdminSettingsPage() {
                             {
                                 key: "MODULE_GUIDES",
                                 label: "Official Document AI",
-                                desc: "Sarkari Document Generator",
+                                desc: "SewaIT Document Generator",
                                 icon: 'description',
                                 color: 'text-blue-500',
                                 info: "Enables/Disables the AI document generator and the assistant."
@@ -224,7 +224,7 @@ export default function AdminSettingsPage() {
                     <div className="space-y-6">
                         {[
                             { key: "API_WEATHER", label: "OpenWeatherMap Secret" },
-                            { key: "API_SEWA_AI", label: "SarkariAI API Key (DeepSeek/OpenRouter)" },
+                            { key: "API_SEWA_AI", label: "SewaIT AI API Key (DeepSeek/OpenRouter)" },
                             { key: "API_GITHUB", label: "GitHub Access Token" },
                             { key: "API_NOTIFICATION", label: "System Notification Gateway" },
                         ].map((field) => (

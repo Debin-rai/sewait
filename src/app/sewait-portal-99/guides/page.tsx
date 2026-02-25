@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
-export default function SarkariGuideManagementPage() {
+export default function SewaITGuideManagementPage() {
     const [loading, setLoading] = useState(false);
     const [guides, setGuides] = useState<any[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -61,7 +61,7 @@ export default function SarkariGuideManagementPage() {
             {/* Page Title & CTA */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Sarkari Guide Management</h2>
+                    <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">SewaIT Guide Management</h2>
                     <p className="text-slate-500 mt-1">Manage and update government service procedures and documentation requirements.</p>
                 </div>
                 <Link

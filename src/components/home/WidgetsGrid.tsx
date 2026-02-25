@@ -90,7 +90,7 @@ export default function WidgetsGrid() {
 
             {isVisible('MODULE_SEWA_AI') && (
                 <FadeIn delay={0.3} className="h-full">
-                    {/* Sarkari AI Widget */}
+                    {/* SewaIT AI Widget */}
                     <Link
                         href="/sewa-ai"
                         className="bg-white border border-slate-100 shadow-sm rounded-2xl p-6 hover:shadow-lg transition-all border-t-4 block h-full overflow-hidden relative group"

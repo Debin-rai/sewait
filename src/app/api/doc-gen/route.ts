@@ -24,14 +24,14 @@ export async function POST(request: Request) {
         // 1. Usage Gating
         const usage = await checkAndIncrementAIUnits(session.user.id);
         if (!usage.allowed) {
-            return NextResponse.json({ 
-                error: "Limit reached", 
-                message: usage.error 
+            return NextResponse.json({
+                error: "Limit reached",
+                message: usage.error
             }, { status: 403 });
         }
 
         const systemPrompt = `
-            You are "Sarkari AI", a professional Nepali Government Document Specialist.
+            You are "SewaIT AI", a professional Nepali Government Document Specialist.
             Your goal is to generate HIGHLY FORMAL and ACCURATE Nepali documents (letters, applications/nibedan, certificates) based on user details.
             
             RULES:
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
             headers: {
                 "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
                 "HTTP-Referer": "https://sewait.up.railway.app",
-                "X-Title": "Sarkari AI Document Gen",
+                "X-Title": "SewaIT AI Document Gen",
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({

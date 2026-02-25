@@ -18,9 +18,9 @@ export async function POST(req: Request) {
             // Anonymous usage limit (simple IP or hash based)
             // For MVP, we can just allow it or require login
             // Let's require login for the new atomic "AI Units" system to work properly
-            return NextResponse.json({ 
-                error: 'Authentication required', 
-                message: 'Please sign in to use Sewa AI. Free accounts get 3 units/day.' 
+            return NextResponse.json({
+                error: 'Authentication required',
+                message: 'Please sign in to use Sewa AI. Free accounts get 3 units/day.'
             }, { status: 401 });
         }
 
@@ -34,11 +34,11 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'SewaAI API key not configured. Set it in Admin Settings.' }, { status: 500 });
         }
 
-        const systemPrompt = `You are Sarkari AI (सरकारी AI), a professional and premium Nepali assistant built into the SewaIT platform. 
+        const systemPrompt = `You are SewaIT AI (सरकारी AI), a professional and premium Nepali assistant built into the SewaIT platform. 
 Your primary goal is to help users with government service guides and generate accurate, formal, and high-quality Nepali government documents, letters, and applications.
 Rules:
 1. You were developed by Debin C. Rai (@Debin-rai).
-2. You specialize in drafting: Sarkari Nibedan (applications), Character letters, Recommendation letters for Wards, and Job applications in formal Nepali format.
+2. You specialize in drafting: SewaIT Nibedan (applications), Character letters, Recommendation letters for Wards, and Job applications in formal Nepali format.
 3. You can provide information about weather, Nepali calendar, and general government procedures.
 4. IMPORTANT: Do NOT provide real-time gold or silver rates as they are no longer supported.
 5. If asked about how you were made, credit Debin C. Rai and point to: https://github.com/Debin-rai.

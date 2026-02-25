@@ -48,7 +48,7 @@ export default function PrivacyPage() {
                             Encrypted Data
                         </h2>
                         <p className="leading-relaxed font-medium opacity-90 text-sm">
-                            Any user-specific data, such as Daily Reminders, is stored in an encrypted database and is only accessible through our secure backend. Our Sarkari Guides also link to official sources; please review their respective policies when visiting external government sites.
+                            Any user-specific data, such as Daily Reminders, is stored in an encrypted database and is only accessible through our secure backend. Our SewaIT Guides also link to official sources; please review their respective policies when visiting external government sites.
                         </p>
                     </section>
                 </div>
