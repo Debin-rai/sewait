@@ -52,8 +52,7 @@ export default function LoginPage() {
             const data = await res.json();
 
             if (res.ok) {
-                router.push("/");
-                router.refresh();
+                window.location.href = "/";
             } else {
                 const combinedError = data.details ? `${data.error}: ${data.details}` : (data.error || "Authentication failed.");
                 setError(combinedError);
@@ -90,8 +89,7 @@ export default function LoginPage() {
             const data = await res.json();
 
             if (res.ok) {
-                router.push("/");
-                router.refresh();
+                window.location.href = "/";
             } else {
                 setError(data.error || "Login failed. Please check your credentials.");
             }

@@ -56,8 +56,7 @@ export default function RegisterPage() {
             if (res.ok) {
                 setSuccess(true);
                 setTimeout(() => {
-                    router.push("/");
-                    router.refresh();
+                    window.location.href = "/";
                 }, 1000);
             } else {
                 const combinedError = data.details ? `${data.error}: ${data.details}` : (data.error || "Authentication failed.");
@@ -97,8 +96,7 @@ export default function RegisterPage() {
             if (res.ok) {
                 setSuccess(true);
                 setTimeout(() => {
-                    router.push("/");
-                    router.refresh();
+                    window.location.href = "/";
                 }, 1500);
             } else {
                 setError(data.error || "Registration failed. Please try again.");
