@@ -48,6 +48,14 @@ model SystemConfig {
   updatedAt   DateTime @updatedAt
 }
 
+model SystemLog {
+  id        String   @id @default(cuid())
+  action    String
+  details   String?
+  admin     String?
+  createdAt DateTime @default(now())
+}
+
 model AuditLog {
   id        String   @id @default(cuid())
   action    String
@@ -188,4 +196,38 @@ model PaymentVerification {
   updatedAt     DateTime @updatedAt
 
   @@index([userId])
+}
+
+// --- 7. Analytics ---
+
+model DailyAnalytic {
+  id        String   @id @default(cuid())
+  path      String
+  date      DateTime
+  hits      Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([path, date])
+}
+
+model PageAnalytic {
+  id          String   @id @default(cuid())
+  pageUrl     String
+  visitorHash String
+  date        DateTime
+  country     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([pageUrl, visitorHash, date])
+}
+
+model VisitorAnalytic {
+  id        String   @id
+  path      String
+  device    String?
+  hits      Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
